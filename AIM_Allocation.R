@@ -31,7 +31,7 @@ urban_areas <- urban_areas()
 facilities <- read_excel("data/All_mills_ACS.xlsx",
                          range = c("a6:ba1378")
                          )%>%
-  rename(State = State_Prov) %>%
+  
   mutate(Label = `Mill_Name`) %>%
   select(Longitude,Latitude,everything()) 
   
@@ -68,7 +68,7 @@ facilities_map <- facilities_sf %>%
 
 facilities_map_t <- usmap_transform(facilities_map)
 
-fac_map <- plot_usmap(include=c(.northeast_region,.south_region,.north_central_region), #,.west_north_central,.west_region,.west_south_central
+fac_map <- plot_usmap(include=c(.northeast_region,.south_region,.north_central_region,.west_region), #,.west_north_central,.west_region,.west_south_central
                   labels=TRUE, 
                   fill = "#C5CFE3", 
                   alpha = 0.5) +
@@ -80,14 +80,14 @@ fac_map <- plot_usmap(include=c(.northeast_region,.south_region,.north_central_r
                             segment.color = "#C60404", segment.size = 1,
                             seed = 1002) +
   geom_point(data = facilities_map_t,
-             aes(x = x, y = y, size = GHG_co2e),
+             aes(x = x, y = y, size = Total_Wood),
              color = "purple", alpha = 0.5) +
   geom_point(data = facilities_map_t,
              aes(x = x, y = y),
              color = "#C60404") +
   scale_size_continuous(range = c(1, 16),
                         label = scales::comma) +
-  labs(size = expression("GHG Releases (mt CO"[2]*"e)")) +
+  labs(size = expression("Capacity (Green tons of wood inputs)")) +
   theme(legend.position = c(0.85, 0.1))
 
 fac_map
@@ -207,31 +207,31 @@ facility_demographics_5mi_pre <- merge(as.data.table(facilities_map), as.data.ta
 facility_demographics_10mi_pre <- merge(as.data.table(facilities_map), as.data.table(buffer_10mi),by="Label")
 
 facility_demographics_1mi_mid <- merge(facility_demographics_1mi_pre, table_2, by="GEOID") %>% 
-  select(Label,City,GHG_co2e,GEOID,sq_miles,rural.x,rural.y,pop,
+  select(Label,City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
          white,black,indian,asian,hispanic,income,pov50,pov99,
          total_risk,total_risk_resp) %>%
   rename(rural_facility = rural.x, rural_blockgroup = rural.y)
 
 facility_demographics_3mi_mid <- merge(facility_demographics_3mi_pre, table_2, by="GEOID") %>% 
-  select(Label,City,GHG_co2e,GEOID,sq_miles,rural.x,rural.y,pop,
+  select(Label,City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
          white,black,indian,asian,hispanic,income,pov50,pov99,
          total_risk,total_risk_resp) %>%
   rename(rural_facility = rural.x, rural_blockgroup = rural.y)
 
 facility_demographics_5mi_mid <- merge(facility_demographics_5mi_pre, table_2, by="GEOID") %>% 
-  select(Label,City,GHG_co2e,GEOID,sq_miles,rural.x,rural.y,pop,
+  select(Label,City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
          white,black,indian,asian,hispanic,income,pov50,pov99,
          total_risk,total_risk_resp) %>%
   rename(rural_facility = rural.x, rural_blockgroup = rural.y)
 
 facility_demographics_10mi_mid <- merge(facility_demographics_10mi_pre, table_2, by="GEOID") %>% 
-  select(Label,City,GHG_co2e,GEOID,sq_miles,rural.x,rural.y,pop,
+  select(Label,City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
          white,black,indian,asian,hispanic,income,pov50,pov99,
          total_risk,total_risk_resp) %>%
   rename(rural_facility = rural.x, rural_blockgroup = rural.y)
 
 facility_demographics_1mi <- facility_demographics_1mi_mid %>%
-  group_by(Label,City,GHG_co2e) %>%
+  group_by(Label,City,Total_Wood) %>%
   mutate(
     blockgroups_n = n(), 
     sq_miles = sum(sq_miles, na.rm=TRUE), 
@@ -249,7 +249,7 @@ facility_demographics_1mi <- facility_demographics_1mi_mid %>%
   mutate(pop_sq_mile_1mi = pop/sq_miles,
          rural_bg_pct = signif(sum(rural_blockgroup/blockgroups_n, na.rm=TRUE),2)) %>% 
   ungroup() %>%
-  select(Label,City,GHG_co2e,blockgroups_n,sq_miles,pop,pop_sq_mile_1mi,
+  select(Label,City,Total_Wood,blockgroups_n,sq_miles,pop,pop_sq_mile_1mi,
          rural_facility,rural_bg_pct,white,black,indian,asian,hispanic,
          income,pov50,pov99,total_risk,total_risk_resp) %>% 
   distinct()
@@ -257,7 +257,7 @@ facility_demographics_1mi <- facility_demographics_1mi_mid %>%
   write.xlsx(facility_demographics_1mi,"output/Allocation Rule/facility_data/allocation_rule_facility_demographics_1mi.xlsx", overwrite = TRUE)
 
 facility_demographics_3mi <- facility_demographics_3mi_mid %>%
-  group_by(Label,City,GHG_co2e) %>%
+  group_by(Label,City,Total_Wood) %>%
   mutate(blockgroups_n = n(), 
          sq_miles = sum(sq_miles, na.rm=TRUE), 
          pop = sum(pop, na.rm=TRUE),
@@ -274,7 +274,7 @@ facility_demographics_3mi <- facility_demographics_3mi_mid %>%
   mutate(pop_sq_mile_3mi = pop/sq_miles,
          rural_bg_pct = signif(sum(rural_blockgroup/blockgroups_n, na.rm=TRUE),2)) %>% 
   ungroup() %>%
-  select(Label,City,GHG_co2e,blockgroups_n,sq_miles,pop,pop_sq_mile_3mi,
+  select(Label,City,Total_Wood,blockgroups_n,sq_miles,pop,pop_sq_mile_3mi,
          rural_facility,rural_bg_pct,white,black,indian,asian,hispanic,
          income,pov50,pov99,total_risk,total_risk_resp) %>% 
   distinct()
@@ -282,7 +282,7 @@ facility_demographics_3mi <- facility_demographics_3mi_mid %>%
 write.xlsx(facility_demographics_3mi,"output/Allocation Rule/facility_data/allocation_rule_facility_demographics_3mi.xlsx", overwrite = TRUE)
 
 facility_demographics_5mi <- facility_demographics_5mi_mid %>%
-  group_by(Label,City,GHG_co2e) %>%
+  group_by(Label,City,Total_Wood) %>%
   mutate(blockgroups_n = n(), 
          sq_miles = sum(sq_miles, na.rm=TRUE), 
          pop = sum(pop, na.rm=TRUE),
@@ -299,7 +299,7 @@ facility_demographics_5mi <- facility_demographics_5mi_mid %>%
   mutate(pop_sq_mile_5mi = pop/sq_miles,
          rural_bg_pct = signif(sum(rural_blockgroup/blockgroups_n, na.rm=TRUE),2)) %>% 
   ungroup() %>%
-  select(Label,City,GHG_co2e,blockgroups_n,sq_miles,pop,pop_sq_mile_5mi,
+  select(Label,City,Total_Wood,blockgroups_n,sq_miles,pop,pop_sq_mile_5mi,
          rural_facility,rural_bg_pct,white,black,indian,asian,hispanic,
          income,pov50,pov99,total_risk,total_risk_resp) %>% 
   distinct()
@@ -307,7 +307,7 @@ facility_demographics_5mi <- facility_demographics_5mi_mid %>%
 write.xlsx(facility_demographics_5mi,"output/Allocation Rule/facility_data/allocation_rule_facility_demographics_5mi.xlsx", overwrite = TRUE)
 
 facility_demographics_10mi <- facility_demographics_10mi_mid %>%
-  group_by(Label,City,GHG_co2e) %>%
+  group_by(Label,City,Total_Wood) %>%
   mutate(blockgroups_n = n(), 
          sq_miles = sum(sq_miles, na.rm=TRUE), 
          pop = sum(pop, na.rm=TRUE),
@@ -324,7 +324,7 @@ facility_demographics_10mi <- facility_demographics_10mi_mid %>%
   mutate(pop_sq_mile_10mi = pop/sq_miles,
          rural_bg_pct = signif(sum(rural_blockgroup/blockgroups_n, na.rm=TRUE),2)) %>% 
   ungroup() %>%
-  select(Label,City,GHG_co2e,blockgroups_n,sq_miles,pop,pop_sq_mile_10mi,
+  select(Label,City,Total_Wood,blockgroups_n,sq_miles,pop,pop_sq_mile_10mi,
          rural_facility,rural_bg_pct,white,black,indian,asian,hispanic,
          income,pov50,pov99,total_risk,total_risk_resp) %>% 
   distinct()
@@ -371,33 +371,33 @@ for (v in 1:length(comparison_vars)) {
 # get the population weighted averages around the production facilities
 local = table$GEOID %in% unique(buffer$GEOID)
 for (v in 1:length(comparison_vars)) {
-  summary_table[v,"Within 1 mile of HFC production facility"] = sum(table$pop[local]*table[local,comparison_vars[v]],na.rm=T)/sum(table$pop[local],na.rm=T)
+  summary_table[v,"Within 1 mile of production facility"] = sum(table$pop[local]*table[local,comparison_vars[v]],na.rm=T)/sum(table$pop[local],na.rm=T)
   a = (table$pop[local]*table[local,comparison_vars[v]])/table$pop[local]
-  summary_table_sd[v,"Within 1 mile of HFC production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  summary_table_sd[v,"Within 1 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
 }
 
 # get the population weighted averages around the production facilities
 local_3mi = table$GEOID %in% unique(buffer_3mi$GEOID)
 for (v in 1:length(comparison_vars))  {
-  summary_table[v,"Within 3 miles of HFC production facility"] = sum(table$pop[local_3mi]*table[local_3mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_3mi],na.rm=T)
+  summary_table[v,"Within 3 miles of production facility"] = sum(table$pop[local_3mi]*table[local_3mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_3mi],na.rm=T)
   a = (table$pop[local_3mi]*table[local_3mi,comparison_vars[v]])/table$pop[local_3mi]
-  summary_table_sd[v,"Within 3 mile of HFC production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  summary_table_sd[v,"Within 3 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
 }
 
 # get the population weighted averages around the production facilities
 local_5mi = table$GEOID %in% unique(buffer_5mi$GEOID)
 for (v in 1:length(comparison_vars))  {
-  summary_table[v,"Within 5 miles of HFC production facility"] = sum(table$pop[local_5mi]*table[local_5mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_5mi],na.rm=T)
+  summary_table[v,"Within 5 miles of production facility"] = sum(table$pop[local_5mi]*table[local_5mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_5mi],na.rm=T)
   a = (table$pop[local_5mi]*table[local_5mi,comparison_vars[v]])/table$pop[local_5mi]
-  summary_table_sd[v,"Within 5 mile of HFC production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  summary_table_sd[v,"Within 5 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
 }
 
 # get the population weighted averages around the production facilities
 local_10mi = table$GEOID %in% unique(buffer_10mi$GEOID)
 for (v in 1:length(comparison_vars))  {
-  summary_table[v,"Within 10 miles of HFC production facility"] = sum(table$pop[local_10mi]*table[local_10mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_10mi],na.rm=T)
+  summary_table[v,"Within 10 miles of production facility"] = sum(table$pop[local_10mi]*table[local_10mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_10mi],na.rm=T)
   a = (table$pop[local_10mi]*table[local_10mi,comparison_vars[v]])/table$pop[local_10mi]
-  summary_table_sd[v,"Within 10 mile of HFC production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  summary_table_sd[v,"Within 10 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
 }
 
 # only include two significant figures in the summary table
@@ -475,33 +475,33 @@ for (v in 1:length(comparison_vars)) {
 # get the population weighted averages around the production facilities
 local = table$GEOID %in% unique(buffer$GEOID)
 for (v in 1:length(comparison_vars)) {
-  summary_table[v,"Within 1 mile of HFC production facility"] = sum(table$pop[local]*table[local,comparison_vars[v]],na.rm=T)/sum(table$pop[local],na.rm=T)
+  summary_table[v,"Within 1 mile of production facility"] = sum(table$pop[local]*table[local,comparison_vars[v]],na.rm=T)/sum(table$pop[local],na.rm=T)
   a = (table$pop[local]*table[local,comparison_vars[v]])/table$pop[local]
-  summary_table_sd[v,"Within 1 mile of HFC production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  summary_table_sd[v,"Within 1 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
 }
 
 # get the population weighted averages around the production facilities
 local_3mi = table$GEOID %in% unique(buffer_3mi$GEOID)
 for (v in 1:length(comparison_vars))  {
-  summary_table[v,"Within 3 miles of HFC production facility"] = sum(table$pop[local_3mi]*table[local_3mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_3mi],na.rm=T)
+  summary_table[v,"Within 3 miles of production facility"] = sum(table$pop[local_3mi]*table[local_3mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_3mi],na.rm=T)
   a = (table$pop[local_3mi]*table[local_3mi,comparison_vars[v]])/table$pop[local_3mi]
-  summary_table_sd[v,"Within 3 mile of HFC production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  summary_table_sd[v,"Within 3 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
 }
 
 # get the population weighted averages around the production facilities
 local_5mi = table$GEOID %in% unique(buffer_5mi$GEOID)
 for (v in 1:length(comparison_vars))  {
-  summary_table[v,"Within 5 miles of HFC production facility"] = sum(table$pop[local_5mi]*table[local_5mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_5mi],na.rm=T)
+  summary_table[v,"Within 5 miles of production facility"] = sum(table$pop[local_5mi]*table[local_5mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_5mi],na.rm=T)
   a = (table$pop[local_5mi]*table[local_5mi,comparison_vars[v]])/table$pop[local_5mi]
-  summary_table_sd[v,"Within 5 mile of HFC production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  summary_table_sd[v,"Within 5 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
 }
 
 # get the population weighted averages around the production facilities
 local_10mi = table$GEOID %in% unique(buffer_10mi$GEOID)
 for (v in 1:length(comparison_vars))  {
-  summary_table[v,"Within 10 miles of HFC production facility"] = sum(table$pop[local_10mi]*table[local_10mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_10mi],na.rm=T)
+  summary_table[v,"Within 10 miles of production facility"] = sum(table$pop[local_10mi]*table[local_10mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_10mi],na.rm=T)
   a = (table$pop[local_10mi]*table[local_10mi,comparison_vars[v]])/table$pop[local_10mi]
-  summary_table_sd[v,"Within 10 mile of HFC production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  summary_table_sd[v,"Within 10 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
 }
 
 # only include two significant figures in the summary table
@@ -578,33 +578,33 @@ for (i in 1:length(facilities_urban)){
   # get the population weighted averages around the production facilities
   local = table$GEOID %in% unique(buffer$GEOID)
   for (v in 1:length(comparison_vars)) {
-    summary_table[v,"Within 1 mile of HFC production facility"] = sum(table$pop[local]*table[local,comparison_vars[v]],na.rm=T)/sum(table$pop[local],na.rm=T)
+    summary_table[v,"Within 1 mile of Production facility"] = sum(table$pop[local]*table[local,comparison_vars[v]],na.rm=T)/sum(table$pop[local],na.rm=T)
     a = (table$pop[local]*table[local,comparison_vars[v]])/table$pop[local]
-    summary_table_sd[v,"Within 1 mile of HFC production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+    summary_table_sd[v,"Within 1 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
   }
   
   # get the population weighted averages around the production facilities
   local_3mi = table$GEOID %in% unique(buffer_3mi$GEOID)
   for (v in 1:length(comparison_vars))  {
-    summary_table[v,"Within 3 miles of HFC production facility"] = sum(table$pop[local_3mi]*table[local_3mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_3mi],na.rm=T)
+    summary_table[v,"Within 3 miles of production facility"] = sum(table$pop[local_3mi]*table[local_3mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_3mi],na.rm=T)
     a = (table$pop[local_3mi]*table[local_3mi,comparison_vars[v]])/table$pop[local_3mi]
-    summary_table_sd[v,"Within 3 mile of HFC production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+    summary_table_sd[v,"Within 3 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
   }
   
   # get the population weighted averages around the production facilities
   local_5mi = table$GEOID %in% unique(buffer_5mi$GEOID)
   for (v in 1:length(comparison_vars))  {
-    summary_table[v,"Within 5 miles of HFC production facility"] = sum(table$pop[local_5mi]*table[local_5mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_5mi],na.rm=T)
+    summary_table[v,"Within 5 miles of production facility"] = sum(table$pop[local_5mi]*table[local_5mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_5mi],na.rm=T)
     a = (table$pop[local_5mi]*table[local_5mi,comparison_vars[v]])/table$pop[local_5mi]
-    summary_table_sd[v,"Within 5 mile of HFC production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+    summary_table_sd[v,"Within 5 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
   }
   
   # get the population weighted averages around the production facilities
   local_10mi = table$GEOID %in% unique(buffer_10mi$GEOID)
   for (v in 1:length(comparison_vars))  {
-    summary_table[v,"Within 10 miles of HFC production facility"] = sum(table$pop[local_10mi]*table[local_10mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_10mi],na.rm=T)
+    summary_table[v,"Within 10 miles of production facility"] = sum(table$pop[local_10mi]*table[local_10mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_10mi],na.rm=T)
     a = (table$pop[local_10mi]*table[local_10mi,comparison_vars[v]])/table$pop[local_10mi]
-    summary_table_sd[v,"Within 10 mile of HFC production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+    summary_table_sd[v,"Within 10 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
   }
   
   # only include two significant figures in the summary table
