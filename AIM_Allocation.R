@@ -27,16 +27,14 @@ urban_areas <- urban_areas()
 ####################################################
 #########################   Production facility data
 ####################################################
-
-facilities <- read_excel("data/Allocation_Final_list production facilities 2022.xls") %>%
-  rename(Latitude = LATITUDE,
-         Longitude = LONGITUDE,
-         GHG_co2e = `GHG QUANTITY (METRIC TONS CO2e)`,
-         City = `CITY NAME`,
-         State = STATE) %>%
-  mutate(Label = `FACILITY NAME`) %>%
-  select(Longitude,Latitude,everything()) %>%
-  filter(Label != "CHEMOURS CHAMBERS WORKS")
+##Note these data exclude GHG, which weve used for relative size,  use Total_Wood (Green tons@capacity)
+facilities <- read_excel("data/All_mills_ACS.xlsx",
+                         range = c("a6:ba1378")
+                         )%>%
+  rename(State = State_Prov) %>%
+  mutate(Label = `Mill_Name`) %>%
+  select(Longitude,Latitude,everything()) 
+  
 
 facilities_lat_lon <- facilities %>% 
   select(Longitude,Latitude,Label) %>%
