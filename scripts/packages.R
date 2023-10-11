@@ -8,7 +8,7 @@ pkgTest <- function(x) {
 }
 
 ## These lines load the required packages
-packages <- c('tidycensus','tigris','tidyverse','magrittr','data.table','sf','foreach','doSNOW','scales','odbc','colorspace','openxlsx','here','readxl','openxlsx') ## you can add more packages here
+packages <- c('tidycensus','tigris','tidyverse','magrittr','data.table','sf','foreach','doSNOW','scales','odbc','colorspace','openxlsx','here','readxl','openxlsx','usmap') ## you can add more packages here
 lapply(packages, pkgTest)
 
 library(usmap)

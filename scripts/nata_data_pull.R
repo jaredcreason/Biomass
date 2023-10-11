@@ -1,6 +1,11 @@
 ####################################################
 ############   Supporting function to download files
 ####################################################
+#Note 10/11/2023 THis doesnt seem to work propoerly.  
+#The ats files are .xlsx, and the unzip command is running,
+#even though unzip is invoked under a subsetting if ext =zip
+
+###############################################################
 
 ## downloads a file if not present locally and extracts the contents if it is a
 ## compressed archive
@@ -37,15 +42,15 @@ download_file = function(url,file_name,dir=".",check_file=NA,tolower=F) {
       progress())
   
   # if the file is a zip archive extract the contents and delete the archive
-  if (tools::file_ext(file_name)=="zip") {
-    cat("extracting zip file...\n")
-    unzip(file.path(dir,file_name),exdir=dir)
-    if (tolower) {
-      files = unzip(file.path(dir,file_name),list=T)
-      for (file in files)
-        file.rename(file.path(dir,file),file.path(dir,tolower(file)))
+ # if (tools::file_ext(file_name)=="zip") {
+ #   cat("extracting zip file...\n")
+ #   unzip(file.path(dir,file_name),exdir=dir)
+ #   if (tolower) {
+ #     files = unzip(file.path(dir,file_name),list=T)
+ #     for (file in files)
+ #       file.rename(file.path(dir,file),file.path(dir,tolower(file)))
     }
-    file.remove(file.path(dir,file_name))
+ #   file.remove(file.path(dir,file_name))
   }
   
   cat("\n")
@@ -54,36 +59,33 @@ download_file = function(url,file_name,dir=".",check_file=NA,tolower=F) {
 
 
 ####################################################
-############   NATA cancer and respiratory risk data
+############   AirToxScreen cancer and respiratory risk data
 ####################################################
 
-# directory to store the nata data
-nata_dir = "data\\nata_data"
+# directory to store the ats data
+ats_dir = "data\\ats_data"
 
-# 2014(2017) nata file containing national cancer risks by toxic
-#nata_file = "nata2014v2_national_cancerrisk_by_tract_poll.xlsx"
-nata_file = "national_cancerrisk_by_tract_poll.xlsx"
-
-
-# # download the nata data if it doesn't already exist
-# download_file("https://www.epa.gov/sites/production/files/2018-08/",
-download_file("https://www.epa.gov/system/files/other-files/2022-03/",
-               nata_file,
-               dir=nata_dir)
+# 2019(2022) ats file containing national cancer risks by toxic
+ats_file = "2019_National_CancerRisk_by_tract_poll.xlsx"
+#https://www.epa.gov/system/files/documents/2022-12/2019_National_CancerRisk_by_tract_poll.xlsx
+# # download the ats data if it doesn't already exist
+download_file("https://www.epa.gov/system/files/documents/2022-12/",
+               ats_file,
+               dir=ats_dir)
 
 
 # # Respiratory 
-#nata_file_resp = "nata2014v2_national_resphi_by_tract_poll.xlsx"
-nata_file_resp =  "national_resphi_by_tract_poll.xlsx"
+ats_file_resp = "2019_National_RespHI_by_tract_poll.xlsx"
 
-download_file("https://www.epa.gov/sites/production/files/2022-03/",
-               nata_file_resp,
-               dir=nata_dir)
+#download_file("https://www.epa.gov/system/files/documents/2022-12/",
+ #              ats_file_resp,
+ #              dir=ats_dir)
 
-# load the nata data
-nata_data = read_excel(file.path(nata_dir,nata_file)) %>%
-  rename(total_risk='Total Risk\r\n (in a million)')
+# load the ats data
+ats_data = read_excel(file.path(ats_dir,ats_file)) %>%
+  rename(total_risk='Total Cancer Risk (per million)')
 
-nata_data_resp = read_excel(file.path(nata_dir,nata_file_resp)) %>%
+ats_data_resp = read_excel(file.path(ats_dir,ats_file_resp)) %>%
   rename(total_risk_resp='Total Respiratory (hazard quotient)') %>%
   select(Tract, total_risk_resp)
+

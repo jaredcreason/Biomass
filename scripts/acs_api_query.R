@@ -6,14 +6,15 @@
 
 ## census api key
 ## get one at: https://api.census.gov/data/key_signup.html
-#  census_api_key("73898e028f52e49f9e5fbb0ca774d91d38c1672d", install=T,overwrite=T)
+  census_api_key("73898e028f52e49f9e5fbb0ca774d91d38c1672d", install=T,overwrite=T)
 #readRenviron("~/.Renviron")
 
 # # geography at which to draw data
 geography = "block group"
 # 
 # # year of ACS to draw data
-year = 2019
+year = 2021
+
 # 
 # ## Get dictionary of ACS variables
 acs_variables <- load_variables(year, "acs5", cache = TRUE)
