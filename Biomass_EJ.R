@@ -16,7 +16,7 @@ source("scripts/packages.R")
 
 # Load ACS data, pull from API if .Rdata file doesnt exist
 #source("acs_api_query.R")
-load("data/acs_data/acs_data_2019_block group.Rdata")
+load("data/acs_data/acs_data_2021_block group.Rdata")
 
 # Load NATA data
 source("scripts/nata_data_pull.R")
@@ -30,11 +30,11 @@ urban_areas <- urban_areas()
 ##Note these data exclude GHG, which weve used for relative size,  use Total_Wood (Green tons@capacity)
 facilities <- read_excel("data/All_mills_ACS.xlsx",
                          range = c("a6:ba1378")
-                         )%>%
+)%>%
   
   mutate(Label = `Mill_ID`) %>%
   select(Longitude,Latitude,everything()) 
-  
+
 
 facilities_lat_lon <- facilities %>% 
   select(Longitude,Latitude,Label) %>%
@@ -42,8 +42,8 @@ facilities_lat_lon <- facilities %>%
          lat = Latitude)
 
 facilities_sf = st_as_sf(facilities, 
-                      coords=c(x="Longitude",y="Latitude"), 
-                      crs=4326) %>%
+                         coords=c(x="Longitude",y="Latitude"), 
+                         crs=4326) %>%
   st_transform(3488) 
 
 ### Indicating rural vs urban facilities. 1 = rural, 0 = urban
@@ -69,9 +69,9 @@ facilities_map <- facilities_sf %>%
 facilities_map_t <- usmap_transform(facilities_map)
 
 fac_map <- plot_usmap(include=c(.northeast_region,.south_region,.north_central_region,.west_region), #,.west_north_central,.west_region,.west_south_central
-                  labels=TRUE, 
-                  fill = "#C5CFE3", 
-                  alpha = 0.5) +
+                      labels=TRUE, 
+                      fill = "#C5CFE3", 
+                      alpha = 0.5) +
   ggrepel::geom_label_repel(data = facilities_map_t,
                             aes(x = x, y = y, 
                                 label = Label),
@@ -115,7 +115,7 @@ tr <- readRDS("data/tr.rds")
 
 # tr = shp %>% group_by(Tract) %>% summarize(geometry=st_union(geometry))
 # saveRDS(tr, "data/tr.rds")
-  
+
 tr_pts <- tr %>% st_centroid()
 
 ###### THIS STEP TAKES TIME
@@ -254,7 +254,7 @@ facility_demographics_1mi <- facility_demographics_1mi_mid %>%
          income,pov50,pov99,total_risk,total_risk_resp) %>% 
   distinct()
 
-  write.xlsx(facility_demographics_1mi,"output/facility_data/allocation_rule_facility_demographics_1mi.xlsx", overwrite = TRUE)
+write.xlsx(facility_demographics_1mi,"output/facility_data/allocation_rule_facility_demographics_1mi.xlsx", overwrite = TRUE)
 
 facility_demographics_3mi <- facility_demographics_3mi_mid %>%
   group_by(Label,City,Total_Wood) %>%
@@ -418,100 +418,100 @@ write.xlsx(list_of_datasets,"output/summary_tables/allocation_rule_summary_table
 facilities_rural <- facilities_map %>% filter(rural == 1)
 
 for (i in 1:NROW(facilities_rural)){
-#use NROW() instead of length?   
-facility <- paste0(facilities_rural[i,]$Label)
-communities = st_buffer(facilities_rural[i,],dist=1*1609.34) 
-communities_3mi = st_buffer(facilities_rural[i,],dist=3*1609.34) 
-communities_5mi = st_buffer(facilities_rural[i,],dist=5*1609.34) 
-communities_10mi = st_buffer(facilities_rural[i,],dist=10*1609.34) 
-
-# find the census geographies within the buffer around the facilities
-buffer = st_intersection(communities,shp) %>%
-  select(GEOID,Tract,Label)
-
-buffer_3mi = st_intersection(communities_3mi,shp) %>%
-  select(GEOID,Tract,Label)
-
-buffer_5mi = st_intersection(communities_5mi,shp) %>%
-  select(GEOID,Tract,Label)
-
-buffer_10mi = st_intersection(communities_10mi,shp) %>%
-  select(GEOID,Tract,Label)
-
-# get the national level averages
-summary_table = data.frame(Variable=desc_vars)
-summary_table_sd = data.frame(Variable=desc_vars)
-
-# for (v in 1:length(comparison_vars)) {
-#   summary_table[v,"Overall (National Average)"] = sum(table$pop*table[,comparison_vars[v]],na.rm=T)/sum(table$pop,na.rm=T)
-#   a = (table$pop*table[,comparison_vars[v]])/table$pop
-#   summary_table_sd[v,"Overall (National Average) SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-# }
-
-# # get the state-level averages 
-# state <- table %>% filter(State==facilities[i,]$`STATE`)
-# for (v in 1:length(comparison_vars)) {
-#   summary_table[v,"State Average"] = sum(state$pop*state[,comparison_vars[v]],na.rm=T)/sum(state$pop,na.rm=T)
-#   a = (state$pop*state[,comparison_vars[v]])/state$pop
-#   summary_table_sd[v,"State Average SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-# }
-
-# get the national rural area level averages
-rural <- table %>% filter(rural==1)
-for (v in 1:length(comparison_vars)) {
-  summary_table[v,"Rural Areas (National Average)"] = sum(rural$pop*rural[,comparison_vars[v]],na.rm=T)/sum(rural$pop,na.rm=T)
-  a = (rural$pop*rural[,comparison_vars[v]])/rural$pop
-  summary_table_sd[v,"Rural Areas (National Average) SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-}
-
-# get the rural area level averages in that state
-state <- table %>% filter(rural==1 & State==facilities_rural[i,]$`State_Prov`)
-for (v in 1:length(comparison_vars)) {
-  summary_table[v,"Rural Areas (State Average)"] = sum(state$pop*state[,comparison_vars[v]],na.rm=T)/sum(state$pop,na.rm=T)
-  a = (state$pop*state[,comparison_vars[v]])/state$pop
-  summary_table_sd[v,"Rural Areas (State Average) SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-}
-
-# get the population weighted averages around the production facilities
-local = table$GEOID %in% unique(buffer$GEOID)
-for (v in 1:length(comparison_vars)) {
-  summary_table[v,"Within 1 mile of production facility"] = sum(table$pop[local]*table[local,comparison_vars[v]],na.rm=T)/sum(table$pop[local],na.rm=T)
-  a = (table$pop[local]*table[local,comparison_vars[v]])/table$pop[local]
-  summary_table_sd[v,"Within 1 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-}
-
-# get the population weighted averages around the production facilities
-local_3mi = table$GEOID %in% unique(buffer_3mi$GEOID)
-for (v in 1:length(comparison_vars))  {
-  summary_table[v,"Within 3 miles of production facility"] = sum(table$pop[local_3mi]*table[local_3mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_3mi],na.rm=T)
-  a = (table$pop[local_3mi]*table[local_3mi,comparison_vars[v]])/table$pop[local_3mi]
-  summary_table_sd[v,"Within 3 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-}
-
-# get the population weighted averages around the production facilities
-local_5mi = table$GEOID %in% unique(buffer_5mi$GEOID)
-for (v in 1:length(comparison_vars))  {
-  summary_table[v,"Within 5 miles of production facility"] = sum(table$pop[local_5mi]*table[local_5mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_5mi],na.rm=T)
-  a = (table$pop[local_5mi]*table[local_5mi,comparison_vars[v]])/table$pop[local_5mi]
-  summary_table_sd[v,"Within 5 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-}
-
-# get the population weighted averages around the production facilities
-local_10mi = table$GEOID %in% unique(buffer_10mi$GEOID)
-for (v in 1:length(comparison_vars))  {
-  summary_table[v,"Within 10 miles of production facility"] = sum(table$pop[local_10mi]*table[local_10mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_10mi],na.rm=T)
-  a = (table$pop[local_10mi]*table[local_10mi,comparison_vars[v]])/table$pop[local_10mi]
-  summary_table_sd[v,"Within 10 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-}
-
-# only include two significant figures in the summary table
-summary_table[,2:7] = signif(summary_table[,2:7],2)
-summary_table_sd[,2:7] = signif(summary_table_sd[,2:7],2)
-
-# export
-list_of_datasets <- list("Means" = summary_table, "Standard Deviations" = summary_table_sd)
-write.xlsx(list_of_datasets,paste0("output/summary_tables/rural/allocation_rule_summary_tables_",facility,".xlsx"), overwrite = TRUE)
-
+  #use NROW() instead of length?   
+  facility <- paste0(facilities_rural[i,]$Label)
+  communities = st_buffer(facilities_rural[i,],dist=1*1609.34) 
+  communities_3mi = st_buffer(facilities_rural[i,],dist=3*1609.34) 
+  communities_5mi = st_buffer(facilities_rural[i,],dist=5*1609.34) 
+  communities_10mi = st_buffer(facilities_rural[i,],dist=10*1609.34) 
+  
+  # find the census geographies within the buffer around the facilities
+  buffer = st_intersection(communities,shp) %>%
+    select(GEOID,Tract,Label)
+  
+  buffer_3mi = st_intersection(communities_3mi,shp) %>%
+    select(GEOID,Tract,Label)
+  
+  buffer_5mi = st_intersection(communities_5mi,shp) %>%
+    select(GEOID,Tract,Label)
+  
+  buffer_10mi = st_intersection(communities_10mi,shp) %>%
+    select(GEOID,Tract,Label)
+  
+  # get the national level averages
+  summary_table = data.frame(Variable=desc_vars)
+  summary_table_sd = data.frame(Variable=desc_vars)
+  
+  # for (v in 1:length(comparison_vars)) {
+  #   summary_table[v,"Overall (National Average)"] = sum(table$pop*table[,comparison_vars[v]],na.rm=T)/sum(table$pop,na.rm=T)
+  #   a = (table$pop*table[,comparison_vars[v]])/table$pop
+  #   summary_table_sd[v,"Overall (National Average) SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  # }
+  
+  # # get the state-level averages 
+  # state <- table %>% filter(State==facilities[i,]$`STATE`)
+  # for (v in 1:length(comparison_vars)) {
+  #   summary_table[v,"State Average"] = sum(state$pop*state[,comparison_vars[v]],na.rm=T)/sum(state$pop,na.rm=T)
+  #   a = (state$pop*state[,comparison_vars[v]])/state$pop
+  #   summary_table_sd[v,"State Average SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  # }
+  
+  # get the national rural area level averages
+  rural <- table %>% filter(rural==1)
+  for (v in 1:length(comparison_vars)) {
+    summary_table[v,"Rural Areas (National Average)"] = sum(rural$pop*rural[,comparison_vars[v]],na.rm=T)/sum(rural$pop,na.rm=T)
+    a = (rural$pop*rural[,comparison_vars[v]])/rural$pop
+    summary_table_sd[v,"Rural Areas (National Average) SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  }
+  
+  # get the rural area level averages in that state
+  state <- table %>% filter(rural==1 & State==facilities_rural[i,]$`State_Prov`)
+  for (v in 1:length(comparison_vars)) {
+    summary_table[v,"Rural Areas (State Average)"] = sum(state$pop*state[,comparison_vars[v]],na.rm=T)/sum(state$pop,na.rm=T)
+    a = (state$pop*state[,comparison_vars[v]])/state$pop
+    summary_table_sd[v,"Rural Areas (State Average) SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  }
+  
+  # get the population weighted averages around the production facilities
+  local = table$GEOID %in% unique(buffer$GEOID)
+  for (v in 1:length(comparison_vars)) {
+    summary_table[v,"Within 1 mile of production facility"] = sum(table$pop[local]*table[local,comparison_vars[v]],na.rm=T)/sum(table$pop[local],na.rm=T)
+    a = (table$pop[local]*table[local,comparison_vars[v]])/table$pop[local]
+    summary_table_sd[v,"Within 1 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  }
+  
+  # get the population weighted averages around the production facilities
+  local_3mi = table$GEOID %in% unique(buffer_3mi$GEOID)
+  for (v in 1:length(comparison_vars))  {
+    summary_table[v,"Within 3 miles of production facility"] = sum(table$pop[local_3mi]*table[local_3mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_3mi],na.rm=T)
+    a = (table$pop[local_3mi]*table[local_3mi,comparison_vars[v]])/table$pop[local_3mi]
+    summary_table_sd[v,"Within 3 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  }
+  
+  # get the population weighted averages around the production facilities
+  local_5mi = table$GEOID %in% unique(buffer_5mi$GEOID)
+  for (v in 1:length(comparison_vars))  {
+    summary_table[v,"Within 5 miles of production facility"] = sum(table$pop[local_5mi]*table[local_5mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_5mi],na.rm=T)
+    a = (table$pop[local_5mi]*table[local_5mi,comparison_vars[v]])/table$pop[local_5mi]
+    summary_table_sd[v,"Within 5 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  }
+  
+  # get the population weighted averages around the production facilities
+  local_10mi = table$GEOID %in% unique(buffer_10mi$GEOID)
+  for (v in 1:length(comparison_vars))  {
+    summary_table[v,"Within 10 miles of production facility"] = sum(table$pop[local_10mi]*table[local_10mi,comparison_vars[v]],na.rm=T)/sum(table$pop[local_10mi],na.rm=T)
+    a = (table$pop[local_10mi]*table[local_10mi,comparison_vars[v]])/table$pop[local_10mi]
+    summary_table_sd[v,"Within 10 mile of production facility SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  }
+  
+  # only include two significant figures in the summary table
+  summary_table[,2:7] = signif(summary_table[,2:7],2)
+  summary_table_sd[,2:7] = signif(summary_table_sd[,2:7],2)
+  
+  # export
+  list_of_datasets <- list("Means" = summary_table, "Standard Deviations" = summary_table_sd)
+  write.xlsx(list_of_datasets,paste0("output/summary_tables/rural/allocation_rule_summary_tables_",facility,".xlsx"), overwrite = TRUE)
+  
 }
 
 ####################################################
@@ -522,7 +522,7 @@ write.xlsx(list_of_datasets,paste0("output/summary_tables/rural/allocation_rule_
 facilities_urban <- facilities_map %>% filter(rural == 0)
 
 for (i in 1:NROW(facilities_urban)){
-#use NROW() instead of length? 
+  #use NROW() instead of length? 
   facility <- paste0(facilities_urban[i,]$Label)
   communities = st_buffer(facilities_urban[i,],dist=1*1609.34) 
   communities_3mi = st_buffer(facilities_urban[i,],dist=3*1609.34) 

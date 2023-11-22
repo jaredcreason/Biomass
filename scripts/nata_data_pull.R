@@ -89,3 +89,27 @@ ats_data_resp = read_excel(file.path(ats_dir,ats_file_resp)) %>%
   rename(total_risk_resp='Total Respiratory (hazard quotient)') %>%
   select(Tract, total_risk_resp)
 
+nata_data_resp <- ats_data_resp
+nata_data <- ats_data
+
+####################################
+
+# Merge ats Cancer and Respitory data for nata_data
+
+
+nata_data <- left_join(ats_data, ats_data_resp, by = 'Tract')
+
+# rearrange tibble column
+
+nata_data <- nata_data %>% 
+  select(
+    1:7,
+    ncol(nata_data),
+    everything()
+         )
+
+
+
+
+
+
