@@ -1,5 +1,8 @@
-source('R/load_data.R')
+
+# sandbox.R
+
 source('packages.R')
+source('R/load_data.R')
 
 load('data/acs_data/acs_data_2021_block group.Rdata')
 
@@ -27,7 +30,6 @@ acs_health_data <- data_ct %>%
 rm(data_ct)
 
 acs_health_data <- acs_health_data %>% left_join(cancer_data,by=c("Tract"="Tract"))
-rm(cancer_data)
 
 
 
@@ -37,24 +39,40 @@ rm(cancer_data)
 ##############################################
 ##############################################
 
+filter_acs_by_state <- function(dataset, state_list) {
+  
+  filtered_data <- dataset[dataset$State %in% state_list, ]
+  return(filtered_data)
+}
 
-acs_health_ga <- acs_health_data %>% filter(State == 'GA')
 
-rm(acs_health_data)
+geography_list <- c('GA', 'FL')
+
+acs_health_ga <- filter_by_states(acs_health_data, geography_list)
+
+
+#rm(acs_health_data)
 
 
 ###########################################
 ##########################################
 
+
 facilities_data <- load_facilities_data('data/All_Mills_ACS.xlsx')
 
-facilities_ga <- facilities_data %>% filter(State_Prov == 'GA')
+filter_facilities_by_state <- function(dataset, state_list) {
+  
+  filtered_data <- dataset[dataset$State_Prov %in% state_list, ]
+  return(filtered_data)
+}
+
+facilities_ga <- filter_facilities_by_state(facilities_data, geography_list)
 
 ###########################################
 ###########################################
 
 
-binpal <- colorBin('YlOrRd', acs_health_ga$`Total Cancer Risk (per million)`, bins = 10)
+binpal <- colorBin('YlOrRd', acs_health_ga$`Total Cancer Risk (per million)`)
 
 
 facilities_map_ga <- leaflet() %>% 
@@ -66,7 +84,7 @@ facilities_map_ga <- leaflet() %>%
               fillOpacity = 0.5) %>%
   
   
-  addMarkers(data = facilities_ga %>% filter(Type == 'pulp/paper'),
+  addMarkers(data = facilities_ga,# %>% filter(Type == 'pulp/paper'),
              lat = ~Latitude,
              lng = ~Longitude) %>%
   
@@ -78,12 +96,13 @@ facilities_map_ga <- leaflet() %>%
             labFormat = labelFormat(transform = function(x) sort(x))
             )
   
+facilties_map_GA_FL <- create_leaflet_map(acs_health_ga, facilities_ga)
 
 
 ##############################################
 ##############################################
 
-saveWidget(facilities_map_ga, file = 'output/facilities_ga_map.html')
 
+merged_test <- merge_acs(data, cancer_data)
 
 
