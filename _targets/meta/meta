@@ -1,23 +1,25 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|fcf778ebc6f0609f|||||||||||||||
+.Random.seed|object|3615bd91086aa0a2|||||||||||||||
 acs_data|stem|f08fd371d76d9b93|bf00fca75bb4b22f|ef46db3751d8e999|2070069384|data/acs_data/acs_data_2021_block group.Rdata|t19678.678832199s|d55132680d1ef2ca|136273846|file|local|vector|||0||
-ats_cancer_data|stem|b2ef27a2f3752757|c8977e5f549edb53|ef46db3751d8e999|1529704893|data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx|t19678.7111443111s|d8fbdf1114b33386|62317313|file|local|vector|||0||
+acs_data_loaded|stem|5ab973971d7ee0e2|bebe5b842bf44158|c6ba6c2f7e9aca5e|-2075208102||t19689.7270387042s|9064907978062c20|56|rds|local|vector|||32.312||
+ats_cancer_data|stem|b2ef27a2f3752757|c8977e5f549edb53|ef46db3751d8e999|1529704893|data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx|t19678.7111443111s|d8fbdf1114b33386|62317313|file|local|vector|||1.828|package tidyverse was built under R version 4.3.1. package ggplot2 was built under R version 4.3.1. package tibble was built under R version 4.3.1. package tidyr was built under R version 4.3.1. package readr was built under R version 4.3.1. package purrr was built under R version 4.3.1. package dplyr was built under R version 4.3.1. package stringr was built under R version 4.3.1. package forcats was built under R version 4.3.1. package lubridate was built under R version 4.3.1. package leaflet was built under R version 4.3.2. package htmlwidgets was built under R version 4.3.1|
+ats_cancer_loaded|stem|1354529a2e694c42|cd2b91dbeb5ec65e|273f7ac522ec0a41|-81153416||t19689.7273319499s|af959fc67e373362|27565158|rds|local|vector|||22.469||
 ats_resp_data|stem|5dc057f29da18050|2fd94ffc4bd427cc|ef46db3751d8e999|369756200|data/ats_data/2019_National_RespHI_by_tract_poll.xlsx|t19678.7122828853s|c3fdf510540ae8b5|43454196|file|local|vector|||0||
+ats_resp_loaded|stem|db8f01e0292bc836|0d7cd4965252d01b|468aaa5f78c4e9fe|-1104002751||t19689.726664269s|c5c4609163fc9f51|216435|rds|local|vector|||10.609||
 create_leaflet_map|function|5eaa4837268a59e3|||||||||||||||
-create_table_2|function|f4de01a05b0b31e2|||||||||||||||
 export_leaflet_map|function|da2af215d52397a8|||||||||||||||
-facilities_data|stem|53d7317b7fcd31ee|43e4f4f5d21c766a|ef46db3751d8e999|1293578598|data/All_mills_ACS.xlsx|t19677.8554906012s|1aabe406be6c0027|819050|file|local|vector|||0.015||
+facilities_data|stem|53d7317b7fcd31ee|43e4f4f5d21c766a|ef46db3751d8e999|1293578598|data/All_mills_ACS.xlsx|t19677.8554906012s|1aabe406be6c0027|819050|file|local|vector|||0||
+facilities_data_loaded|stem|fe65f295de4d14c1|386873c08c4c0ef7|58a5639730fc6c9e|353411423||t19689.7265394282s|3c708e2544ddc50a|185912|rds|local|vector|||0.562||
 filter_acs_by_state|function|f4ca84383beb33fd|||||||||||||||
-filter_facilities|stem|6b55da1388ce5a5f|b187c9c544e3eeab|1b9380693628ad06|-839412128||t19688.7897011076s|6496f6a5da2e4ccd|4916|rds|local|vector|||0||
+filter_facilities|stem|6b55da1388ce5a5f|e6e7ef9a8b4a2db7|b001fe90f656d192|-839412128||t19689.7290532609s|6496f6a5da2e4ccd|4916|rds|local|vector|||0||
 filter_facilities_by_state|function|8d1fe15a57ca90c8|||||||||||||||
-load|stem|f08fd371d76d9b93|bf00fca75bb4b22f|ef46db3751d8e999|837451790|data/acs_data/acs_data_2021_block group.Rdata|t19678.678832199s|d55132680d1ef2ca|136273846|file|local|vector|||0||
-load_acs|stem|5ab973971d7ee0e2|ea36f313d6f32ce7|42dc0f2a78b5b53f|2064513036||t19681.7370097333s|9064907978062c20|56|rds|local|vector|||37.829||
-load_acs_data|function|33b2e917659e3e02|||||||||||||||
-load_ats_cancer|stem|1354529a2e694c42|cd2b91dbeb5ec65e|b5e0f3cafc7c389d|-993686363||t19681.7365607851s|af959fc67e373362|27565158|rds|local|vector|||21.156||
-load_ats_resp|stem|db8f01e0292bc836|0d7cd4965252d01b|88a1837df8655cd1|-653470910||t19681.7389731222s|c5c4609163fc9f51|216435|rds|local|vector|||14.719||
-load_facilities_data|stem|fe65f295de4d14c1|386873c08c4c0ef7|784e0d08957153cd|-1727399298||t19681.7365715902s|3c708e2544ddc50a|185912|rds|local|vector|||0.718||
-merge_acs|function|db58bdab1c89e536|||||||||||||||
-merge_acs_health|stem||c583fa6d118b78bc|66e3025f0e583e01|-998521516||t19681.6205273161s||0|rds|local|vector|||0.016||no applicable method for mutate applied to an object of class function
-packages|object|e8ea1c2b630e9f03|||||||||||||||
+load_acs|stem||8132e6f9195f3a29|521da0d6ed1b0dd6|2064513036||t19689.6647557612s||0|file|local|vector|||||_build_ target load_acs did not return a character. dynamic files targets with format  file must return character vectors of file or directory paths.
+load_acs_data|function|042f876f6d6e7cb9|||||||||||||||
+load_ats_cancer|function|6d4d7b4e1b36259b|||||||||||||||
+load_ats_resp|function|88ad835b390e1aaf|||||||||||||||
+load_facilities_data|function|8571a265e265a2b1|||||||||||||||
+merge_acs|function|d0dbc3e450f01cfa|||||||||||||||
+merge_acs_health|stem||9148fefe4be61b39|270cc0b6f98dd4ee|-998521516||t19689.7290646913s||0|rds|local|vector|||0.062||no applicable method for mutate applied to an object of class character
+packages|object|3777d35a6fe3d25e|||||||||||||||
 pkgTest|function|2339bbeb4bfeecbb|||||||||||||||
 states|object|64d4740d21ed988a|||||||||||||||

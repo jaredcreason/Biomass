@@ -12,7 +12,8 @@
 
 
 load_acs_data <- function(acs_filepath){
- load(acs_filepath)
+  loaded_data <- load(acs_filepath)
+  return(data)
   
 }
 
