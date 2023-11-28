@@ -103,6 +103,3 @@ facilties_map_GA_FL <- create_leaflet_map(acs_health_ga, facilities_ga)
 ##############################################
 
 
-merged_test <- merge_acs(data, cancer_data)
-
-

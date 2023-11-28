@@ -12,14 +12,14 @@
 
 
 load_acs_data <- function(acs_filepath){
-  loaded_data <- load(acs_filepath)
-  return(data)
+  loaded_data <- get(load(acs_filepath))
+  return(loaded_data)
   
 }
 
 
 load_facilities_data <- function(facilities_filepath){
-  read_excel("data/All_mills_ACS.xlsx",
+  read_excel(facilities_filepath,
              range = c("a6:ba1378")
   )%>%
     

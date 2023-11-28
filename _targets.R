@@ -17,7 +17,11 @@ tar_plan(
   
   # Establish Regions of Interest
   
+  # Enter one or multiple U.S. State Abbreviations
   states <- c('TX', 'NM'),
+  
+  # Enter desired file name of output .html file
+  map_title <- 'TX_NM_Facilities_Map',
 
 
   ################################
@@ -25,9 +29,9 @@ tar_plan(
   ################################
   
    
-  tar_target(acs_data,
-             'data/acs_data/acs_data_2021_block group.Rdata',
-             format = 'file'),
+  #tar_target(acs_data,
+   #          'data/acs_data/acs_data_2021_block group.Rdata',
+    #         format = 'file'),
   
   
   tar_target(facilities_data,
@@ -51,7 +55,7 @@ tar_plan(
   ######################################
   
   tar_target(acs_data_loaded,
-             load(acs_data)),
+             load_acs_data('data/acs_data/acs_data_2021_block group.Rdata')),
   
   tar_target(ats_cancer_loaded,
              load_ats_cancer(ats_cancer_data)),
@@ -102,7 +106,7 @@ tar_plan(
  
   tar_target(export_leaflet_as_html,
              export_leaflet_map(create_leaflet,
-                                map_title = 'TX_NM_map'),
+                                map_title = map_title),
              format = 'file')
   
   
