@@ -2,19 +2,23 @@
 # sandbox.R
 
 source('packages.R')
-source('R/load_data.R')
+source('R/01_load_data.R')
 
-load('data/acs_data/acs_data_2021_block group.Rdata')
+acs_data <- get(load('data/acs_data/acs_data_2021_block group.Rdata'))
+rm(data)
 
-cancer_data <- read_excel('data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx')
-resp_data <- read_excel('data/ats_data/2019_National_RespHI_by_tract_poll.xlsx')
+
+cancer_data <- load_ats_cancer('data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx')
+resp_data <- load_ats_resp('data/ats_data/2019_National_RespHI_by_tract_poll.xlsx')
 
 ##########################################
 ##########################################
 
-data_ct <-data %>% 
+data_ct <-acs_data %>% 
   mutate(Tract=substr(GEOID,1,11))
-remove(data)
+
+rm(acs_data)
+
 
 
 acs_health_data <- data_ct %>%
@@ -46,12 +50,14 @@ filter_acs_by_state <- function(dataset, state_list) {
 }
 
 
-geography_list <- c('GA', 'FL')
+geography_list <- c('GA')
 
-acs_health_ga <- filter_by_states(acs_health_data, geography_list)
+mill_type_list <- c('pulp/paper')
+
+acs_health_ga <- filter_acs_by_state(acs_health_data, geography_list)
 
 
-#rm(acs_health_data)
+rm(acs_health_data)
 
 
 ###########################################
@@ -66,31 +72,41 @@ filter_facilities_by_state <- function(dataset, state_list) {
   return(filtered_data)
 }
 
+
+filter_facilities_by_mill_type <- function(dataset, type_list) {
+  
+  filtered_data <- dataset[dataset$Type %in% type_list, ]
+  return(filtered_data)
+}
+
+
 facilities_ga <- filter_facilities_by_state(facilities_data, geography_list)
+facilities_ga <- filter_facilities_by_mill_type(facilities_ga, mill_type_list)
+
 
 ###########################################
 ###########################################
 
 
-binpal <- colorBin('YlOrRd', acs_health_ga$`Total Cancer Risk (per million)`)
+binpal <- colorBin('YlOrRd', acs_health_ga$total_risk)
 
 
 facilities_map_ga <- leaflet() %>% 
   
   addTiles() %>%
   addPolygons(data = acs_health_ga,
-              color = ~binpal(`Total Cancer Risk (per million)`),
+              color = ~binpal(total_risk),
               weight = 1.0,
               fillOpacity = 0.5) %>%
   
   
-  addMarkers(data = facilities_ga,# %>% filter(Type == 'pulp/paper'),
+  addMarkers(data = facilities_ga,
              lat = ~Latitude,
              lng = ~Longitude) %>%
   
   addLegend('bottomright',
             pal = binpal,
-            values = acs_health_ga$`Total Cancer Risk (per million)`,
+            values = acs_health_ga$total_risk,
             title = 'Cancer Risk (per Million)',
             opacity = 1,
             labFormat = labelFormat(transform = function(x) sort(x))

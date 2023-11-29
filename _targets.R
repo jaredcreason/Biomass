@@ -1,10 +1,11 @@
 
 # Biomass/_targets.R
 
-library(targets)
-library(tarchetypes)
 
 source('packages.R')
+
+library(targets)
+library(tarchetypes)
 
 tar_source()
 
@@ -18,12 +19,29 @@ tar_plan(
   # Establish Regions of Interest
   
   # Enter one or multiple U.S. State Abbreviations
-  states <- c('TX', 'NM'),
+  states <- c('GA'),
+  
+  # Enter desired mill-type
+  
+  mill_type <- c('pulp/paper'),
+  
   
   # Enter desired file name of output .html file
-  map_title <- 'TX_NM_Facilities_Map',
+  map_title <- 'GA_paper_facility_map',
 
-
+ ###########################
+ ##### Load Packages
+ ###########################
+ 
+ #tar_target(
+  # load_packages,
+   #load_required_packages()
+ #),
+  
+  
+  
+  
+  
   ################################
   ###### Establish data file paths
   ################################
@@ -81,11 +99,15 @@ tar_plan(
  ###################################################
  
   tar_target(filter_area,
-             filter_acs_by_state(merge_acs_health, states)),
+             filter_acs_state(merge_acs_health, states)),
   
 
-  tar_target(filter_facilities,
-             filter_facilities_by_state(facilities_data_loaded, states)),
+  tar_target(filter_facilities_by_state,
+             filter_facilities_state(facilities_data_loaded, states)),
+ 
+ 
+  tar_target(filter_facilities_final,
+             filter_facilities_type(filter_facilities_by_state, mill_type)),
  
  
  
@@ -96,7 +118,7 @@ tar_plan(
  
   
   tar_target(create_leaflet,
-             create_leaflet_map(filter_area, filter_facilities)),
+             create_leaflet_map(filter_area, filter_facilities_final)),
   
  
  ############################

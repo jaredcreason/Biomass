@@ -1,28 +1,37 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|1249ad02421fe71b|||||||||||||||
+.Random.seed|object|0a98dc5552517693|||||||||||||||
 acs_data|stem|f08fd371d76d9b93|bf00fca75bb4b22f|ef46db3751d8e999|2070069384|data/acs_data/acs_data_2021_block group.Rdata|t19678.678832199s|d55132680d1ef2ca|136273846|file|local|vector|||0||
 acs_data_loaded|stem|9c66fa740ad05b70|8132e6f9195f3a29|04b59827bdcd95be|-2075208102||t19689.7454788419s|d55132680d1ef2ca|136273846|rds|local|vector|||31.75||
 ats_cancer_data|stem|b2ef27a2f3752757|c8977e5f549edb53|ef46db3751d8e999|1529704893|data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx|t19678.7111443111s|d8fbdf1114b33386|62317313|file|local|vector|||1.828|package tidyverse was built under R version 4.3.1. package ggplot2 was built under R version 4.3.1. package tibble was built under R version 4.3.1. package tidyr was built under R version 4.3.1. package readr was built under R version 4.3.1. package purrr was built under R version 4.3.1. package dplyr was built under R version 4.3.1. package stringr was built under R version 4.3.1. package forcats was built under R version 4.3.1. package lubridate was built under R version 4.3.1. package leaflet was built under R version 4.3.2. package htmlwidgets was built under R version 4.3.1|
 ats_cancer_loaded|stem|1354529a2e694c42|cd2b91dbeb5ec65e|273f7ac522ec0a41|-81153416||t19689.7273319499s|af959fc67e373362|27565158|rds|local|vector|||22.469||
 ats_resp_data|stem|5dc057f29da18050|2fd94ffc4bd427cc|ef46db3751d8e999|369756200|data/ats_data/2019_National_RespHI_by_tract_poll.xlsx|t19678.7122828853s|c3fdf510540ae8b5|43454196|file|local|vector|||0||
 ats_resp_loaded|stem|db8f01e0292bc836|0d7cd4965252d01b|468aaa5f78c4e9fe|-1104002751||t19689.726664269s|c5c4609163fc9f51|216435|rds|local|vector|||10.609||
-create_leaflet|stem|b90c9d8448185e8e|93acf982a352b3f9|894c7d991deaa803|1565913365||t19689.756329871s|576253214d2826ad|4874155|rds|local|vector|||4.672|sf layer has inconsistent datum projlonglat datumNAD83 no_defs.Need projlonglat datumWGS84|
+create_leaflet|stem|749eda596c402184|39d646831dd35d82|3da34f7630afc704|1565913365||t19690.6236298809s|ecc1969d9966d770|1903766|rds|local|vector|||1.5|sf layer has inconsistent datum projlonglat datumNAD83 no_defs.Need projlonglat datumWGS84|
 create_leaflet_map|function|38f5708f003c6cb3|||||||||||||||
-export_leaflet_as_html|stem|da7e5646cbdfced7|fd6cdac2c1bfb95a|48073a5e8d66998b|186102043||t0s|f4066a65ff755f48|0|file|local|vector|||38.532||
+export_leaflet_as_html|stem|da7e5646cbdfced7|3ed188e2e2aaf0d8|8df247af52f5ef56|186102043||t0s|f4066a65ff755f48|0|file|local|vector|||22.031||
 export_leaflet_map|function|da2af215d52397a8|||||||||||||||
 facilities_data|stem|53d7317b7fcd31ee|43e4f4f5d21c766a|ef46db3751d8e999|1293578598|data/All_mills_ACS.xlsx|t19677.8554906012s|1aabe406be6c0027|819050|file|local|vector|||0||
 facilities_data_loaded|stem|fe65f295de4d14c1|386873c08c4c0ef7|4befb00fd14607bc|353411423||t19689.739093074s|3c708e2544ddc50a|185912|rds|local|vector|||0.594||
 filter_acs_by_state|function|f4ca84383beb33fd|||||||||||||||
-filter_area|stem|cd326d674202c9c0|1a5e721a486df06c|9a85d580f33b9a07|-1497367863||t19689.7464338885s|c44acb3060810b4b|8548623|rds|local|vector|||1.969||
-filter_facilities|stem|6b55da1388ce5a5f|e6e7ef9a8b4a2db7|b001fe90f656d192|-839412128||t19689.7290532609s|6496f6a5da2e4ccd|4916|rds|local|vector|||0||
-filter_facilities_by_state|function|8d1fe15a57ca90c8|||||||||||||||
+filter_acs_state|function|f4ca84383beb33fd|||||||||||||||
+filter_area|stem|9ad1e8c8854f1732|e55e08b25fac3752|fda62cd76285b2d4|-1497367863||t19690.6229778049s|7bcd13a4492d79c7|2840610|rds|local|vector|||0.046||
+filter_facilites_final|stem|8c3f35e777861367|148821f221d15631|ececf51f2fd22461|-465997415||t19690.6228843529s|6f854fc1df6f00a1|1744|rds|local|vector|||0.016||
+filter_facilities|stem|fb5b54947fc3a3de|e6e7ef9a8b4a2db7|62f5e24bd6e7d490|-839412128||t19689.8020233243s|64013308fc4e1ba4|5156|rds|local|vector|||0||
+filter_facilities_by_state|stem|46b54914b979150a|e6c6698512ca9df9|3843c90a68d3bf5f|1698412645||t19690.6228837869s|4acafaeff49c4fde|7908|rds|local|vector|||0||
+filter_facilities_final|stem|8c3f35e777861367|148821f221d15631|ececf51f2fd22461|1435373520||t19690.623607072s|6f854fc1df6f00a1|1744|rds|local|vector|||0||
+filter_facilities_state|function|8d1fe15a57ca90c8|||||||||||||||
+filter_facilities_type|function|b68b44eb54fecdf6|||||||||||||||
 load_acs|stem||8132e6f9195f3a29|521da0d6ed1b0dd6|2064513036||t19689.6647557612s||0|file|local|vector|||||_build_ target load_acs did not return a character. dynamic files targets with format  file must return character vectors of file or directory paths.
 load_acs_data|function|46b18275af478ff0|||||||||||||||
 load_ats_cancer|function|6d4d7b4e1b36259b|||||||||||||||
 load_ats_resp|function|88ad835b390e1aaf|||||||||||||||
 load_facilities_data|function|4781b41f7755ce9b|||||||||||||||
+load_packages|stem|c2af222d93ef06de|5953eea0030a81c0|8a39a5e332a13c96|649925701||t19689.7780419756s|d2d1db4a210f8f40|309|rds|local|vector|||9.344|package tidyverse was built under R version 4.3.1. package ggplot2 was built under R version 4.3.1. package tibble was built under R version 4.3.1. package tidyr was built under R version 4.3.1. package readr was built under R version 4.3.1. package purrr was built under R version 4.3.1. package dplyr was built under R version 4.3.1. package stringr was built under R version 4.3.1. package forcats was built under R version 4.3.1. package lubridate was built under R version 4.3.1. package leaflet was built under R version 4.3.2. package htmlwidgets was built under R version 4.3.1. package tidycensus was built under R version 4.3.2. package tigris was built under R version 4.3.2. package magrittr was built under R version 4.3.1. package data.table was built under R version 4.3.1. package sf was built under R version 4.3.2. package foreach was built under R version 4.3.2. package doSNOW was built under R version 4.3.2. package iterators was built under R version 4.3.2. package snow was built under R version 4.3.1. package scales was built under R version 4.3.1. package odbc was built under R version 4.3.2. package colorspace was built under R version 4.3.1. package openxlsx was built under R version 4.3.1. package usmap was built under R version 4.3.2. package leafdown was built under R version 4.3.2. package shiny was built under R version 4.3.2. package shinydashboard was built under R version 4.3.2|
+load_required_packages|function|538f10e1bb31c013|||||||||||||||
+map_title|object|b80219eb59a7f3b7|||||||||||||||
 merge_acs|function|d0dbc3e450f01cfa|||||||||||||||
-merge_acs_health|stem|aad6eed99a885a7f|9148fefe4be61b39|9d265e6d01082146|-998521516||t19689.7463910386s|2eb653c56029b100|149675539|rds|local|vector|||48.641||
+merge_acs_health|stem|aad6eed99a885a7f|9148fefe4be61b39|9d265e6d01082146|-998521516||t19689.7987295395s|2eb653c56029b100|149675539|rds|local|vector|||75.5||
+mill_type|object|269c5cff45a7df49|||||||||||||||
 packages|object|3777d35a6fe3d25e|||||||||||||||
 pkgTest|function|2339bbeb4bfeecbb|||||||||||||||
-states|object|64d4740d21ed988a|||||||||||||||
+states|object|744b4c170b1e8fa9|||||||||||||||
