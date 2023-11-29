@@ -4,7 +4,7 @@
 source('packages.R')
 source('R/01_load_data.R')
 
-acs_data <- get(load('data/acs_data/acs_data_2021_block group.Rdata'))
+acs_data <- load_acs_data('data/acs_data/acs_data_2021_block group.Rdata')
 rm(data)
 
 
@@ -54,7 +54,7 @@ geography_list <- c('GA')
 
 mill_type_list <- c('pulp/paper')
 
-acs_health_ga <- filter_acs_by_state(acs_health_data, geography_list)
+acs_health_ga <- filter_acs_state(acs_health_data, geography_list)
 
 
 rm(acs_health_data)
@@ -66,29 +66,29 @@ rm(acs_health_data)
 
 facilities_data <- load_facilities_data('data/All_Mills_ACS.xlsx')
 
-filter_facilities_by_state <- function(dataset, state_list) {
+filter_facilities_state <- function(dataset, state_list) {
   
   filtered_data <- dataset[dataset$State_Prov %in% state_list, ]
   return(filtered_data)
 }
 
 
-filter_facilities_by_mill_type <- function(dataset, type_list) {
+filter_facilities_type <- function(dataset, type_list) {
   
   filtered_data <- dataset[dataset$Type %in% type_list, ]
   return(filtered_data)
 }
 
 
-facilities_ga <- filter_facilities_by_state(facilities_data, geography_list)
-facilities_ga <- filter_facilities_by_mill_type(facilities_ga, mill_type_list)
+facilities_ga <- filter_facilities_state(facilities_data, geography_list)
+facilities_ga_paper <- filter_facilities_type(facilities_ga, mill_type_list)
 
 
 ###########################################
 ###########################################
 
 
-binpal <- colorBin('YlOrRd', acs_health_ga$total_risk)
+binpal <- colorBin('YlOrRd', acs_health_ga$total_risk, bins = 5)
 
 
 facilities_map_ga <- leaflet() %>% 
@@ -97,12 +97,42 @@ facilities_map_ga <- leaflet() %>%
   addPolygons(data = acs_health_ga,
               color = ~binpal(total_risk),
               weight = 1.0,
-              fillOpacity = 0.5) %>%
+              fillOpacity = 0.5,
+              popup = paste("Tract ID: ", acs_health_ga$Tract, "<br>",
+                            "County: ", acs_health_ga$County, "<br>",
+                            "State: ", acs_health_ga$State, "<br>",
+                            "Population: ", comma(acs_health_ga$pop), "<br>",
+                           
+                             "<br>",
+                            
+                            "Cancer Risk: ", acs_health_ga$total_risk, "<br>",
+                            "Percent White: ", round(acs_health_ga$white_pct,1),"%", "<br>",
+                            "Median HH Income: ", "$", comma(acs_health_ga$income*1000), "<br>"
+                            )) %>%
   
   
-  addMarkers(data = facilities_ga,
+  addMarkers(data = facilities_ga_paper,
              lat = ~Latitude,
-             lng = ~Longitude) %>%
+             lng = ~Longitude,
+             popup = paste("Name: ", facilities_ga_paper$Mill_Name, "<br>",
+                           "Mill Type: ", facilities_ga_paper$Type, "<br>",
+                           "End Product: ", facilities_ga_paper$End_Use, "<br>",
+                           "Status: ", facilities_ga_paper$Status, "<br>",
+                           
+                           '<br>',
+                           
+                           "Production Capacity: ", 
+                           comma(facilities_ga_paper$Current_Ca),
+                           facilities_ga_paper$Production, "<br>",
+                           "Wood Input at Capacity: ",
+                           comma(facilities_ga_paper$Total_Wood), 'Tons','<br>',
+                           
+                           '<br>',
+                           
+                           "City: ", facilities_ga_paper$City, "<br>",
+                           "County: ", facilities_ga_paper$County, "<br>",
+                           "State: ", facilities_ga_paper$State_Prov, "<br>"
+             )) %>%
   
   addLegend('bottomright',
             pal = binpal,
@@ -112,10 +142,8 @@ facilities_map_ga <- leaflet() %>%
             labFormat = labelFormat(transform = function(x) sort(x))
             )
   
-facilties_map_GA_FL <- create_leaflet_map(acs_health_ga, facilities_ga)
+facilities_map_ga
 
 
 ##############################################
 ##############################################
-
-

@@ -1,14 +1,14 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|0a98dc5552517693|||||||||||||||
+.Random.seed|object|7eb9ddf04bd00c80|||||||||||||||
 acs_data|stem|f08fd371d76d9b93|bf00fca75bb4b22f|ef46db3751d8e999|2070069384|data/acs_data/acs_data_2021_block group.Rdata|t19678.678832199s|d55132680d1ef2ca|136273846|file|local|vector|||0||
 acs_data_loaded|stem|9c66fa740ad05b70|8132e6f9195f3a29|04b59827bdcd95be|-2075208102||t19689.7454788419s|d55132680d1ef2ca|136273846|rds|local|vector|||31.75||
 ats_cancer_data|stem|b2ef27a2f3752757|c8977e5f549edb53|ef46db3751d8e999|1529704893|data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx|t19678.7111443111s|d8fbdf1114b33386|62317313|file|local|vector|||1.828|package tidyverse was built under R version 4.3.1. package ggplot2 was built under R version 4.3.1. package tibble was built under R version 4.3.1. package tidyr was built under R version 4.3.1. package readr was built under R version 4.3.1. package purrr was built under R version 4.3.1. package dplyr was built under R version 4.3.1. package stringr was built under R version 4.3.1. package forcats was built under R version 4.3.1. package lubridate was built under R version 4.3.1. package leaflet was built under R version 4.3.2. package htmlwidgets was built under R version 4.3.1|
 ats_cancer_loaded|stem|1354529a2e694c42|cd2b91dbeb5ec65e|273f7ac522ec0a41|-81153416||t19689.7273319499s|af959fc67e373362|27565158|rds|local|vector|||22.469||
 ats_resp_data|stem|5dc057f29da18050|2fd94ffc4bd427cc|ef46db3751d8e999|369756200|data/ats_data/2019_National_RespHI_by_tract_poll.xlsx|t19678.7122828853s|c3fdf510540ae8b5|43454196|file|local|vector|||0||
 ats_resp_loaded|stem|db8f01e0292bc836|0d7cd4965252d01b|468aaa5f78c4e9fe|-1104002751||t19689.726664269s|c5c4609163fc9f51|216435|rds|local|vector|||10.609||
-create_leaflet|stem|749eda596c402184|39d646831dd35d82|3da34f7630afc704|1565913365||t19690.6236298809s|ecc1969d9966d770|1903766|rds|local|vector|||1.5|sf layer has inconsistent datum projlonglat datumNAD83 no_defs.Need projlonglat datumWGS84|
-create_leaflet_map|function|38f5708f003c6cb3|||||||||||||||
-export_leaflet_as_html|stem|da7e5646cbdfced7|3ed188e2e2aaf0d8|8df247af52f5ef56|186102043||t0s|f4066a65ff755f48|0|file|local|vector|||22.031||
+create_leaflet|stem|4a8c0891e3c8ca8f|39d646831dd35d82|dcddb1e28242d625|1565913365||t19690.7462700677s|60867963a28e32fe|1979763|rds|local|vector|||2.312|sf layer has inconsistent datum projlonglat datumNAD83 no_defs.Need projlonglat datumWGS84|
+create_leaflet_map|function|ec08781b317220d0|||||||||||||||
+export_leaflet_as_html|stem|da7e5646cbdfced7|3ed188e2e2aaf0d8|c69d425e3d1ad80f|186102043||t0s|f4066a65ff755f48|0|file|local|vector|||21.703||
 export_leaflet_map|function|da2af215d52397a8|||||||||||||||
 facilities_data|stem|53d7317b7fcd31ee|43e4f4f5d21c766a|ef46db3751d8e999|1293578598|data/All_mills_ACS.xlsx|t19677.8554906012s|1aabe406be6c0027|819050|file|local|vector|||0||
 facilities_data_loaded|stem|fe65f295de4d14c1|386873c08c4c0ef7|4befb00fd14607bc|353411423||t19689.739093074s|3c708e2544ddc50a|185912|rds|local|vector|||0.594||
