@@ -1,11 +1,34 @@
 
 # Biomass/_targets.R
 
+######################################
+### How to Run this Repository
+######################################
 
-source('packages.R')
+# Step 1: Download 2021 ACS Block group data if not already installed
 
+## source('scripts/acs_api_query.R')
+
+
+
+# Step 2: Load required targets packages
 library(targets)
 library(tarchetypes)
+
+
+# Step 3: Establish Area and Facilities of Interest 
+#         by changing strings at beginning of tar_plan()
+
+# Step 4: Run tar_make()
+
+# Step 5: View rendered HTML map in /output directory.
+
+###############################
+######### Set-Up
+################################
+
+
+source('packages.R')
 
 tar_source()
 
@@ -14,33 +37,28 @@ tar_option_set(packages= c('tidyverse', 'leaflet','htmlwidgets'))
 
 
 tar_plan(
+ ############################################
+ ##### Create Facility Interactive Map
+  ##########################################
+ 
+ 
   
+  ## Enter one or multiple U.S. State Abbreviations (max two recommended)
+  states <- c('PA'),
   
-  # Establish Regions of Interest
+ 
+ 
+  # Enter desired mill-type, options include:
+ # "pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", or "OSB" 
   
-  # Enter one or multiple U.S. State Abbreviations
-  states <- c('GA'),
-  
-  # Enter desired mill-type
-  
-  mill_type <- c('pulp/paper'),
+  mill_type <- c('lumber'),
   
   
   # Enter desired file name of output .html file
-  map_title <- 'GA_paper_facility_map',
+  map_title <- 'PA_lumber_facilities_map',
 
- ###########################
- ##### Load Packages
- ###########################
  
- #tar_target(
-  # load_packages,
-   #load_required_packages()
- #),
-  
-  
-  
-  
+
   
   ################################
   ###### Establish data file paths
@@ -131,11 +149,15 @@ tar_plan(
                                 map_title = map_title),
              format = 'file')
   
-  
+###########################################################################
+ #############################################################################
+ ###############################################################################
+ 
+ # Planned Space for Proximity Analysis _targetification
 
-  )
 
 
+)
 
 
 

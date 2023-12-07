@@ -1,26 +1,24 @@
 
 # Forest Products Manufacturing EJ Analysis
 
-This repository pulls demographics from the ACS for areas surrounding Forest Products Manufacturing (pellets, chips, lumber, paper, etc.) using the `targets` package pipeline framework. This repository is currently in development.
+This repository uses block group level data from the [2021 5-year American Community Survey](https://api.census.gov/data/2021/acs/acs5/variables.html), health risk data from the [2019 National Air Toxicity Assesment](https://www.epa.gov/national-air-toxics-assessment), and Forest Products Manufacturing (pellets, chips, lumber, paper, etc.) facilties dataset resulting in an interactive visualization powered by [Leaflet](https://rstudio.github.io/leaflet/) using the [`targets`](https://books.ropensci.org/targets/) data pipeline framework.
 
 
 ## Getting started.
 
 To run this repository:
 
-1. Source scripts/acs_api_query.R to install ACS Survey Data onto your local drive.
-2. Open _targets.R
-3. Change region/state settings as necessary.
-4. run `tar::tar_make()`
-5. View `.html` output in /output directory.
-
+1. Clone to local directory.
+2. Open Biomass.Rproj.
+3. Open _targets.R.
+4. Follow brief instructions as described in _targets.R.
 
 ## Contact Information
 
 > David Lopez Jr.
-
+>
 > US EPA Climate Economics Branch
-
+>
 > Lopez.David@epa.gov
 
 

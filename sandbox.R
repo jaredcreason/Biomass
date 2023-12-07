@@ -147,3 +147,25 @@ facilities_map_ga
 
 ##############################################
 ##############################################
+
+
+facilities_pellet_data <- facilities_data %>% filter(Type == 'pellet')
+
+facilities_lumber_data <- facilities_data %>% filter(Type == 'lumber') %>% filter(State_Prov == 'TX')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

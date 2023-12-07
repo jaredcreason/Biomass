@@ -2,9 +2,9 @@
 # R/data-collection.R
 
 
-#' read_data_file
+#' Read files into targets environment
 #'
-#' @param filepath
+#' @param filepath file paths on local machine to ACS, Facilities, and NATA datasets.
 #'
 #' @return
 #' @exportf
