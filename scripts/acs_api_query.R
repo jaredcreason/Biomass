@@ -2,6 +2,7 @@
 #################################  GET CENSUS - ACS
 ###################################################
 
+source('packages.R')
 ## This will take approximately 1-2 hours if ACS data are not already downloaded
 
 ## census api key

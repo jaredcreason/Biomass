@@ -7,7 +7,7 @@
 
 # Step 1: Download 2021 ACS Block group data if not already installed
 
-## source('scripts/acs_api_query.R')
+#source('scripts/acs_api_query.R')
 
 
 
@@ -44,18 +44,18 @@ tar_plan(
  
   
   ## Enter one or multiple U.S. State Abbreviations (max two recommended)
-  states <- c('PA'),
+  states <- c('OK'),
   
  
  
   # Enter desired mill-type, options include:
  # "pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", or "OSB" 
   
-  mill_type <- c('lumber'),
+  mill_type <- c('pulp/paper'),
   
   
   # Enter desired file name of output .html file
-  map_title <- 'PA_lumber_facilities_map',
+  map_title <- 'OK_paper_facilities_map',
 
  
 
