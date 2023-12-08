@@ -5,28 +5,33 @@
 ### How to Run this Repository
 ######################################
 
-# Step 1: Download 2021 ACS Block group data if not already installed
-
-#source('scripts/acs_api_query.R')
-
+# FIRST TIME ONLY: Script will query Census API ACS Data
+# Runtime: (approx. 90 minutes)
 
 
-# Step 2: Load required targets packages
+# Step 1: Load required targets packages
 library(targets)
 library(tarchetypes)
 
 
-# Step 3: Establish Area and Facilities of Interest 
+# Step 2: Establish Area and Facilities of Interest 
 #         by changing strings at beginning of tar_plan()
 
-# Step 4: Run tar_make()
+# Step 3: Run tar_make()
 
-# Step 5: View rendered HTML map in /output directory.
+# Step 4: View rendered HTML map in /output directory.
 
 ###############################
 ######### Set-Up
 ################################
 
+acs_data_filepath <- 'data/acs_data/acs_data_2021_block group.Rdata'
+
+if (!file.exists(acs_data_filepath)) {
+  source('scripts/acs_api_query.R')
+} else {
+  print('ACS Data already exists. Skipping Census API Query.')
+}
 
 source('packages.R')
 
@@ -44,7 +49,7 @@ tar_plan(
  
   
   ## Enter one or multiple U.S. State Abbreviations (max two recommended)
-  states <- c('OK'),
+  states <- c('TX'),
   
  
  
@@ -55,7 +60,7 @@ tar_plan(
   
   
   # Enter desired file name of output .html file
-  map_title <- 'OK_paper_facilities_map',
+  map_title <- 'TX_paper_facilities_map',
 
  
 
