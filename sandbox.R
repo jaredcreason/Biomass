@@ -17,6 +17,13 @@ resp_data <- load_ats_resp('data/ats_data/2019_National_RespHI_by_tract_poll.xls
 data_ct <-acs_data %>% 
   mutate(Tract=substr(GEOID,1,11))
 
+shp = data_ct %>%
+  filter(variable=="pop") %>%
+  select(GEOID,Tract) %>%
+  arrange(GEOID) %>%
+  st_transform(3488)
+
+
 rm(acs_data)
 
 
@@ -54,15 +61,16 @@ geography_list <- c('GA')
 
 mill_type_list <- c('pulp/paper')
 
-acs_health_ga <- filter_acs_state(acs_health_data, geography_list)
+acs_health_ga <- filter_acs_by_state(acs_health_data, geography_list)
 
-
+write.csv(acs_health_ga, 'acs_health_ga.csv')
 rm(acs_health_data)
 
 
 ###########################################
 ##########################################
 
+state_list <- c('GA')
 
 facilities_data <- load_facilities_data('data/All_Mills_ACS.xlsx')
 
@@ -86,6 +94,16 @@ facilities_ga_paper <- filter_facilities_type(facilities_ga, mill_type_list)
 
 ###########################################
 ###########################################
+
+
+
+
+
+
+
+
+########################################
+#######################################
 
 
 binpal <- colorBin('YlOrRd', acs_health_ga$total_risk, bins = 5)
@@ -134,6 +152,27 @@ facilities_map_ga <- leaflet() %>%
                            "State: ", facilities_ga_paper$State_Prov, "<br>"
              )) %>%
   
+  
+  addMarkers(data = tri_facilities_GA,
+             lat = ~`12. LATITUDE`,
+             lng = ~`13. LONGITUDE`,
+           popup = paste("TRI FACILITY", 
+                         
+                         "<br>",
+                         
+                         "Name: ", tri_facilities_GA$`4. FACILITY NAME`, "<br>",
+                           "Industry Sector: ", tri_facilities_GA$`20. INDUSTRY SECTOR`, "<br>",
+                           "Chemical: ", tri_facilities_GA$`34. CHEMICAL`, "<br>",
+                           "Carcinogen: ", tri_facilities_GA$`43. CARCINOGEN`, "<br>",
+                           
+                           '<br>',
+                          
+                           
+                           "City: ", tri_facilities_GA$`6. CITY`, "<br>",
+                           "County: ", tri_facilities_GA$`7. COUNTY`, "<br>",
+                           "State: ", tri_facilities_GA$`8. ST`, "<br>"
+             )) %>%
+  
   addLegend('bottomright',
             pal = binpal,
             values = acs_health_ga$total_risk,
@@ -157,15 +196,329 @@ facilities_lumber_data <- facilities_data %>% filter(Type == 'lumber') %>% filte
 
 
 
+##################################################
+## Add TRI mapping 
+
+tri_facilities <- read_csv("data/tri_data/tri_2020_us.csv") %>%
+  
+  select(`3. FRS ID`, `4. FACILITY NAME`,`5. STREET ADDRESS`,`6. CITY`,`7. COUNTY`,`8. ST`,`9. ZIP`,`10. BIA`,`11. TRIBE`,
+         `12. LATITUDE`,`13. LONGITUDE`,`14. HORIZONTAL DATUM`,
+         `15. PARENT CO NAME`,
+         `27. PRIMARY NAICS`,`20. INDUSTRY SECTOR`,
+         `34. CHEMICAL`,`43. CARCINOGEN`,`46. UNIT OF MEASURE`,
+         `47. 5.1 - FUGITIVE AIR`,`48. 5.2 - STACK AIR`,`49. 5.3 - WATER`,
+         `51. 5.4.1 - UNDERGROUND CL I`,`52. 5.4.2 - UNDERGROUND C II-V`,
+         `54. 5.5.1A - RCRA C LANDFILL`,`55. 5.5.1B - OTHER LANDFILLS`,`56. 5.5.2 - LAND TREATMENT`,
+         `58. 5.5.3A - RCRA SURFACE IM`,`59. 5.5.3B - OTHER SURFACE I`,`60. 5.5.4 - OTHER DISPOSAL`,
+         `61. ON-SITE RELEASE TOTAL`,
+         `62. 6.1 - POTW - TRNS RLSE`,`63. 6.1 - POTW - TRNS TRT`,`64. POTW - TOTAL TRANSFERS`,
+         `84. OFF-SITE RELEASE TOTAL`,`90. OFF-SITE RECYCLED TOTAL`,`93. OFF-SITE ENERGY RECOVERY T`,
+         `100. OFF-SITE TREATED TOTAL`,`101. 6.2 - UNCLASSIFIED`,`102. 6.2 - TOTAL TRANSFER`,
+         `103. TOTAL RELEASES`)
+
+
+state_list_test <- c('GA')
+industry_list_test <- c('Wood Products')
+
+tri_facilities_GA <- tri_facilities %>%
+  filter(`8. ST` %in% state_list_test) %>% 
+  filter(`20. INDUSTRY SECTOR` %in% industry_list_test)
+
+rm(tri_facilities)
+
+
+
+
+##############################################
+########### TRI Proximity Analysis
+#############################################
+
+tri_facilities_ga <- read_csv('tri_facilities_ga.csv')
+
+
+acs_health_ga <- read.xlsx('acs_health_ga.xlsx')
+
+urban_areas <- urban_areas()
+
+
+
+#####################################################
+
+
+
+
+facilities <- tri_facilities_ga %>% mutate(Label = `4. FACILITY NAME`)
+
+
+
+facilities_lat_lon <- facilities %>% 
+  select(`13. LONGITUDE`,`12. LATITUDE`,Label) %>%
+  rename(lon =`13. LONGITUDE`,
+         lat = `12. LATITUDE`)
+
+
+
+facilities_sf = st_as_sf(facilities, 
+                         coords=c(x="13. LONGITUDE",y="12. LATITUDE"), 
+                         crs=4326) %>%
+  st_transform(3488) 
+
+### Indicating rural vs urban facilities. 1 = rural, 0 = urban
+
+uac <- urban_areas %>% st_transform(3488)
+
+facilities_sf_urban <- st_intersection(facilities_sf,uac) %>%
+  mutate(rural = 0)
+
+facilities_sf_rural <- facilities_sf %>%
+  mutate(rural = fifelse(`4. FACILITY NAME` %in% unique(facilities_sf_urban$`4. FACILITY NAME`),0,1)) %>%
+  as.data.frame() %>%
+  select(rural,`4. FACILITY NAME`)
+
+facilities_map <- left_join(facilities_sf, facilities_sf_rural, by = 'Label')
+
+facilities_map <- facilities_sf %>%
+  left_join(facilities_sf_rural, by = "Label") %>%
+  left_join(facilities_lat_lon, by = "Label")
+
+
+
+left_join()
+
+#####################################
 
 
 
 
 
+urban_tracts <- readRDS("data/urban_tracts.rds")
 
 
 
+shp_rural <- shp %>% mutate(rural = fifelse(Tract %in% urban_tracts$Tract,0,1))
+
+# identify rural and urban census blocks
+sq_miles <- shp %>% mutate(sq_miles = units::set_units(st_area(shp),"mi^2")) %>%
+  select(GEOID,sq_miles)
+
+units(sq_miles$sq_miles) <- NULL
+
+# prepare for merge with data
+sq_miles %<>% st_set_geometry(NULL) %>% as.data.table() %>% setkey('GEOID')
+
+# draw a buffer around the facilities
+# buffer_dist is in miles so we need to multiply by 1609.34 meters/mile
+
+communities = st_buffer(facilities_map, dist=1*1609.34) 
+
+communities_3mi = st_buffer(facilities_map, dist=3*1609.34)
+
+communities_5mi = st_buffer(facilities_map, dist=5*1609.34)
+
+communities_10mi = st_buffer(facilities_map, dist=10*1609.34)
+
+# find the census geographies within the buffer around the facilities
+
+buffer = st_intersection(communities,shp) %>%
+  select(GEOID,Tract,Label)
+
+buffer_3mi = st_intersection(communities_3mi,shp) %>%
+  select(GEOID,Tract,Label)
+
+buffer_5mi = st_intersection(communities_5mi,shp) %>%
+  select(GEOID,Tract,Label)
+
+buffer_10mi = st_intersection(communities_10mi,shp) %>%
+  select(GEOID,Tract,Label)
+
+# # get GEOID to facility list
+facility_buffer <- st_intersection(facilities_map, buffer) %>% select(Label, GEOID) %>% st_set_geometry(NULL)
+
+facility_buffer_3mi <- st_intersection(facilities_map, buffer_3mi) %>% select(Label, GEOID) %>% st_set_geometry(NULL)
+
+facility_buffer_5mi <- st_intersection(facilities_map, buffer_5mi) %>% select(Label, GEOID) %>% st_set_geometry(NULL)
+
+facility_buffer_10mi <- st_intersection(facilities_map, buffer_10mi) %>% select(Label, GEOID) %>% st_set_geometry(NULL)
+
+# drop the geometry to work with the data alone
+table_full <- data_ct %>% 
+  st_set_geometry(NULL) %>%
+  as.data.table() %>% 
+  setkey('GEOID')
+
+table_1 <- table_full[sq_miles]
+
+# merge the acs and nata data
+
+nata_data <- read.xlsx('data/nata_data/national_cancerrisk_by_tract_poll.xlsx')
+nata_data_resp <- read.xlsx('data/nata_data/national_resphi_by_tract_poll.xlsx')
+
+
+table_2 <- table_1 %>%
+  pivot_wider(names_from=variable,values_from=estimate) %>%
+  mutate(white_pct=(white/pop)*100,
+         minority_black=(black/pop)*100,
+         minority_other=((pop-(white + black))/pop)*100,
+         minority_hispanic=(hispanic/hispanic_denominator)*100,
+         pov99=pov99/pop*100,
+         pov50=pov50/pop*100,
+         income=income/1000,
+         rural = fifelse(Tract %in% urban_tracts$Tract,0,1)) %>%
+  left_join(nata_data,by=c("Tract"="Tract")) %>%
+  left_join(nata_data_resp,by=c("Tract"="Tract")) %>%
+  as.data.table() %>%
+  setkey('GEOID')
+
+table_2$total_risk_resp <- table_2$`Total Respiratory (hazard quotient)`
+
+table_2 <- acs_health_ga
+
+# merge the acs and facility data
+
+facility_demographics_1mi_pre <- merge(as.data.table(facilities_map), as.data.table(buffer),by="Label", allow.cartesian = TRUE)
+facility_demographics_3mi_pre <- merge(as.data.table(facilities_map), as.data.table(buffer_3mi),by="Label")
+facility_demographics_5mi_pre <- merge(as.data.table(facilities_map), as.data.table(buffer_5mi),by="Label")
+facility_demographics_10mi_pre <- merge(as.data.table(facilities_map), as.data.table(buffer_10mi),by="Label")
+
+facility_demographics_1mi_mid <- merge(facility_demographics_1mi_pre, table_2, by="GEOID") %>% 
+  select(Label,City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
+         white,black,indian,asian,hispanic,income,pov50,pov99,
+         total_risk,total_risk_resp) %>%
+  rename(rural_facility = rural.x, rural_blockgroup = rural.y)
+
+facility_demographics_3mi_mid <- merge(facility_demographics_3mi_pre, table_2, by="GEOID") %>% 
+  select(Label,City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
+         white,black,indian,asian,hispanic,income,pov50,pov99,
+         total_risk,total_risk_resp) %>%
+  rename(rural_facility = rural.x, rural_blockgroup = rural.y)
+
+facility_demographics_5mi_mid <- merge(facility_demographics_5mi_pre, table_2, by="GEOID") %>% 
+  select(Label,City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
+         white,black,indian,asian,hispanic,income,pov50,pov99,
+         total_risk, total_risk_resp) %>%
+  rename(rural_facility = rural.x, rural_blockgroup = rural.y)
+
+facility_demographics_10mi_mid <- merge(facility_demographics_10mi_pre, table_2, by="GEOID") %>% 
+  select(Label,City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
+         white,black,indian,asian,hispanic,income,pov50,pov99,
+         total_risk,total_risk_resp) %>%
+  rename(rural_facility = rural.x, rural_blockgroup = rural.y)
+
+facility_demographics_1mi <- facility_demographics_1mi_mid %>%
+  group_by(Label,City,Total_Wood) %>%
+  mutate(
+    blockgroups_n = n(), 
+    sq_miles = sum(sq_miles, na.rm=TRUE), 
+    pop = sum(pop, na.rm=TRUE),
+    white = sum(white, na.rm=TRUE),
+    black = sum(black, na.rm=TRUE),
+    indian = sum(indian, na.rm=TRUE),
+    asian = sum(asian, na.rm=TRUE),
+    hispanic = sum(hispanic, na.rm=TRUE),
+    income = mean(income, na.rm=TRUE),
+    pov50 = mean(pov50, na.rm=TRUE), 
+    pov99 = mean(pov99, na.rm=TRUE), 
+    total_risk = mean(total_risk, na.rm=TRUE), 
+    total_risk_resp = mean(total_risk_resp, na.rm=TRUE)) %>%
+  mutate(pop_sq_mile_1mi = pop/sq_miles,
+         rural_bg_pct = signif(sum(rural_blockgroup/blockgroups_n, na.rm=TRUE),2)) %>% 
+  ungroup() %>%
+  select(Label,City,Total_Wood,blockgroups_n,sq_miles,pop,pop_sq_mile_1mi,
+         rural_facility,rural_bg_pct,white,black,indian,asian,hispanic,
+         income,pov50,pov99,total_risk,total_risk_resp) %>% 
+  distinct()
+
+write.xlsx(facility_demographics_1mi,"output/facility_data/allocation_rule_facility_demographics_1mi.xlsx", overwrite = TRUE)
+
+facility_demographics_3mi <- facility_demographics_3mi_mid %>%
+  group_by(Label,City,Total_Wood) %>%
+  mutate(blockgroups_n = n(), 
+         sq_miles = sum(sq_miles, na.rm=TRUE), 
+         pop = sum(pop, na.rm=TRUE),
+         white = sum(white, na.rm=TRUE),
+         black = sum(black, na.rm=TRUE),
+         indian = sum(indian, na.rm=TRUE),
+         asian = sum(asian, na.rm=TRUE),
+         hispanic = sum(hispanic, na.rm=TRUE),
+         income = mean(income, na.rm=TRUE),
+         pov50 = mean(pov50, na.rm=TRUE), 
+         pov99 = mean(pov99, na.rm=TRUE), 
+         total_risk = mean(total_risk, na.rm=TRUE), 
+         total_risk_resp = mean(total_risk_resp, na.rm=TRUE)) %>%
+  mutate(pop_sq_mile_3mi = pop/sq_miles,
+         rural_bg_pct = signif(sum(rural_blockgroup/blockgroups_n, na.rm=TRUE),2)) %>% 
+  ungroup() %>%
+  select(Label,City,Total_Wood,blockgroups_n,sq_miles,pop,pop_sq_mile_3mi,
+         rural_facility,rural_bg_pct,white,black,indian,asian,hispanic,
+         income,pov50,pov99,total_risk,total_risk_resp) %>% 
+  distinct()
+
+write.xlsx(facility_demographics_3mi,"output/facility_data/allocation_rule_facility_demographics_3mi.xlsx", overwrite = TRUE)
+
+facility_demographics_5mi <- facility_demographics_5mi_mid %>%
+  group_by(Label,City,Total_Wood) %>%
+  mutate(blockgroups_n = n(), 
+         sq_miles = sum(sq_miles, na.rm=TRUE), 
+         pop = sum(pop, na.rm=TRUE),
+         white = sum(white, na.rm=TRUE),
+         black = sum(black, na.rm=TRUE),
+         indian = sum(indian, na.rm=TRUE),
+         asian = sum(asian, na.rm=TRUE),
+         hispanic = sum(hispanic, na.rm=TRUE),
+         income = mean(income, na.rm=TRUE),
+         pov50 = mean(pov50, na.rm=TRUE), 
+         pov99 = mean(pov99, na.rm=TRUE), 
+         total_risk = mean(total_risk, na.rm=TRUE), 
+         total_risk_resp = mean(total_risk_resp, na.rm=TRUE)) %>%
+  mutate(pop_sq_mile_5mi = pop/sq_miles,
+         rural_bg_pct = signif(sum(rural_blockgroup/blockgroups_n, na.rm=TRUE),2)) %>% 
+  ungroup() %>%
+  select(Label,City,Total_Wood,blockgroups_n,sq_miles,pop,pop_sq_mile_5mi,
+         rural_facility,rural_bg_pct,white,black,indian,asian,hispanic,
+         income,pov50,pov99,total_risk,total_risk_resp) %>% 
+  distinct()
+
+write.xlsx(facility_demographics_5mi, file = "output/facility_data/allocation_rule_facility_demographics_5mi.xlsx", overwrite = TRUE)
+
+facility_demographics_10mi <- facility_demographics_10mi_mid %>%
+  group_by(Label,City,Total_Wood) %>%
+  mutate(blockgroups_n = n(), 
+         sq_miles = sum(sq_miles, na.rm=TRUE), 
+         pop = sum(pop, na.rm=TRUE),
+         white = sum(white, na.rm=TRUE),
+         black = sum(black, na.rm=TRUE),
+         indian = sum(indian, na.rm=TRUE),
+         asian = sum(asian, na.rm=TRUE),
+         hispanic = sum(hispanic, na.rm=TRUE),
+         income = mean(income, na.rm=TRUE),
+         pov50 = mean(pov50, na.rm=TRUE), 
+         pov99 = mean(pov99, na.rm=TRUE), 
+         total_risk = mean(total_risk, na.rm=TRUE), 
+         total_risk_resp = mean(total_risk_resp, na.rm=TRUE)) %>%
+  mutate(pop_sq_mile_10mi = pop/sq_miles,
+         rural_bg_pct = signif(sum(rural_blockgroup/blockgroups_n, na.rm=TRUE),2)) %>% 
+  ungroup() %>%
+  select(Label,City,Total_Wood,blockgroups_n,sq_miles,pop,pop_sq_mile_10mi,
+         rural_facility,rural_bg_pct,white,black,indian,asian,hispanic,
+         income,pov50,pov99,total_risk,total_risk_resp) %>% 
+  distinct()
+
+write.xlsx(facility_demographics_10mi,"output/facility_data/allocation_rule_facility_demographics_10mi.xlsx", overwrite = TRUE)
+
+###\
+
+
+ID_column_name = 'Mill_Name'
+
+longitude_col_name = 'Longitude'
+
+latitude_col_name = 'Latitude'
 
 
 
-
+fac_map_test <- prep_facilities(facilities_data,
+                                ID_column_name,
+                                longitude_col_name,
+                                latitude_col_name)
+    
+    

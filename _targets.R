@@ -49,7 +49,7 @@ tar_plan(
  
   
   ## Enter one or multiple U.S. State Abbreviations (max two recommended)
-  states <- c('TX'),
+  states <- c('GA'),
   
  
  
@@ -57,26 +57,42 @@ tar_plan(
  # "pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", or "OSB" 
   
   mill_type <- c('pulp/paper'),
+ 
+ tri_industry_sector <- c('Wood Products'),
   
   
   # Enter desired file name of output .html file
-  map_title <- 'TX_paper_facilities_map',
+  map_title <- 'GA_paper_tri_map',
 
+ 
+ ##############################################################
+ 
+ # Proximity Analysis Set-Up
+ 
+ buffer_radius_mi = 5,
+ 
+ fac_demo_table_name = 'GA_paper_mills_5mi',
+ 
+ ID_column_name = 'Mill_Name',
+ 
+ longitude_col_name = 'Longitude',
+ 
+ latitude_col_name = 'Latitude',
  
 
   
   ################################
   ###### Establish data file paths
   ################################
-  
-   
-  #tar_target(acs_data,
-   #          'data/acs_data/acs_data_2021_block group.Rdata',
-    #         format = 'file'),
-  
+
   
   tar_target(facilities_data,
              'data/All_mills_ACS.xlsx',
+             format = 'file'),
+ 
+ 
+  tar_target(tri_facilities_data,
+             'data/tri_data/tri_2020_us.csv',
              format = 'file'),
   
   
@@ -108,6 +124,9 @@ tar_plan(
   tar_target(facilities_data_loaded,
              load_facilities_data(facilities_data)),
 
+  tar_target(tri_facilities_data_loaded,
+             load_tri_facilities_data(tri_facilities_data)),
+
   
   
  #########################################
@@ -133,6 +152,12 @@ tar_plan(
              filter_facilities_type(filter_facilities_by_state, mill_type)),
  
  
+  tar_target(filter_tri_facilities,
+             filter_tri_facilities_states_industry(tri_facilities_data_loaded,
+                                                   states,
+                                                   tri_industry_sector)),
+ 
+ 
  
   
  ############################
@@ -141,7 +166,9 @@ tar_plan(
  
   
   tar_target(create_leaflet,
-             create_leaflet_map(filter_area, filter_facilities_final)),
+             create_leaflet_map(filter_area,
+                                filter_facilities_final, 
+                                filter_tri_facilities)),
   
  
  ############################
@@ -152,7 +179,7 @@ tar_plan(
   tar_target(export_leaflet_as_html,
              export_leaflet_map(create_leaflet,
                                 map_title = map_title),
-             format = 'file')
+             format = 'file'),
   
 ###########################################################################
  #############################################################################
@@ -161,13 +188,41 @@ tar_plan(
  # Planned Space for Proximity Analysis _targetification
 
 
+ tar_target(fac_map, prep_facilities(facilities_data_loaded,
+                                             ID_column_name,
+                                             longitude_col_name,
+                                             latitude_col_name)),
+
+  tar_target(urban_tracts_loaded, load_urban_tracts()),
+
+  tar_target(data_ct_loaded, gen_acs_data_ct(acs_data_loaded)),
+
+  tar_target(shp_loaded, prep_acs_geometry(data_ct_loaded, urban_tracts_loaded)),
+
+  tar_target(gen_bufferzone, create_buffer_zone(fac_map, buffer_radius_mi, shp_loaded)),
+
+  tar_target(gen_sq_miles, gen_sq_miles(shp_loaded)),
+  
+  
+  
+  tar_target(acs_health_table, gen_acs_health_table(data_ct_loaded,
+                                                    gen_sq_miles,
+                                                    urban_tracts_loaded,
+                                                    ats_cancer_loaded,
+                                                    ats_resp_loaded)),
+
+  tar_target(facility_demo_table, gen_facility_demo_table(fac_map,
+                                                          gen_bufferzone,
+                                                          data_ct_loaded,
+                                                          gen_sq_miles,
+                                                          acs_health_table
+                                                          )),
+  
+  tar_target(write_facility_dem_table, write_table(facility_demo_table, fac_demo_table_name),
+             format = 'file')
+
+
 
 )
-
-
-
-
-
-
 
 

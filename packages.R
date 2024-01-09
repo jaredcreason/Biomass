@@ -29,9 +29,7 @@ packages <- c('tidycensus',
               'openxlsx',
               'usmap',
               'leaflet',
-              'leafdown',
-              'shiny',
-              'shinydashboard',
+              'writexl',
               'htmlwidgets') ## you can add more packages here
 lapply(packages, pkgTest)
 

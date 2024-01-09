@@ -1,5 +1,5 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|ab463e81d923508c|||||||||||||||
+.Random.seed|object|c1a49b684469ba4f|||||||||||||||
 acs_data|stem|f08fd371d76d9b93|bf00fca75bb4b22f|ef46db3751d8e999|2070069384|data/acs_data/acs_data_2021_block group.Rdata|t19678.678832199s|d55132680d1ef2ca|136273846|file|local|vector|||0||
 acs_data_filepath|object|05934a9e844b86f8|||||||||||||||
 acs_data_loaded|stem|9c66fa740ad05b70|8132e6f9195f3a29|04b59827bdcd95be|-2075208102||t19698.833434271s|d55132680d1ef2ca|136273846|rds|local|vector|||34.203||
@@ -9,24 +9,37 @@ ats_cancer_data|stem|b2ef27a2f3752757|c8977e5f549edb53|ef46db3751d8e999|15297048
 ats_cancer_loaded|stem|1354529a2e694c42|cd2b91dbeb5ec65e|273f7ac522ec0a41|-81153416||t19698.8339785041s|af959fc67e373362|27565158|rds|local|vector|||26.047||
 ats_resp_data|stem|5dc057f29da18050|2fd94ffc4bd427cc|ef46db3751d8e999|369756200|data/ats_data/2019_National_RespHI_by_tract_poll.xlsx|t19698.7773181305s|c3fdf510540ae8b5|43454196|file|local|vector|||0||
 ats_resp_loaded|stem|db8f01e0292bc836|0d7cd4965252d01b|468aaa5f78c4e9fe|-1104002751||t19698.8336392968s|c5c4609163fc9f51|216435|rds|local|vector|||16.047||
+buffer_radius_mi|stem|413079758fbbe355|f441e038a19f959a|ef46db3751d8e999|-127625650||t19731.6363786626s|ded833868582137a|50|rds|local|vector|||0||
 cl|object|ab45e979113a4503|||||||||||||||
-create_leaflet|stem|bcbbf8bf75dc6749|39d646831dd35d82|aea9c812229a0a17|1565913365||t19699.7553557747s|f2d5b5fc519033d3|4440878|rds|local|vector|||6.453|sf layer has inconsistent datum projlonglat datumNAD83 no_defs.Need projlonglat datumWGS84|
-create_leaflet_map|function|ec08781b317220d0|||||||||||||||
+create_buffer_zone|function|8cd55b6ee36c8c95|||||||||||||||
+create_leaflet|stem|710d1ef6920deb79|1011e3cee9615f72|326af01ef7c4786c|1565913365||t19725.6381072647s|373e1adbd26e1a7a|1983533|rds|local|vector|||2.578|sf layer has inconsistent datum projlonglat datumNAD83 no_defs.Need projlonglat datumWGS84|
+create_leaflet_map|function|0a3f137d72546cda|||||||||||||||
 data|object|879dc5b586043a65|||||||||||||||
-export_leaflet_as_html|stem|da7e5646cbdfced7|3ed188e2e2aaf0d8|8fa4a9bc56c34634|186102043||t0s|f4066a65ff755f48|0|file|local|vector|||33.593||
+data_ct_loaded|stem|cddd19d3ec418fd5|98c1ed806951a477|d2c4b5414b012bb3|-111547602||t19731.6384495441s|e7a060e7b3dff796|137621751|rds|local|vector|||0.391||
+export_leaflet_as_html|stem|da7e5646cbdfced7|3ed188e2e2aaf0d8|b8b3eb32b55ddf22|186102043||t0s|f4066a65ff755f48|0|file|local|vector|||25.328||
 export_leaflet_map|function|da2af215d52397a8|||||||||||||||
+fac_demo_table_name|stem|e71b008df6a20be1|97b908528c4d7fdd|ef46db3751d8e999|-1592984396||t19731.6363990329s|21c64f85d8c4a821|70|rds|local|vector|||0||
+fac_map|stem||7dd0523516c9f091|25910b8733b00c9a|683287463||t19731.6391834778s||0|rds|local|vector|||34.86|Using an external vector in selections was deprecated in tidyselect 1.1.0.ℹ Please use all_of or any_of instead.   Was  data  selectlongitude_col_name   Now  data  selectall_oflongitude_col_nameSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. Using an external vector in selections was deprecated in tidyselect 1.1.0.ℹ Please use all_of or any_of instead.   Was  data  selectlatitude_col_name   Now  data  selectall_oflatitude_col_nameSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. attribute variables are assumed to be spatially constant throughout all geometries. Detected an unexpected manytomany relationship between x and y.ℹ Row 1 of x matches multiple rows in y.ℹ Row 1 of y matches multiple rows in x.ℹ If a manytomany relationship is expected, set relationship   manytomany to silence this warning.|Match procedure results in an allocation larger than 2311 elements.ℹ Attempted allocation size was 2582630848.ℹ This is an internal error that was detected in the vctrs package.  Please report it at httpsgithub.comrlibvctrsissues with a reprex httpstidyverse.orghelp and the full backtrace.
 facilities_data|stem|53d7317b7fcd31ee|43e4f4f5d21c766a|ef46db3751d8e999|1293578598|data/All_mills_ACS.xlsx|t19698.7772996649s|1aabe406be6c0027|819050|file|local|vector|||0||
 facilities_data_loaded|stem|fe65f295de4d14c1|386873c08c4c0ef7|4befb00fd14607bc|353411423||t19698.8334515773s|3c708e2544ddc50a|185912|rds|local|vector|||0.781||
 filter_acs_by_state|function|f4ca84383beb33fd|||||||||||||||
 filter_acs_state|function|f4ca84383beb33fd|||||||||||||||
-filter_area|stem|4d456fabd7aba01a|e55e08b25fac3752|3a833dd8a4682424|-1497367863||t19699.7552714618s|a89931a8854088dd|7606434|rds|local|vector|||0.125||
+filter_area|stem|9ad1e8c8854f1732|e55e08b25fac3752|fda62cd76285b2d4|-1497367863||t19725.6346151687s|7bcd13a4492d79c7|2840610|rds|local|vector|||0.062||
 filter_facilites_final|stem|8c3f35e777861367|148821f221d15631|ececf51f2fd22461|-465997415||t19690.6228843529s|6f854fc1df6f00a1|1744|rds|local|vector|||0.016||
 filter_facilities|stem|fb5b54947fc3a3de|e6e7ef9a8b4a2db7|62f5e24bd6e7d490|-839412128||t19689.8020233243s|64013308fc4e1ba4|5156|rds|local|vector|||0||
-filter_facilities_by_state|stem|4cb442b3011d2aa5|e6c6698512ca9df9|074be6919929f913|1698412645||t19699.755160533s|b783669adaf6ed81|4536|rds|local|vector|||0||
-filter_facilities_final|stem|79e0d5b1be7ea07c|148821f221d15631|0edf762683ec2155|1435373520||t19699.755161501s|ac05953935b4c367|951|rds|local|vector|||0||
+filter_facilities_by_state|stem|46b54914b979150a|e6c6698512ca9df9|3843c90a68d3bf5f|1698412645||t19725.6345011282s|4acafaeff49c4fde|7908|rds|local|vector|||0.016||
+filter_facilities_final|stem|8c3f35e777861367|148821f221d15631|ececf51f2fd22461|1435373520||t19725.6345049595s|6f854fc1df6f00a1|1744|rds|local|vector|||0||
 filter_facilities_state|function|8d1fe15a57ca90c8|||||||||||||||
 filter_facilities_type|function|b68b44eb54fecdf6|||||||||||||||
+filter_tri_facilities|stem|34821671ce0faec9|79ba902a559c7baf|6a55ca333c6bc0f5|2117490905||t19725.6345045021s|c36d6922647ae344|6873|rds|local|vector|||0.235||
+filter_tri_facilities_states_industry|function|aeac46c2601486e6|||||||||||||||
+gen_acs_data_ct|function|6de94ea6227f3f49|||||||||||||||
+gen_acs_health_table|function|2152f373d09cce6c|||||||||||||||
+gen_facility_demo_table|function|f1e21ce786907a88|||||||||||||||
 geography|object|e978e08d4f7fc8e2|||||||||||||||
+ID_column_name|stem|1f644293f08d85b7|84cd20fd044ab856|ef46db3751d8e999|690362307||t19731.6523003673s|8a2d295a6f6be5b7|61|rds|local|vector|||0||
+latitude_col|stem|9ca55a10e289bbb5|b4f56d26959a8552|ef46db3751d8e999|-305815769||t19731.6523123133s|a44f74ecaf054496|60|rds|local|vector|||0||
+latitude_col_name|stem|9ca55a10e289bbb5|b4f56d26959a8552|ef46db3751d8e999|-1240052673||t19731.6704211222s|a44f74ecaf054496|60|rds|local|vector|||0||
 load_acs|stem||8132e6f9195f3a29|521da0d6ed1b0dd6|2064513036||t19689.6647557612s||0|file|local|vector|||||_build_ target load_acs did not return a character. dynamic files targets with format  file must return character vectors of file or directory paths.
 load_acs_data|function|46b18275af478ff0|||||||||||||||
 load_ats_cancer|function|6d4d7b4e1b36259b|||||||||||||||
@@ -34,12 +47,24 @@ load_ats_resp|function|88ad835b390e1aaf|||||||||||||||
 load_facilities_data|function|4781b41f7755ce9b|||||||||||||||
 load_packages|stem|c2af222d93ef06de|5953eea0030a81c0|8a39a5e332a13c96|649925701||t19689.7780419756s|d2d1db4a210f8f40|309|rds|local|vector|||9.344|package tidyverse was built under R version 4.3.1. package ggplot2 was built under R version 4.3.1. package tibble was built under R version 4.3.1. package tidyr was built under R version 4.3.1. package readr was built under R version 4.3.1. package purrr was built under R version 4.3.1. package dplyr was built under R version 4.3.1. package stringr was built under R version 4.3.1. package forcats was built under R version 4.3.1. package lubridate was built under R version 4.3.1. package leaflet was built under R version 4.3.2. package htmlwidgets was built under R version 4.3.1. package tidycensus was built under R version 4.3.2. package tigris was built under R version 4.3.2. package magrittr was built under R version 4.3.1. package data.table was built under R version 4.3.1. package sf was built under R version 4.3.2. package foreach was built under R version 4.3.2. package doSNOW was built under R version 4.3.2. package iterators was built under R version 4.3.2. package snow was built under R version 4.3.1. package scales was built under R version 4.3.1. package odbc was built under R version 4.3.2. package colorspace was built under R version 4.3.1. package openxlsx was built under R version 4.3.1. package usmap was built under R version 4.3.2. package leafdown was built under R version 4.3.2. package shiny was built under R version 4.3.2. package shinydashboard was built under R version 4.3.2|
 load_required_packages|function|538f10e1bb31c013|||||||||||||||
-map_title|object|fdcabe2030736787|||||||||||||||
+load_tri_facilities_data|function|bdd58cc20af6bfa3|||||||||||||||
+load_urban_tracts|function|1fcda016667e7e4e|||||||||||||||
+longitude_col|stem|8cb309819146b0f1|9df008f33efba721|ef46db3751d8e999|846835872||t19731.6523140072s|8a2d295a6f6be5b7|61|rds|local|vector|||0||
+longitude_col_name|stem|8cb309819146b0f1|9df008f33efba721|ef46db3751d8e999|-274391903||t19731.6704306006s|8a2d295a6f6be5b7|61|rds|local|vector|||0||
+map_title|object|95c09a687cd23878|||||||||||||||
 merge_acs|function|d0dbc3e450f01cfa|||||||||||||||
 merge_acs_health|stem|aad6eed99a885a7f|9148fefe4be61b39|9d265e6d01082146|-998521516||t19698.8349558545s|2eb653c56029b100|149675539|rds|local|vector|||55.359||
 mill_type|object|269c5cff45a7df49|||||||||||||||
-packages|object|3777d35a6fe3d25e|||||||||||||||
+packages|object|af43e347bc326a5f|||||||||||||||
 pkgTest|function|2339bbeb4bfeecbb|||||||||||||||
-states|object|30742d1d967803aa|||||||||||||||
+prep_acs_geometry|function|5621128c58ea1a3c|||||||||||||||
+prep_facilities|function|aa8730bcb2b221af|||||||||||||||
+shp_loaded|stem|14b71afa2f33d622|55a8da4a668ff0cc|a90a5b95aa7780b7|1790498708||t19731.6391777796s|6bbf49e18ce82872|78524476|rds|local|vector|||48.281||
+states|object|744b4c170b1e8fa9|||||||||||||||
+tri_facilities_data|stem|972204fb3fe57649|b9193c64ae178f31|ef46db3751d8e999|-68656250|data/tri_data/tri_2020_us.csv|t19698.7773667148s|0b55c3049aefa02f|36377240|file|local|vector|||0||
+tri_facilities_data_loaded|stem|f9f8de1ec73596b2|0a3bed114dda22ac|3b995ca0f4f42d2d|-253821523||t19725.6344995657s|63a7ed4c5bbebd91|5240591|rds|local|vector|||4.422|1m22mOne or more parsing issues, call problems on your data frame for details,e.g.  dat  vroom...  problemsdat|
+tri_industry_sector|object|9bc40ac72acbba3d|||||||||||||||
+urban_tracts_loaded|stem|b3d0e8290d33d269|f5f06076e86fd766|b2857d79f1c8c9c7|1996385239||t19731.6363941013s|5dc2a858906fbdd5|1098946|rds|local|vector|||0.547||
 variables|object|2fba05fd0c0dbd74|||||||||||||||
+write_table|function|36524617586be8aa|||||||||||||||
 year|object|950c0ed63d9d204a|||||||||||||||

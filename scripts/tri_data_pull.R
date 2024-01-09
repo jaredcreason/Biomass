@@ -15,3 +15,8 @@ tri_data <- read_csv("data/tri_data/tri_2020_us.csv") %>%
          `84. OFF-SITE RELEASE TOTAL`,`90. OFF-SITE RECYCLED TOTAL`,`93. OFF-SITE ENERGY RECOVERY T`,
          `100. OFF-SITE TREATED TOTAL`,`101. 6.2 - UNCLASSIFIED`,`102. 6.2 - TOTAL TRANSFER`,
          `103. TOTAL RELEASES`)
+
+
+for (package in packages){
+  library(package)
+}
