@@ -71,7 +71,7 @@ tar_plan(
  
  buffer_radius_mi = 20,
  
- final_table_name = 'GA_paper_mills_20mi',
+ final_table_name = 'GA_paper_mills_3mi',
  
  ID_column_name = 'Mill_Name',
  
