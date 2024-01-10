@@ -22,7 +22,7 @@ library(tarchetypes)
 # Step 4: View rendered HTML map in /output directory.
 
 ###############################
-######### Set-Up
+######### Targets Set-Up
 ################################
 
 acs_data_filepath <- 'data/acs_data/acs_data_2021_block group.Rdata'
@@ -62,18 +62,20 @@ tar_plan(
   
   
   # Enter desired file name of output .html file
-  map_title <- 'GA_paper_tri_map',
+  map_title <- 'GA_paper_mills_map',
 
  
  ##############################################################
  
  # Proximity Analysis Set-Up
  
- buffer_radius_mi = 5,
+ buffer_radius_mi = 20,
  
- fac_demo_table_name = 'GA_paper_mills_5mi',
+ final_table_name = 'GA_paper_mills_20mi',
  
  ID_column_name = 'Mill_Name',
+ 
+ geography_column_name = 'State',
  
  longitude_col_name = 'Longitude',
  
@@ -132,9 +134,14 @@ tar_plan(
  #########################################
  ####### Merge ACS and NATA Health Data
  ##########################################
+ 
+  tar_target(nata_data,
+             merge_nata(ats_cancer_loaded, ats_resp_loaded)),
+ 
+ 
   
   tar_target(merge_acs_health,
-             merge_acs(acs_data_loaded, ats_cancer_loaded)),
+             merge_acs(acs_data_loaded, nata_data)),
   
  ###################################################
  ###### Subset region of interest from merged data
@@ -167,8 +174,7 @@ tar_plan(
   
   tar_target(create_leaflet,
              create_leaflet_map(filter_area,
-                                filter_facilities_final, 
-                                filter_tri_facilities)),
+                                filter_facilities_final)),
   
  
  ############################
@@ -181,17 +187,20 @@ tar_plan(
                                 map_title = map_title),
              format = 'file'),
   
-###########################################################################
- #############################################################################
+
+
  ###############################################################################
- 
- # Planned Space for Proximity Analysis _targetification
+ # Biomass Proximity Analysis
+##################################
 
 
- tar_target(fac_map, prep_facilities(facilities_data_loaded,
+ tar_target(fac_map, prep_facilities(filter_facilities_final,
                                              ID_column_name,
                                              longitude_col_name,
                                              latitude_col_name)),
+
+
+
 
   tar_target(urban_tracts_loaded, load_urban_tracts()),
 
@@ -208,18 +217,18 @@ tar_plan(
   tar_target(acs_health_table, gen_acs_health_table(data_ct_loaded,
                                                     gen_sq_miles,
                                                     urban_tracts_loaded,
-                                                    ats_cancer_loaded,
-                                                    ats_resp_loaded)),
+                                                    nata_data,
+                                                    geography_column_name,
+                                                    states
+                                                    )),
 
-  tar_target(facility_demo_table, gen_facility_demo_table(fac_map,
-                                                          gen_bufferzone,
-                                                          data_ct_loaded,
-                                                          gen_sq_miles,
-                                                          acs_health_table
-                                                          )),
-  
-  tar_target(write_facility_dem_table, write_table(facility_demo_table, fac_demo_table_name),
-             format = 'file')
+  tar_target(fac_dem_pre, merge_facility_buffer(fac_map, gen_bufferzone)),
+
+  tar_target(fac_dem_mid, gen_fac_dem_mid(fac_dem_pre, acs_health_table)),
+
+  tar_target(fac_dem_table, gen_fac_dem_table(fac_dem_mid, gen_sq_miles)),
+
+  tar_target(write_facility_dem_table, write_table(fac_dem_table, final_table_name))
 
 
 

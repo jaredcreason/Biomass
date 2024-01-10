@@ -1,13 +1,18 @@
 
 
-gen_acs_health_table <- function(data_ct, sq_miles, urban_tracts, nata_data, nata_data_resp) {
+gen_acs_health_table <- function(data_ct, sq_miles, urban_tracts, nata_data, geography_col, state_list) {
   
   table_full <- data_ct %>% 
     st_set_geometry(NULL) %>%
     as.data.table() %>% 
     setkey('GEOID')
   
+  rm(data_ct)
+  
+
   table_1 <- table_full[sq_miles]
+  
+  rm(table_full)
   
   # merge the acs and nata data
   table_2 <- table_1 %>%
@@ -21,43 +26,39 @@ gen_acs_health_table <- function(data_ct, sq_miles, urban_tracts, nata_data, nat
            income=income/1000,
            rural = fifelse(Tract %in% urban_tracts$Tract,0,1)) %>%
     left_join(nata_data,by=c("Tract"="Tract")) %>%
-    left_join(nata_data_resp,by=c("Tract"="Tract")) %>%
     as.data.table() %>%
-    setkey('GEOID')
+    setkey('GEOID') %>%
+    filter(State == 'GA')
   
-  
-  table_2 <- table_2 %>%
-    
-    rename(
-      total_risk = `Total.Risk.(in.a.million)`,
-      total_risk_resp = `Total.Respiratory.(hazard.quotient)`
-    )
+  rm(table_1)
   
   return(table_2)
 }
 
 
-
-
-
-
-
-
-
-
-gen_facility_demo_table <- function(facilities_map, buffer, data_ct, sq_miles, acs_health_table) {
+merge_facility_buffer <- function(fac_map, buffer) {
   
- 
-  facility_demographics_pre <- merge(as.data.table(facilities_map), as.data.table(buffer),by="Label", allow.cartesian = TRUE)
+  facility_demographics_pre <- merge(as.data.table(fac_map), as.data.table(buffer),by="Label", allow.cartesian = TRUE)
   
-  facility_demographics_mid <- merge(facility_demographics_pre, acs_health_table, by="GEOID") %>% 
-    select(Label,City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
+  return(facility_demographics_pre)
+}
+
+
+gen_fac_dem_mid <- function(fac_dem_pre, acs_health_table) {
+  
+  facility_demographics_mid <- merge(fac_dem_pre, acs_health_table, by="GEOID") %>% 
+    select(Label,Mill_Name,City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
            white,black,indian,asian,hispanic,income,pov50,pov99,
            total_risk,total_risk_resp) %>%
     rename(rural_facility = rural.x, rural_blockgroup = rural.y)
   
+  return(facility_demographics_mid)
+}
+
+
+gen_fac_dem_table <- function(fac_dem_mid, sq_miles) {
   
-  facility_demographics <- facility_demographics_mid %>%
+  facility_demographics <- fac_dem_mid %>%
     group_by(Label,City,Total_Wood) %>%
     mutate(
       blockgroups_n = n(), 
@@ -81,6 +82,6 @@ gen_facility_demo_table <- function(facilities_map, buffer, data_ct, sq_miles, a
            income,pov50,pov99,total_risk,total_risk_resp) %>% 
     distinct()
   
-  
-  return(facility_demographics)
 }
+
+

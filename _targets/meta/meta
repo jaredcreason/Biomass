@@ -1,43 +1,54 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|c1a49b684469ba4f|||||||||||||||
+.Random.seed|object|7f810e8828c9c31d|||||||||||||||
 acs_data|stem|f08fd371d76d9b93|bf00fca75bb4b22f|ef46db3751d8e999|2070069384|data/acs_data/acs_data_2021_block group.Rdata|t19678.678832199s|d55132680d1ef2ca|136273846|file|local|vector|||0||
 acs_data_filepath|object|05934a9e844b86f8|||||||||||||||
 acs_data_loaded|stem|9c66fa740ad05b70|8132e6f9195f3a29|04b59827bdcd95be|-2075208102||t19698.833434271s|d55132680d1ef2ca|136273846|rds|local|vector|||34.203||
 acs_file|object|6c02ad9acb6663a7|||||||||||||||
+acs_health_table|stem|b4b28014bad1d956|ea590cbd07894332|2101d2052f4c2474|707456150||t19732.7447141816s|3497faf989ba9037|724779|rds|local|vector|||3.828||
 acs_variables|object|28458198a7c8dbd5|||||||||||||||
 ats_cancer_data|stem|b2ef27a2f3752757|c8977e5f549edb53|ef46db3751d8e999|1529704893|data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx|t19698.7773103243s|d8fbdf1114b33386|62317313|file|local|vector|||1.828|package tidyverse was built under R version 4.3.1. package ggplot2 was built under R version 4.3.1. package tibble was built under R version 4.3.1. package tidyr was built under R version 4.3.1. package readr was built under R version 4.3.1. package purrr was built under R version 4.3.1. package dplyr was built under R version 4.3.1. package stringr was built under R version 4.3.1. package forcats was built under R version 4.3.1. package lubridate was built under R version 4.3.1. package leaflet was built under R version 4.3.2. package htmlwidgets was built under R version 4.3.1|
 ats_cancer_loaded|stem|1354529a2e694c42|cd2b91dbeb5ec65e|273f7ac522ec0a41|-81153416||t19698.8339785041s|af959fc67e373362|27565158|rds|local|vector|||26.047||
 ats_resp_data|stem|5dc057f29da18050|2fd94ffc4bd427cc|ef46db3751d8e999|369756200|data/ats_data/2019_National_RespHI_by_tract_poll.xlsx|t19698.7773181305s|c3fdf510540ae8b5|43454196|file|local|vector|||0||
 ats_resp_loaded|stem|db8f01e0292bc836|0d7cd4965252d01b|468aaa5f78c4e9fe|-1104002751||t19698.8336392968s|c5c4609163fc9f51|216435|rds|local|vector|||16.047||
-buffer_radius_mi|stem|413079758fbbe355|f441e038a19f959a|ef46db3751d8e999|-127625650||t19731.6363786626s|ded833868582137a|50|rds|local|vector|||0||
+buffer_radius_mi|stem|57e29612662c4126|e6a4a97ad0b1ccac|ef46db3751d8e999|-127625650||t19732.81443817s|ded833868582137a|50|rds|local|vector|||0||
 cl|object|ab45e979113a4503|||||||||||||||
 create_buffer_zone|function|8cd55b6ee36c8c95|||||||||||||||
-create_leaflet|stem|710d1ef6920deb79|1011e3cee9615f72|326af01ef7c4786c|1565913365||t19725.6381072647s|373e1adbd26e1a7a|1983533|rds|local|vector|||2.578|sf layer has inconsistent datum projlonglat datumNAD83 no_defs.Need projlonglat datumWGS84|
-create_leaflet_map|function|0a3f137d72546cda|||||||||||||||
+create_leaflet|stem|4a8c0891e3c8ca8f|39d646831dd35d82|da5c7f98b37bad38|1565913365||t19732.8122971234s|60867963a28e32fe|1979763|rds|local|vector|||2.813|sf layer has inconsistent datum projlonglat datumNAD83 no_defs.Need projlonglat datumWGS84|
+create_leaflet_map|function|ec08781b317220d0|||||||||||||||
 data|object|879dc5b586043a65|||||||||||||||
 data_ct_loaded|stem|cddd19d3ec418fd5|98c1ed806951a477|d2c4b5414b012bb3|-111547602||t19731.6384495441s|e7a060e7b3dff796|137621751|rds|local|vector|||0.391||
-export_leaflet_as_html|stem|da7e5646cbdfced7|3ed188e2e2aaf0d8|b8b3eb32b55ddf22|186102043||t0s|f4066a65ff755f48|0|file|local|vector|||25.328||
-export_leaflet_map|function|da2af215d52397a8|||||||||||||||
+export_leaflet_as_html|stem|da7e5646cbdfced7|3ed188e2e2aaf0d8|ec69b3113e1c70d6|186102043||t0s|f4066a65ff755f48|0|file|local|vector|||20.187||
+export_leaflet_map|function|2677169d097410e1|||||||||||||||
+fac_dem_mid|stem|71ed49a3864bbbee|791bc4f0ae191fb8|2f8e6119940ffded|-964187182||t19732.8145691069s|a2813f8e76ff6224|23504|rds|local|vector|||0.047||
+fac_dem_pre|stem|6dd636b65d0d7f1f|83755932d1c9f11d|8fc8a6a0fcc802e4|-1029345761||t19732.8145674728s|aeb8e8db3f0480e5|274184|rds|local|vector|||0.078||
+fac_dem_table|stem|7d0e6b2ca3c711ac|f830779f1bd13360|cec34fb34ca8a478|-1010777212||t19732.8145745201s|6a0f3cab4e91f8cd|1568|rds|local|vector|||0.172||
 fac_demo_table_name|stem|e71b008df6a20be1|97b908528c4d7fdd|ef46db3751d8e999|-1592984396||t19731.6363990329s|21c64f85d8c4a821|70|rds|local|vector|||0||
-fac_map|stem||7dd0523516c9f091|25910b8733b00c9a|683287463||t19731.6391834778s||0|rds|local|vector|||34.86|Using an external vector in selections was deprecated in tidyselect 1.1.0.ℹ Please use all_of or any_of instead.   Was  data  selectlongitude_col_name   Now  data  selectall_oflongitude_col_nameSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. Using an external vector in selections was deprecated in tidyselect 1.1.0.ℹ Please use all_of or any_of instead.   Was  data  selectlatitude_col_name   Now  data  selectall_oflatitude_col_nameSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. attribute variables are assumed to be spatially constant throughout all geometries. Detected an unexpected manytomany relationship between x and y.ℹ Row 1 of x matches multiple rows in y.ℹ Row 1 of y matches multiple rows in x.ℹ If a manytomany relationship is expected, set relationship   manytomany to silence this warning.|Match procedure results in an allocation larger than 2311 elements.ℹ Attempted allocation size was 2582630848.ℹ This is an internal error that was detected in the vctrs package.  Please report it at httpsgithub.comrlibvctrsissues with a reprex httpstidyverse.orghelp and the full backtrace.
+fac_map|stem|c5eae37ee436081a|9c0ea4ad0f759c60|7efdf8d938dca8a0|683287463||t19732.8022777588s|c49ac8f93f57adda|2826|rds|local|vector|||26.078|Using an external vector in selections was deprecated in tidyselect 1.1.0.ℹ Please use all_of or any_of instead.   Was  data  selectlongitude_col_name   Now  data  selectall_oflongitude_col_nameSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. Using an external vector in selections was deprecated in tidyselect 1.1.0.ℹ Please use all_of or any_of instead.   Was  data  selectlatitude_col_name   Now  data  selectall_oflatitude_col_nameSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. attribute variables are assumed to be spatially constant throughout all geometries|
 facilities_data|stem|53d7317b7fcd31ee|43e4f4f5d21c766a|ef46db3751d8e999|1293578598|data/All_mills_ACS.xlsx|t19698.7772996649s|1aabe406be6c0027|819050|file|local|vector|||0||
 facilities_data_loaded|stem|fe65f295de4d14c1|386873c08c4c0ef7|4befb00fd14607bc|353411423||t19698.8334515773s|3c708e2544ddc50a|185912|rds|local|vector|||0.781||
+facility_demo_table|stem||d66a5c4accfcd58e|81c758dc98de619f|858977894||t19731.8027758557s||0|rds|local|vector|||434.766||cannot allocate vector of size 672.0 Mb
 filter_acs_by_state|function|f4ca84383beb33fd|||||||||||||||
 filter_acs_state|function|f4ca84383beb33fd|||||||||||||||
-filter_area|stem|9ad1e8c8854f1732|e55e08b25fac3752|fda62cd76285b2d4|-1497367863||t19725.6346151687s|7bcd13a4492d79c7|2840610|rds|local|vector|||0.062||
+filter_area|stem|fe1e2249cf5ea802|e55e08b25fac3752|ea0d3a659a8f11ee|-1497367863||t19732.7295693701s|f7d900495a7a6f42|2842517|rds|local|vector|||0.047||
 filter_facilites_final|stem|8c3f35e777861367|148821f221d15631|ececf51f2fd22461|-465997415||t19690.6228843529s|6f854fc1df6f00a1|1744|rds|local|vector|||0.016||
 filter_facilities|stem|fb5b54947fc3a3de|e6e7ef9a8b4a2db7|62f5e24bd6e7d490|-839412128||t19689.8020233243s|64013308fc4e1ba4|5156|rds|local|vector|||0||
 filter_facilities_by_state|stem|46b54914b979150a|e6c6698512ca9df9|3843c90a68d3bf5f|1698412645||t19725.6345011282s|4acafaeff49c4fde|7908|rds|local|vector|||0.016||
-filter_facilities_final|stem|8c3f35e777861367|148821f221d15631|ececf51f2fd22461|1435373520||t19725.6345049595s|6f854fc1df6f00a1|1744|rds|local|vector|||0||
+filter_facilities_final|stem|8c3f35e777861367|148821f221d15631|ececf51f2fd22461|1435373520||t19732.7264150947s|6f854fc1df6f00a1|1744|rds|local|vector|||0||
 filter_facilities_state|function|8d1fe15a57ca90c8|||||||||||||||
 filter_facilities_type|function|b68b44eb54fecdf6|||||||||||||||
 filter_tri_facilities|stem|34821671ce0faec9|79ba902a559c7baf|6a55ca333c6bc0f5|2117490905||t19725.6345045021s|c36d6922647ae344|6873|rds|local|vector|||0.235||
 filter_tri_facilities_states_industry|function|aeac46c2601486e6|||||||||||||||
+final_table_name|stem|faa401b27671a607|b1262a791a704108|ef46db3751d8e999|801681648||t19732.8144428314s|79365c26e374407f|71|rds|local|vector|||0||
 gen_acs_data_ct|function|6de94ea6227f3f49|||||||||||||||
-gen_acs_health_table|function|2152f373d09cce6c|||||||||||||||
-gen_facility_demo_table|function|f1e21ce786907a88|||||||||||||||
+gen_acs_health_table|function|8b35480e8b0742e9|||||||||||||||
+gen_bufferzone|stem|72be1f503785c361|5e6ee0759ca7f8bb|4b48a59857b65a2b|-1208715441||t19732.8145652539s|4c8d7f8a3128bf9e|236700|rds|local|vector|||5.047|attribute variables are assumed to be spatially constant throughout all geometries. attribute variables are assumed to be spatially constant throughout all geometries|
+gen_fac_dem_mid|function|43f4168b4c42b61e|||||||||||||||
+gen_fac_dem_table|function|277f9b6ada04f227|||||||||||||||
+gen_facility_demo_table|function|4043d0cba4c5afc9|||||||||||||||
+gen_sq_miles|stem|56a005baa909ddbc|47faca96661b2092|e93469d9350b5431|-1364964643||t19731.7608857279s|4c5e906049c84f86|2484412|rds|local|vector|||5.531||
 geography|object|e978e08d4f7fc8e2|||||||||||||||
-ID_column_name|stem|1f644293f08d85b7|84cd20fd044ab856|ef46db3751d8e999|690362307||t19731.6523003673s|8a2d295a6f6be5b7|61|rds|local|vector|||0||
+geography_column_name|stem|d31a703047452a6b|d85bdb457463cc39|ef46db3751d8e999|36471222||t19732.7263528644s|9064907978062c20|56|rds|local|vector|||0||
+ID_column_name|stem|1f644293f08d85b7|84cd20fd044ab856|ef46db3751d8e999|690362307||t19732.8019714542s|8a2d295a6f6be5b7|61|rds|local|vector|||0.016||
 latitude_col|stem|9ca55a10e289bbb5|b4f56d26959a8552|ef46db3751d8e999|-305815769||t19731.6523123133s|a44f74ecaf054496|60|rds|local|vector|||0||
 latitude_col_name|stem|9ca55a10e289bbb5|b4f56d26959a8552|ef46db3751d8e999|-1240052673||t19731.6704211222s|a44f74ecaf054496|60|rds|local|vector|||0||
 load_acs|stem||8132e6f9195f3a29|521da0d6ed1b0dd6|2064513036||t19689.6647557612s||0|file|local|vector|||||_build_ target load_acs did not return a character. dynamic files targets with format  file must return character vectors of file or directory paths.
@@ -51,14 +62,17 @@ load_tri_facilities_data|function|bdd58cc20af6bfa3|||||||||||||||
 load_urban_tracts|function|1fcda016667e7e4e|||||||||||||||
 longitude_col|stem|8cb309819146b0f1|9df008f33efba721|ef46db3751d8e999|846835872||t19731.6523140072s|8a2d295a6f6be5b7|61|rds|local|vector|||0||
 longitude_col_name|stem|8cb309819146b0f1|9df008f33efba721|ef46db3751d8e999|-274391903||t19731.6704306006s|8a2d295a6f6be5b7|61|rds|local|vector|||0||
-map_title|object|95c09a687cd23878|||||||||||||||
-merge_acs|function|d0dbc3e450f01cfa|||||||||||||||
-merge_acs_health|stem|aad6eed99a885a7f|9148fefe4be61b39|9d265e6d01082146|-998521516||t19698.8349558545s|2eb653c56029b100|149675539|rds|local|vector|||55.359||
+map_title|object|21200ccafcce1de3|||||||||||||||
+merge_acs|function|028e6ccb5a528407|||||||||||||||
+merge_acs_health|stem|24dbc677cc36c1e7|88d1dc91aa0e5a66|0b78bb8fde40205e|-998521516||t19732.727719674s|4e6f1a0a69b5eb72|149788773|rds|local|vector|||50.14||
+merge_facility_buffer|function|289502fcd933a58d|||||||||||||||
+merge_nata|function|8a03b62729e12c76|||||||||||||||
 mill_type|object|269c5cff45a7df49|||||||||||||||
+nata_data|stem|6aa52e7f26e00c5e|b7794dfdc0723c01|9f717a03d85a12ce|-1072446257||t19732.7264124464s|be49dbc8b680211b|27587673|rds|local|vector|||0.297||
 packages|object|af43e347bc326a5f|||||||||||||||
 pkgTest|function|2339bbeb4bfeecbb|||||||||||||||
 prep_acs_geometry|function|5621128c58ea1a3c|||||||||||||||
-prep_facilities|function|aa8730bcb2b221af|||||||||||||||
+prep_facilities|function|f246896fe0ec7bd5|||||||||||||||
 shp_loaded|stem|14b71afa2f33d622|55a8da4a668ff0cc|a90a5b95aa7780b7|1790498708||t19731.6391777796s|6bbf49e18ce82872|78524476|rds|local|vector|||48.281||
 states|object|744b4c170b1e8fa9|||||||||||||||
 tri_facilities_data|stem|972204fb3fe57649|b9193c64ae178f31|ef46db3751d8e999|-68656250|data/tri_data/tri_2020_us.csv|t19698.7773667148s|0b55c3049aefa02f|36377240|file|local|vector|||0||
@@ -66,5 +80,6 @@ tri_facilities_data_loaded|stem|f9f8de1ec73596b2|0a3bed114dda22ac|3b995ca0f4f42d
 tri_industry_sector|object|9bc40ac72acbba3d|||||||||||||||
 urban_tracts_loaded|stem|b3d0e8290d33d269|f5f06076e86fd766|b2857d79f1c8c9c7|1996385239||t19731.6363941013s|5dc2a858906fbdd5|1098946|rds|local|vector|||0.547||
 variables|object|2fba05fd0c0dbd74|||||||||||||||
-write_table|function|36524617586be8aa|||||||||||||||
+write_facility_dem_table|stem|aee71d17fae0c34c|0d07908218100b6d|a63b94486c4310e6|1244003843||t19732.8145803087s|a47968fb27377a1b|161512|rds|local|vector|||0.297||
+write_table|function|80915223d95ee967|||||||||||||||
 year|object|950c0ed63d9d204a|||||||||||||||

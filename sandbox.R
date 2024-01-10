@@ -5,11 +5,25 @@ source('packages.R')
 source('R/01_load_data.R')
 
 acs_data <- load_acs_data('data/acs_data/acs_data_2021_block group.Rdata')
-rm(data)
 
 
-cancer_data <- load_ats_cancer('data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx')
-resp_data <- load_ats_resp('data/ats_data/2019_National_RespHI_by_tract_poll.xlsx')
+ats_cancer <- load_ats_cancer('data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx')
+ats_resp <- load_ats_resp('data/ats_data/2019_National_RespHI_by_tract_poll.xlsx')
+
+nata_data <- left_join(ats_cancer, ats_resp, by = 'Tract')
+
+rm(cancer_data)
+rm(resp_data)
+
+
+# rearrange tibble column
+
+nata_data <- nata_data %>% 
+  select(
+    1:7,
+    ncol(nata_data),
+    everything()
+  )
 
 ##########################################
 ##########################################
@@ -40,7 +54,7 @@ acs_health_data <- data_ct %>%
 
 rm(data_ct)
 
-acs_health_data <- acs_health_data %>% left_join(cancer_data,by=c("Tract"="Tract"))
+acs_health_data <- acs_health_data %>% left_join(nata_data,by=c("Tract"="Tract"))
 
 
 
@@ -123,6 +137,7 @@ facilities_map_ga <- leaflet() %>%
                            
                              "<br>",
                             
+                            "Cancer Risk: ", acs_health_ga$total_risk, "<br>",
                             "Cancer Risk: ", acs_health_ga$total_risk, "<br>",
                             "Percent White: ", round(acs_health_ga$white_pct,1),"%", "<br>",
                             "Median HH Income: ", "$", comma(acs_health_ga$income*1000), "<br>"
@@ -516,7 +531,7 @@ latitude_col_name = 'Latitude'
 
 
 
-fac_map_test <- prep_facilities(facilities_data,
+fac_map_test <- prep_facilities(facilities_ga_paper,
                                 ID_column_name,
                                 longitude_col_name,
                                 latitude_col_name)

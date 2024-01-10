@@ -1,7 +1,8 @@
 
 # create_leaflet_map.R
 
-create_leaflet_map <- function(filtered_acs_health, filtered_facilities, filtered_tri_facilities) {
+create_leaflet_map <- function(filtered_acs_health,
+                               filtered_facilities) {
   
   
   binpal <- colorBin('YlOrRd', filtered_acs_health$total_risk, bins = 5)
@@ -48,26 +49,6 @@ create_leaflet_map <- function(filtered_acs_health, filtered_facilities, filtere
                              "City: ", filtered_facilities$City, "<br>",
                              "County: ", filtered_facilities$County, "<br>",
                              "State: ", filtered_facilities$State_Prov, "<br>"
-               )) %>%
-    
-    addMarkers(data = filtered_tri_facilities,
-               lat = ~`12. LATITUDE`,
-               lng = ~`13. LONGITUDE`,
-               popup = paste("TRI FACILITY", 
-                             
-                             "<br>",
-                             
-                             "Name: ", filtered_tri_facilities$`4. FACILITY NAME`, "<br>",
-                             "Industry Sector: ", filtered_tri_facilities$`20. INDUSTRY SECTOR`, "<br>",
-                             "Chemical: ", filtered_tri_facilities$`34. CHEMICAL`, "<br>",
-                             "Carcinogen: ", filtered_tri_facilities$`43. CARCINOGEN`, "<br>",
-                             
-                             '<br>',
-                             
-                             
-                             "City: ", filtered_tri_facilities$`6. CITY`, "<br>",
-                             "County: ", filtered_tri_facilities$`7. COUNTY`, "<br>",
-                             "State: ", filtered_tri_facilities$`8. ST`, "<br>"
                )) %>%
     
     

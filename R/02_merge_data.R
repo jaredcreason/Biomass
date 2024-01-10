@@ -2,7 +2,7 @@
 # merge_acs.R
 
 
-merge_acs <- function(acs_dataset, cancer_dataset){
+merge_acs <- function(acs_dataset, nata_dataset){
   
   
   data_ct <-acs_dataset %>%
@@ -21,7 +21,7 @@ merge_acs <- function(acs_dataset, cancer_dataset){
   
   rm(data_ct)
   
-  acs_health_data <- acs_health_data %>% left_join(cancer_dataset,by=c("Tract"="Tract"))
+  acs_health_data <- acs_health_data %>% left_join(nata_dataset,by=c("Tract"="Tract"))
 
   return(acs_health_data)
   
@@ -29,7 +29,19 @@ merge_acs <- function(acs_dataset, cancer_dataset){
 
 
 
-
+merge_nata <- function(ats_cancer, ats_resp){
+  
+  nata_data_merged <- left_join(ats_cancer, ats_resp, by = 'Tract')
+  
+  # rearrange tibble column
+  
+  nata_data <- nata_data_merged %>% 
+    select(
+      1:7,
+      ncol(nata_data_merged),
+      everything()
+    )
+}
 
 
 

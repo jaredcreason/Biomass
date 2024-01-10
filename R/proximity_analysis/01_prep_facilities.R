@@ -4,11 +4,13 @@ prep_facilities <- function(facility_data, ID_column_name, longitude_col_name, l
   
   facilities <- facility_data %>%
     
-    mutate(Label = ID_column_name) %>%
+  #  mutate(Label = ID_column_name) %>%
     
     select(longitude_col_name,
            latitude_col_name,
            everything())
+  
+  facilities$Label <- facilities[, ID_column_name]
   
   
   facilities_lat_lon <- facilities %>%
@@ -21,12 +23,17 @@ prep_facilities <- function(facility_data, ID_column_name, longitude_col_name, l
                            crs=4326) %>%
     st_transform(3488)
   
+  rm(facilities)
+  
   urban_areas <- urban_areas()
   uac <- urban_areas %>% st_transform(3488)
   
+  rm(urban_areas)
   
   facilities_sf_urban <- st_intersection(facilities_sf,uac) %>%
     mutate(rural = 0)
+  
+  rm(uac)
   
   facilities_sf_rural <- facilities_sf %>%
     mutate(rural = fifelse(Label %in% unique(facilities_sf_urban$Label),0,1)) %>%
@@ -35,7 +42,8 @@ prep_facilities <- function(facility_data, ID_column_name, longitude_col_name, l
   
   facilities_map <- facilities_sf %>%
     left_join(facilities_sf_rural, by = "Label") %>%
-    left_join(facilities_lat_lon, by = "Label")
+    left_join(facilities_lat_lon, by = "Label") %>%
+    distinct()
   
   
   return(facilities_map)
