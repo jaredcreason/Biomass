@@ -1,7 +1,7 @@
 
 # Forest Products Manufacturing EJ Analysis
 
-This repository uses block group level data from the [2021 5-year American Community Survey](https://api.census.gov/data/2021/acs/acs5/variables.html), health risk data from the [2019 National Air Toxicity Assesment](https://www.epa.gov/national-air-toxics-assessment), and Forest Products Manufacturing (pellets, chips, lumber, paper, etc.) facilties dataset resulting in an interactive visualization powered by [Leaflet](https://rstudio.github.io/leaflet/) using the [`targets`](https://books.ropensci.org/targets/) data pipeline framework.
+This repository uses block group level data from the [2021 5-year American Community Survey](https://api.census.gov/data/2021/acs/acs5/variables.html), health risk data from the [2019 National Air Toxicity Assesment](https://www.epa.gov/national-air-toxics-assessment), Forest Products Manufacturing (pellets, chips, lumber, paper, etc.), and [Toxic Release Inventory](https://www.epa.gov/toxics-release-inventory-tri-program/tri-data-and-tools) facilties datasets resulting in an interactive visualization powered by [Leaflet](https://rstudio.github.io/leaflet/) and Environmental Justice Proxmity Analysis tables using the [`targets`](https://books.ropensci.org/targets/) data pipeline framework.
 
 
 ## Getting started.
