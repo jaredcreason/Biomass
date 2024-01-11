@@ -62,24 +62,25 @@ tar_plan(
   
   
   # Enter desired file name of output .html file
-  map_title <- 'GA_paper_mills_map',
+  map_title <- 'GA_TRI_wood_products_map',
 
  
  ##############################################################
  
  # Proximity Analysis Set-Up
  
- buffer_radius_mi = 20,
+
+ buffer_radius_mi = 10,
  
- final_table_name = 'GA_paper_mills_3mi',
+ final_table_name = 'GA_TRI_wood_products_10mi',
  
- ID_column_name = 'Mill_Name',
+ ID_column_name = '4. FACILITY NAME',
  
- geography_column_name = 'State',
+ geography_column_name = '8. ST',
  
- longitude_col_name = 'Longitude',
+ longitude_col_name = '13. LONGITUDE',
  
- latitude_col_name = 'Latitude',
+ latitude_col_name = '12. LATITUDE',
  
 
   
@@ -194,7 +195,8 @@ tar_plan(
 ##################################
 
 
- tar_target(fac_map, prep_facilities(filter_facilities_final,
+ # 
+ tar_target(fac_map, prep_facilities(filter_tri_facilities,
                                              ID_column_name,
                                              longitude_col_name,
                                              latitude_col_name)),

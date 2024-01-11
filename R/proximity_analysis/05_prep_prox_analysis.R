@@ -44,10 +44,11 @@ merge_facility_buffer <- function(fac_map, buffer) {
 }
 
 
-gen_fac_dem_mid <- function(fac_dem_pre, acs_health_table) {
+gen_fac_dem_mid <- function(fac_dem_pre,
+                            acs_health_table) {
   
   facility_demographics_mid <- merge(fac_dem_pre, acs_health_table, by="GEOID") %>% 
-    select(Label,Mill_Name,City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
+    select(Label,GEOID,sq_miles,rural.x,rural.y,pop,
            white,black,indian,asian,hispanic,income,pov50,pov99,
            total_risk,total_risk_resp) %>%
     rename(rural_facility = rural.x, rural_blockgroup = rural.y)
@@ -59,7 +60,7 @@ gen_fac_dem_mid <- function(fac_dem_pre, acs_health_table) {
 gen_fac_dem_table <- function(fac_dem_mid, sq_miles) {
   
   facility_demographics <- fac_dem_mid %>%
-    group_by(Label,City,Total_Wood) %>%
+    group_by(Label) %>%
     mutate(
       blockgroups_n = n(), 
       sq_miles = sum(sq_miles, na.rm=TRUE), 
@@ -77,7 +78,7 @@ gen_fac_dem_table <- function(fac_dem_mid, sq_miles) {
     mutate(pop_sq_mile_1mi = pop/sq_miles,
            rural_bg_pct = signif(sum(rural_blockgroup/blockgroups_n, na.rm=TRUE),2)) %>% 
     ungroup() %>%
-    select(Label,City,Total_Wood,blockgroups_n,sq_miles,pop,pop_sq_mile_1mi,
+    select(Label,blockgroups_n,sq_miles,pop,pop_sq_mile_1mi,
            rural_facility,rural_bg_pct,white,black,indian,asian,hispanic,
            income,pov50,pov99,total_risk,total_risk_resp) %>% 
     distinct()
