@@ -12,8 +12,8 @@ ats_resp <- load_ats_resp('data/ats_data/2019_National_RespHI_by_tract_poll.xlsx
 
 nata_data <- left_join(ats_cancer, ats_resp, by = 'Tract')
 
-rm(cancer_data)
-rm(resp_data)
+rm(ats_cancer)
+rm(ats_resp)
 
 
 # rearrange tibble column

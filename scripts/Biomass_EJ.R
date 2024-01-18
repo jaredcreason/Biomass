@@ -36,10 +36,15 @@ facilities <- read_excel("data/All_mills_ACS.xlsx",
   select(Longitude,Latitude,everything()) 
 
 
+facilities <- facilities %>% filter(State_Prov == 'GA') %>% 
+  filter(Type == 'pulp/paper')
+
 facilities_lat_lon <- facilities %>% 
   select(Longitude,Latitude,Label) %>%
   rename(lon = Longitude,
          lat = Latitude)
+
+
 
 facilities_sf = st_as_sf(facilities, 
                          coords=c(x="Longitude",y="Latitude"), 
@@ -52,6 +57,7 @@ uac <- urban_areas %>% st_transform(3488)
 
 facilities_sf_urban <- st_intersection(facilities_sf,uac) %>%
   mutate(rural = 0)
+
 
 facilities_sf_rural <- facilities_sf %>%
   mutate(rural = fifelse(Label %in% unique(facilities_sf_urban$Label),0,1)) %>%
@@ -182,7 +188,6 @@ table_full <- data_ct %>%
   setkey('GEOID')
 
 table_1 <- table_full[sq_miles]
-
 # merge the acs and nata data
 table_2 <- table_1 %>%
   pivot_wider(names_from=variable,values_from=estimate) %>%
@@ -195,9 +200,13 @@ table_2 <- table_1 %>%
          income=income/1000,
          rural = fifelse(Tract %in% urban_tracts$Tract,0,1)) %>%
   left_join(nata_data,by=c("Tract"="Tract")) %>%
-  left_join(nata_data_resp,by=c("Tract"="Tract")) %>%
+ # left_join(nata_data_resp,by=c("Tract"="Tract")) %>%
   as.data.table() %>%
-  setkey('GEOID')
+  setkey('GEOID') %>%
+  filter(State == c('GA'))
+
+
+
 
 # merge the acs and facility data
 
@@ -207,7 +216,7 @@ facility_demographics_5mi_pre <- merge(as.data.table(facilities_map), as.data.ta
 facility_demographics_10mi_pre <- merge(as.data.table(facilities_map), as.data.table(buffer_10mi),by="Label")
 
 facility_demographics_1mi_mid <- merge(facility_demographics_1mi_pre, table_2, by="GEOID") %>% 
-  select(Label,City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
+  select(Label, Mill_Name, City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
          white,black,indian,asian,hispanic,income,pov50,pov99,
          total_risk,total_risk_resp) %>%
   rename(rural_facility = rural.x, rural_blockgroup = rural.y)
@@ -219,9 +228,9 @@ facility_demographics_3mi_mid <- merge(facility_demographics_3mi_pre, table_2, b
   rename(rural_facility = rural.x, rural_blockgroup = rural.y)
 
 facility_demographics_5mi_mid <- merge(facility_demographics_5mi_pre, table_2, by="GEOID") %>% 
-  select(Label,City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
+  select(Label, Mill_Name, City,Total_Wood,GEOID,sq_miles,rural.x,rural.y,pop,
          white,black,indian,asian,hispanic,income,pov50,pov99,
-         total_risk,total_risk_resp) %>%
+         total_risk, total_risk_resp) %>%
   rename(rural_facility = rural.x, rural_blockgroup = rural.y)
 
 facility_demographics_10mi_mid <- merge(facility_demographics_10mi_pre, table_2, by="GEOID") %>% 
@@ -299,12 +308,12 @@ facility_demographics_5mi <- facility_demographics_5mi_mid %>%
   mutate(pop_sq_mile_5mi = pop/sq_miles,
          rural_bg_pct = signif(sum(rural_blockgroup/blockgroups_n, na.rm=TRUE),2)) %>% 
   ungroup() %>%
-  select(Label,City,Total_Wood,blockgroups_n,sq_miles,pop,pop_sq_mile_5mi,
+  select(Label, Mill_Name, City,Total_Wood,blockgroups_n,sq_miles,pop,pop_sq_mile_5mi,
          rural_facility,rural_bg_pct,white,black,indian,asian,hispanic,
          income,pov50,pov99,total_risk,total_risk_resp) %>% 
   distinct()
 
-write.xlsx(facility_demographics_5mi,"output/facility_data/allocation_rule_facility_demographics_5mi.xlsx", overwrite = TRUE)
+write.xlsx(facility_demographics_5mi, file = "output/facility_data/allocation_rule_facility_demographics_5mi.xlsx", overwrite = TRUE)
 
 facility_demographics_10mi <- facility_demographics_10mi_mid %>%
   group_by(Label,City,Total_Wood) %>%

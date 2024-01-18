@@ -5,7 +5,7 @@
 ### How to Run this Repository
 ######################################
 
-# FIRST TIME ONLY: Script will query Census API ACS Data
+# FIRST TIME ONLY: Script will query ACS Data from Census API
 # Runtime: (approx. 90 minutes)
 
 
@@ -14,8 +14,8 @@ library(targets)
 library(tarchetypes)
 
 
-# Step 2: Establish Area and Facilities of Interest 
-#         by changing strings at beginning of tar_plan()
+
+# Step 2: Complete Set-up by altering strings by state and facility
 
 # Step 3: Run tar_make()
 
@@ -49,7 +49,7 @@ tar_plan(
  
   
   ## Enter one or multiple U.S. State Abbreviations (max two recommended)
-  states <- c('GA'),
+  states <- c('WA'),
   
  
  
@@ -58,11 +58,12 @@ tar_plan(
   
   mill_type <- c('pulp/paper'),
  
+ 
  tri_industry_sector <- c('Wood Products'),
   
   
   # Enter desired file name of output .html file
-  map_title <- 'GA_TRI_wood_products_map',
+  map_title <- 'WA_TRI_wood_products_map',
 
  
  ##############################################################
@@ -70,9 +71,9 @@ tar_plan(
  # Proximity Analysis Set-Up
  
 
- buffer_radius_mi = 10,
+ buffer_radius_mi = 5,
  
- final_table_name = 'GA_TRI_wood_products_10mi',
+ final_table_name = 'WA_TRI_wood_products_5mi',
  
  ID_column_name = '4. FACILITY NAME',
  
@@ -83,7 +84,8 @@ tar_plan(
  latitude_col_name = '12. LATITUDE',
  
 
-  
+# End of Set-up
+
   ################################
   ###### Establish data file paths
   ################################
@@ -160,7 +162,7 @@ tar_plan(
              filter_facilities_type(filter_facilities_by_state, mill_type)),
  
  
-  tar_target(filter_tri_facilities,
+  tar_target(filter_tri_facilities_final,
              filter_tri_facilities_states_industry(tri_facilities_data_loaded,
                                                    states,
                                                    tri_industry_sector)),
@@ -195,8 +197,9 @@ tar_plan(
 ##################################
 
 
- # 
- tar_target(fac_map, prep_facilities(filter_tri_facilities,
+ # Prep Proximity Analysis
+
+ tar_target(fac_map, prep_facilities(filter_tri_facilities_final,
                                              ID_column_name,
                                              longitude_col_name,
                                              latitude_col_name)),
@@ -230,10 +233,41 @@ tar_plan(
 
   tar_target(fac_dem_table, gen_fac_dem_table(fac_dem_mid, gen_sq_miles)),
 
-  tar_target(write_facility_dem_table, write_table(fac_dem_table, final_table_name))
+  tar_target(write_facility_dem_table, write_table(fac_dem_table, final_table_name)),
+
+#########################################################
+########### Conduct Proximity Analysis
+##################################################
+
+comparison_vars <- c("white_pct",'minority_black','minority_other','minority_hispanic',
+                    "income",
+                    "pov99","pov50",
+                    "total_risk","total_risk_resp"),
 
 
+# descriptions of the comparison variables to be included in the tables
+desc_vars <- c("% White","% Black or African American ","% Other","% Hispanic",
+              "Median Income [1,000 2019$]",
+              "% Below Poverty Line","% Below Half the Poverty Line",
+              "Total Cancer Risk (per million)",
+              'Total Respiratory (hazard quotient)'),
+
+
+  tar_target(gen_averages_table, gen_averages_table(desc_vars,
+                                                    comparison_vars,
+                                                    acs_health_table,
+                                                    gen_bufferzone,
+                                                    buffer_radius_mi)),
+
+  tar_target(gen_std_devs_table, gen_std_devs_table(desc_vars,
+                                                  comparison_vars,
+                                                  acs_health_table,
+                                                  gen_bufferzone,
+                                                  buffer_radius_mi)),
+
+tar_target(write_averages_table, write_summary_means_table(gen_averages_table, final_table_name)),
+
+tar_target(write_std_devs_table, write_summary_std_devs_table(gen_std_devs_table, final_table_name))
 
 )
-
 

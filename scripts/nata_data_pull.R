@@ -51,11 +51,11 @@ download_file = function(url,file_name,dir=".",check_file=NA,tolower=F) {
  #       file.rename(file.path(dir,file),file.path(dir,tolower(file)))
     }
  #   file.remove(file.path(dir,file_name))
-  }
+  
   
   cat("\n")
   #   
-}
+
 
 
 ####################################################
@@ -106,7 +106,7 @@ nata_data_merged <- left_join(ats_data, ats_data_resp, by = 'Tract')
 nata_data <- nata_data_merged %>% 
   select(
     1:7,
-    ncol(nata_data),
+    ncol(nata_data_merged),
     everything()
          )
 
