@@ -19,7 +19,6 @@ prep_acs_geometry <- function(data_ct, urban_tracts) {
   
   #shp_rural <- shp %>% mutate(rural = fifelse(Tract %in% urban_tracts$Tract,0,1))
   
-  return(shp)
   sq_miles <- shp %>% mutate(sq_miles = units::set_units(st_area(shp),"mi^2")) %>%
   select(GEOID,sq_miles)
   
@@ -30,4 +29,5 @@ prep_acs_geometry <- function(data_ct, urban_tracts) {
   
 
   return(shp)
+  
 }

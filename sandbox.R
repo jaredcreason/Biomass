@@ -535,5 +535,109 @@ fac_map_test <- prep_facilities(facilities_ga_paper,
                                 ID_column_name,
                                 longitude_col_name,
                                 latitude_col_name)
+
+###############################################################
+comparison_vars <- c("white_pct",'minority_black','minority_other','minority_hispanic',
+                     "income",
+                     "pov99","pov50",
+                     "total_risk","total_risk_resp")
+
+
+# descriptions of the comparison variables to be included in the tables
+desc_vars <- c("% White","% Black or African American ","% Other","% Hispanic",
+               "Median Income [1,000 2019$]",
+               "% Below Poverty Line","% Below Half the Poverty Line",
+               "Total Cancer Risk (per million)",
+               'Total Respiratory (hazard quotient)')
+
+
+tar_load(acs_health_table)
+
+tar_load(gen_bufferzone)
+
+buffer_radius_mi <- 5
+
+final_table_name = 'GA_TRI_wood_products_5mi'
+
+
+
+#########################################################
+
+
+  summary_table = data.frame(Variable=desc_vars)
+  
+  # get the national level averages
+  
+  for (v in 1:length(comparison_vars)) {
+    summary_table[v,"Overall (Population Average)"] = sum(acs_health_table$pop*acs_health_table[,comparison_vars[v]],na.rm=T)/sum(acs_health_table$pop,na.rm=T)
     
-    
+  }
+  
+  # get the rural area level averages
+  rural <- acs_health_table %>% filter(rural==1)
+  for (v in 1:length(comparison_vars)) {
+    summary_table[v,"Rural Areas (Population Average)"] = sum(rural$pop*rural[,comparison_vars[v]],na.rm=T)/sum(rural$pop,na.rm=T)
+  }
+  
+  # get the population weighted averages around the production facilities
+  local = acs_health_table$GEOID %in% unique(buffer$GEOID)
+  for (v in 1:length(comparison_vars)) {
+    summary_table[v,paste("Within ",buffer_radius_mi," mile(s) of production facility")] = sum(acs_health_table$pop[local]*acs_health_table[local,comparison_vars[v]],na.rm=T)/sum(acs_health_table$pop[local],na.rm=T)
+  }
+
+
+
+################################
+##################################
+
+
+
+
+  summary_table_sd = data.frame(Variable=desc_vars)
+  
+  for (v in 1:length(comparison_vars)) {
+    a = (acs_health_table$pop*acs_health_table[,comparison_vars[v]])/acs_health_table$pop
+    summary_table_sd[v,"Overall (Population Average) SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  }
+  
+  # get the rural area level std devs
+  rural <- acs_health_table %>% filter(rural==1)
+  for (v in 1:length(comparison_vars)) {
+    a = (rural$pop*rural[,comparison_vars[v]])/rural$pop
+    summary_table_sd[v,"Rural Areas (Population Average) SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  }
+  
+  # get the population weighted SD around the production facilities
+  local = acs_health_table$GEOID %in% unique(buffer$GEOID)
+  for (v in 1:length(comparison_vars)) {
+    a = (acs_health_table$pop[local]*acs_health_table[local,comparison_vars[v]])/acs_health_table$pop[local]
+    summary_table_sd[v,paste("Within ",buffer_radius_mi," mile(s) of production facility SD")] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
+  }
+  
+  #################################
+  ###################################
+  
+
+    output_path <- file.path('output', 'summary_tables', paste0(final_table_name,'_means','.xlsx'))
+    write.xlsx(summary_table, output_path)  
+  
+  
+  
+
+    output_path <- file.path('output', 'summary_tables', paste0(final_table_name,'_standard_deviations','.xlsx'))
+    write.xlsx(summary_table_sd, output_path)  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
