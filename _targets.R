@@ -259,15 +259,15 @@ desc_vars <- c("% White","% Black or African American ","% Other","% Hispanic",
                                                     gen_bufferzone,
                                                     buffer_radius_mi)),
 
-  tar_target(gen_std_devs_table, gen_std_devs_table(desc_vars,
-                                                  comparison_vars,
-                                                  acs_health_table,
-                                                  gen_bufferzone,
-                                                  buffer_radius_mi)),
+  # tar_target(gen_std_devs_table, gen_std_devs_table(desc_vars,
+                                                  # comparison_vars,
+                                                  # acs_health_table,
+                                                  # gen_bufferzone,
+                                                  # buffer_radius_mi)),
 
-tar_target(write_averages_table, write_summary_means_table(gen_averages_table, final_table_name)),
+tar_target(write_averages_table, write_summary_means_table(gen_averages_table, final_table_name))
 
-tar_target(write_std_devs_table, write_summary_std_devs_table(gen_std_devs_table, final_table_name))
+# tar_target(write_std_devs_table, write_summary_std_devs_table(gen_std_devs_table, final_table_name))
 
 )
 

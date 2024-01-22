@@ -565,11 +565,44 @@ final_table_name = 'GA_TRI_wood_products_5mi'
 
 
   summary_table = data.frame(Variable=desc_vars)
+
+summary_table$Population_Average <- sapply(comparison_vars, function(var) {
+  
+  weighted.mean(acs_health_table[[var]], acs_health_table$pop, na.rm = TRUE)
+})
+
+
+
+rural <- acs_health_table %>% filter(rural == 1)
+
+summary_table$Rural_Average <- sapply(comparison_vars, function(var) {
+  
+  weighted.mean(rural[[var]], rural$pop, na.rm = TRUE)
+})
+
+urban <- acs_health_table %>% filter(rural == 0)
+
+summary_table$Urban_Average <- sapply(comparison_vars, function(var) {
+  
+  weighted.mean(urban[[var]], urban$pop, na.rm = TRUE)
+})
+
+
+local_geoids <- gen_bufferzone$GEOID
+
+local_cts = acs_health_table %>% filter(GEOID %in% local_geoids)
+
+
+summary_table$`Within Buffer Radius` <- sapply(comparison_vars, function(var) {
+  
+  weighted.mean(rural[[var]], rural$pop, na.rm = TRUE)
+})
+
   
   # get the national level averages
   
-  for (v in 1:length(comparison_vars)) {
-    summary_table[v,"Overall (Population Average)"] = sum(acs_health_table$pop*acs_health_table[,comparison_vars[v]],na.rm=T)/sum(acs_health_table$pop,na.rm=T)
+  for (var in comparison_vars) {
+    summary_table[v,"Overall (Population Average)"] = sum(acs_health_table$pop*acs_health_table$vars)/sum(acs_health_table$pop,na.rm=T)
     
   }
   
@@ -579,12 +612,12 @@ final_table_name = 'GA_TRI_wood_products_5mi'
     summary_table[v,"Rural Areas (Population Average)"] = sum(rural$pop*rural[,comparison_vars[v]],na.rm=T)/sum(rural$pop,na.rm=T)
   }
   
-  # get the population weighted averages around the production facilities
-  local = acs_health_table$GEOID %in% unique(buffer$GEOID)
+  # get the urban area level averages
+  urban <- acs_health_table %>% filter(rural==0)
   for (v in 1:length(comparison_vars)) {
-    summary_table[v,paste("Within ",buffer_radius_mi," mile(s) of production facility")] = sum(acs_health_table$pop[local]*acs_health_table[local,comparison_vars[v]],na.rm=T)/sum(acs_health_table$pop[local],na.rm=T)
+    summary_table[v,"Urban Areas (Population Average)"] = sum(rural$pop*rural[,comparison_vars[v]],na.rm=T)/sum(rural$pop,na.rm=T)
   }
-
+ 
 
 
 ################################
@@ -594,6 +627,24 @@ final_table_name = 'GA_TRI_wood_products_5mi'
 
 
   summary_table_sd = data.frame(Variable=desc_vars)
+  
+  summary_table_sd$Population_SD <- sapply(comparison_vars, function(var) {
+    sd(acs_health_table[[var]], na.rm = TRUE)
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ##############################################
   
   for (v in 1:length(comparison_vars)) {
     a = (acs_health_table$pop*acs_health_table[,comparison_vars[v]])/acs_health_table$pop

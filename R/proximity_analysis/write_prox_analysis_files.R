@@ -1,9 +1,11 @@
 
 
-write_summary_means_table <- function(summary_table, final_table_name) {
+write_summary_means_table <- function(summary_table, final_table_name, output_dir = 'output/summary_tables') {
   
-  output_path <- file.path('output', 'summary_tables', paste0(final_table_name,'_means','.xlsx'))
-  write.xlsx(summary_table, output_path)  
+  
+  filepath <- file.path(output_dir, paste0(final_table_name, '.xlsx'))
+  
+  write.xlsx(summary_table, filepath)  
 }
 
 

@@ -3,24 +3,33 @@ gen_averages_table <- function(desc_vars, comparison_vars, table, buffer, buffer
   
   summary_table = data.frame(Variable=desc_vars)
   
-   # get the national level averages
+
+  summary_table$Population_Average <- sapply(comparison_vars, function(var) {
+    
+    weighted.mean(table[[var]], table$pop, na.rm = TRUE)
+  })
   
-  for (v in 1:length(comparison_vars)) {
-    summary_table[v,"Overall (Population Average)"] = sum(table$pop*table[,comparison_vars[v]],na.rm=T)/sum(table$pop,na.rm=T)
   
-  }
   
-  # get the rural area level averages
-  rural <- table %>% filter(rural==1)
-  for (v in 1:length(comparison_vars)) {
-    summary_table[v,"Rural Areas (Population Average)"] = sum(rural$pop*rural[,comparison_vars[v]],na.rm=T)/sum(rural$pop,na.rm=T)
-  }
+  rural <- table %>% filter(rural == 1)
   
-  # get the population weighted averages around the production facilities
-  local = table$GEOID %in% unique(buffer$GEOID)
-  for (v in 1:length(comparison_vars)) {
-    summary_table[v,paste("Within ",buffer_radius_mi," mile(s) of production facility")] = sum(table$pop[local]*table[local,comparison_vars[v]],na.rm=T)/sum(table$pop[local],na.rm=T)
-  }
+  summary_table$Rural_Average <- sapply(comparison_vars, function(var) {
+    
+    weighted.mean(rural[[var]], rural$pop, na.rm = TRUE)
+  })
+  
+  urban <- table %>% filter(rural == 0)
+  
+  summary_table$Urban_Average <- sapply(comparison_vars, function(var) {
+    
+    weighted.mean(urban[[var]], urban$pop, na.rm = TRUE)
+  })
+  
+  
+  summary_table$Population_SD <- sapply(comparison_vars, function(var) {
+    sd(table[[var]], na.rm = TRUE)
+  })
+  
   
 return(summary_table)
 }
