@@ -49,8 +49,8 @@ tar_plan(
  
   
   ## Enter one or multiple U.S. State Abbreviations (max two recommended)
-  states <- c('WA'),
-  
+ # states <- c('AR','LA','MS','AL','GA','FL','TN','SC', 'NC'),
+  states <- c('GA'),
  
  
   # Enter desired mill-type, options include:
@@ -63,7 +63,7 @@ tar_plan(
   
   
   # Enter desired file name of output .html file
-  map_title <- 'WA_TRI_wood_products_map',
+#  map_title <- 'US_NATL_mills_map',
 
  
  ##############################################################
@@ -71,17 +71,26 @@ tar_plan(
  # Proximity Analysis Set-Up
  
 
- buffer_radius_mi = 5,
+ buffer_radius_mi = 1,
  
- final_table_name = 'WA_TRI_wood_products_5mi',
+ final_table_name = 'USA_tri_woodproducts_1mi',
  
- ID_column_name = '4. FACILITY NAME',
+ #geography_column_name = '8. ST',
  
- geography_column_name = '8. ST',
+
+ #### Uncomment for LURA All Mills
+
+ # longitude_col_name = 'Longitude',
+
+ # latitude_col_name = 'Latitude',
+
+
+
+### Uncomment for TRI Facilities
+
+  longitude_col_name = '13. LONGITUDE',
  
- longitude_col_name = '13. LONGITUDE',
- 
- latitude_col_name = '12. LATITUDE',
+  latitude_col_name = '12. LATITUDE',
  
 
 # End of Set-up
@@ -145,22 +154,37 @@ tar_plan(
   
   tar_target(merge_acs_health,
              merge_acs(acs_data_loaded, nata_data)),
-  
- ###################################################
- ###### Subset region of interest from merged data
- ###################################################
- 
-  tar_target(filter_area,
-             filter_acs_state(merge_acs_health, states)),
-  
 
+ ###################################################################
+ ##### Subset region or industry of interest from facility dataset
+ ######################################################################
+
+  #tar_target(filter_area,
+   #          filter_acs_state(merge_acs_health, states)),
+
+
+ # Filters LURA Mills by State..
   tar_target(filter_facilities_by_state,
              filter_facilities_state(facilities_data_loaded, states)),
- 
- 
+
+ # By mill type..
+  tar_target(filter_facilities_by_milltype,
+           filter_facilities_type(facilities_data_loaded, mill_type)),
+
+ # By both
   tar_target(filter_facilities_final,
              filter_facilities_type(filter_facilities_by_state, mill_type)),
- 
+
+
+###
+
+
+
+
+  tar_target(filter_tri_by_state, filter_tri_state(tri_facilities_data_loaded, states)),
+
+  tar_target(filter_tri_by_industry, filter_tri_industry(tri_facilities_data_loaded, tri_industry_sector)),
+
  
   tar_target(filter_tri_facilities_final,
              filter_tri_facilities_states_industry(tri_facilities_data_loaded,
@@ -175,9 +199,9 @@ tar_plan(
  ###########################
  
   
-  tar_target(create_leaflet,
-             create_leaflet_map(filter_area,
-                                filter_facilities_final)),
+  # tar_target(create_leaflet,
+             # create_leaflet_map(filter_area,
+                                # filter_facilities_final)),
   
  
  ############################
@@ -185,10 +209,10 @@ tar_plan(
  ############################ 
  
  
-  tar_target(export_leaflet_as_html,
-             export_leaflet_map(create_leaflet,
-                                map_title = map_title),
-             format = 'file'),
+  # tar_target(export_leaflet_as_html,
+             # export_leaflet_map(create_leaflet,
+                                # map_title = map_title),
+             # format = 'file'),
   
 
 
@@ -199,41 +223,69 @@ tar_plan(
 
  # Prep Proximity Analysis
 
- tar_target(fac_map, prep_facilities(filter_tri_facilities_final,
-                                             ID_column_name,
-                                             longitude_col_name,
-                                             latitude_col_name)),
+## Create fac map
+
+ tar_target(urban_areas, urban_areas()),
+ tar_target(uac, gen_uac(urban_areas)),
+
+tar_target(fac_lat_lon, gen_fac_lat_lon(filter_tri_by_industry,
+                                        latitude_col_name = latitude_col_name,
+                                        longitude_col_name = longitude_col_name)),
+
+tar_target(fac_sf, gen_fac_sf(filter_tri_by_industry,
+                              latitude_col_name = latitude_col_name,
+                              longitude_col_name = longitude_col_name)),
+
+tar_target(fac_sf_urban, gen_fac_sf_urban(fac_sf, uac)),
+
+tar_target(fac_sf_rural, gen_fac_sf_rural(fac_sf, fac_sf_urban)),
+
+ tar_target(fac_map, gen_fac_map(fac_sf,
+                                 fac_sf_rural,
+                                 fac_lat_lon)),
 
 
 
 
-  tar_target(urban_tracts_loaded, load_urban_tracts()),
+#######################################################################
 
-  tar_target(data_ct_loaded, gen_acs_data_ct(acs_data_loaded)),
 
-  tar_target(shp_loaded, prep_acs_geometry(data_ct_loaded, urban_tracts_loaded)),
 
-  tar_target(gen_bufferzone, create_buffer_zone(fac_map, buffer_radius_mi, shp_loaded)),
+  tar_target(urban_tracts, load_urban_tracts()),
 
-  tar_target(gen_sq_miles, gen_sq_miles(shp_loaded)),
+  tar_target(data_ct, gen_acs_data_ct(acs_data_loaded)),
+
+  tar_target(shp, prep_acs_geometry(data_ct, urban_tracts)),
+
+  tar_target(bufferzone, create_buffer_zone(fac_map,
+                                                buffer_radius_mi,
+                                                shp)),
+
+
+
+  tar_target(sq_miles, gen_sq_miles(shp)),
+
+  tar_target(natl_acs_health_table, gen_natl_acs_health_table(data_ct,
+                                                              sq_miles,
+                                                              urban_tracts,
+                                                              nata_data)),
   
   
   
-  tar_target(acs_health_table, gen_acs_health_table(data_ct_loaded,
-                                                    gen_sq_miles,
-                                                    urban_tracts_loaded,
+  tar_target(acs_health_table, gen_acs_health_table(data_ct,
+                                                    sq_miles,
+                                                    urban_tracts,
                                                     nata_data,
-                                                    geography_column_name,
                                                     states
                                                     )),
 
-  tar_target(fac_dem_pre, merge_facility_buffer(fac_map, gen_bufferzone)),
+  tar_target(fac_dem_pre, merge_facility_buffer(fac_map, bufferzone)),
 
-  tar_target(fac_dem_mid, gen_fac_dem_mid(fac_dem_pre, acs_health_table)),
+  tar_target(fac_dem_mid, gen_fac_dem_mid(fac_dem_pre, natl_acs_health_table)),
 
-  tar_target(fac_dem_table, gen_fac_dem_table(fac_dem_mid, gen_sq_miles)),
+  tar_target(fac_dem_table, gen_fac_dem_table(fac_dem_mid, sq_miles)),
 
-  tar_target(write_facility_dem_table, write_table(fac_dem_table, final_table_name)),
+  tar_target(write_facility_dem_table, write_fac_dem_table(fac_dem_table, final_table_name)),
 
 #########################################################
 ########### Conduct Proximity Analysis
@@ -253,21 +305,29 @@ desc_vars <- c("% White","% Black or African American ","% Other","% Hispanic",
               'Total Respiratory (hazard quotient)'),
 
 
-  tar_target(gen_averages_table, gen_averages_table(desc_vars,
-                                                    comparison_vars,
-                                                    acs_health_table,
-                                                    gen_bufferzone,
-                                                    buffer_radius_mi)),
+  tar_target(fac_dem_comp_vars, add_comp_vars(fac_dem_table)),
 
-  # tar_target(gen_std_devs_table, gen_std_devs_table(desc_vars,
-                                                  # comparison_vars,
-                                                  # acs_health_table,
-                                                  # gen_bufferzone,
-                                                  # buffer_radius_mi)),
+  tar_target(summary_means_table, gen_summary_means_table(desc_vars,
+                                              comparison_vars,
+                                              natl_table = natl_acs_health_table,
+                                              state_table = natl_acs_health_table,
+                                              fac_dem_table = fac_dem_comp_vars)),
 
-tar_target(write_averages_table, write_summary_means_table(gen_averages_table, final_table_name))
+tar_target(write_summary_means_table, write_summary_means_table(summary_means_table, final_table_name)),
 
-# tar_target(write_std_devs_table, write_summary_std_devs_table(gen_std_devs_table, final_table_name))
+
+##################
+
+
+tar_target(summary_sd_table, gen_summary_sd_table(desc_vars,
+                                            comparison_vars,
+                                            natl_table = natl_acs_health_table,
+                                            state_table = natl_acs_health_table,
+                                            fac_dem_table = fac_dem_comp_vars)),
+
+
+
+tar_target(write_summary_sd_table, write_summary_sd_table(summary_sd_table, final_table_name))
 
 )
 

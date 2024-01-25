@@ -23,16 +23,18 @@ load_facilities_data <- function(facilities_filepath){
              range = c("a6:ba1378")
   )%>%
     
-    mutate(Label = `Mill_ID`) %>%
-    select(Longitude,Latitude,everything())
+    mutate(Label = `Mill_Name`) %>%
+    select(Label,Longitude,Latitude,everything())
   
 }
 
 load_tri_facilities_data <- function(tri_facilities_filepath){
   
   read_csv(tri_facilities_filepath) %>%
+    mutate(Label = `4. FACILITY NAME`) %>%
     
-    select(`3. FRS ID`, `4. FACILITY NAME`,`5. STREET ADDRESS`,`6. CITY`,`7. COUNTY`,`8. ST`,`9. ZIP`,`10. BIA`,`11. TRIBE`,
+    
+    select(Label, `3. FRS ID`, `4. FACILITY NAME`,`5. STREET ADDRESS`,`6. CITY`,`7. COUNTY`,`8. ST`,`9. ZIP`,`10. BIA`,`11. TRIBE`,
            `12. LATITUDE`,`13. LONGITUDE`,`14. HORIZONTAL DATUM`,
            `15. PARENT CO NAME`,
            `27. PRIMARY NAICS`,`20. INDUSTRY SECTOR`,

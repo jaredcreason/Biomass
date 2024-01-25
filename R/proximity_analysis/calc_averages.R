@@ -1,68 +1,111 @@
 
-gen_averages_table <- function(desc_vars, comparison_vars, table, buffer, buffer_radius_mi){
+gen_summary_means_table <- function(desc_vars,
+                              comparison_vars,
+                              natl_table,
+                              state_table,
+                              fac_dem_table){
   
   summary_table = data.frame(Variable=desc_vars)
   
-
-  summary_table$Population_Average <- sapply(comparison_vars, function(var) {
+  #######################################################################
+  
+  summary_table$Natl_Average <- sapply(comparison_vars, function(var) {
     
-    weighted.mean(table[[var]], table$pop, na.rm = TRUE)
+    weighted.mean(natl_table[[var]], natl_table$pop, na.rm = TRUE)
   })
   
   
   
-  rural <- table %>% filter(rural == 1)
+  rural <- natl_table %>% filter(rural == 1)
   
-  summary_table$Rural_Average <- sapply(comparison_vars, function(var) {
+  summary_table$Natl_Rural_Average <- sapply(comparison_vars, function(var) {
     
     weighted.mean(rural[[var]], rural$pop, na.rm = TRUE)
   })
   
-  urban <- table %>% filter(rural == 0)
+  urban <- natl_table %>% filter(rural == 0)
   
-  summary_table$Urban_Average <- sapply(comparison_vars, function(var) {
+  summary_table$Natl_Urban_Average <- sapply(comparison_vars, function(var) {
     
     weighted.mean(urban[[var]], urban$pop, na.rm = TRUE)
   })
+
   
   
-  summary_table$Population_SD <- sapply(comparison_vars, function(var) {
-    sd(table[[var]], na.rm = TRUE)
+  #######################################################################
+  
+  
+  summary_table$State_Average <- sapply(comparison_vars, function(var) {
+    
+    weighted.mean(state_table[[var]], state_table$pop, na.rm = TRUE)
   })
   
+  rural_state <- state_table %>% filter(rural == 1)
+  
+  summary_table$State_Rural_Average <- sapply(comparison_vars, function(var) {
+    
+    weighted.mean(rural_state[[var]], rural_state$pop, na.rm = TRUE)
+  })
+  
+  urban_state <- state_table %>% filter(rural == 0)
+  
+  summary_table$State_Urban_Average <- sapply(comparison_vars, function(var) {
+    
+    weighted.mean(urban_state[[var]], urban_state$pop, na.rm = TRUE)
+  })
+  
+  
+  #######################################################################
+  
+
+  summary_table$Facility_Buffer_Average <- sapply(comparison_vars, function(var) {
+    
+    weighted.mean(fac_dem_table[[var]], fac_dem_table$pop, na.rm = TRUE)
+  })
+  
+
   
 return(summary_table)
 }
 
 
+############################################
 
-################################
-##################################
+gen_summary_sd_table <- function(desc_vars,
+                              comparison_vars,
+                              natl_table,
+                              state_table,
+                              fac_dem_table){
+  
+  summary_table = data.frame(Variable=desc_vars)
+  
+  #######################################################################
+  
+  
+  
+  
+  summary_table$Natl_SD <- sapply(comparison_vars, function(var) {
+    sd(natl_table[[var]], na.rm = TRUE)
+  })
+  
+  #######################################################################
+  
+  
 
-
-
-gen_std_devs_table <- function(desc_vars, comparison_vars, table, buffer, buffer_radius_mi) {
+  summary_table$State_SD <- sapply(comparison_vars, function(var) {
+    sd(state_table[[var]], na.rm = TRUE)
+  })
   
-  summary_table_sd = data.frame(Variable=desc_vars)
+  #######################################################################
   
-  for (v in 1:length(comparison_vars)) {
-    a = (table$pop*table[,comparison_vars[v]])/table$pop
-    summary_table_sd[v,"Overall (Population Average) SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-  }
   
-  # get the rural area level std devs
-  rural <- table %>% filter(rural==1)
-  for (v in 1:length(comparison_vars)) {
-    a = (rural$pop*rural[,comparison_vars[v]])/rural$pop
-    summary_table_sd[v,"Rural Areas (Population Average) SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-  }
+  summary_table$Facility_Buffer_SD <- sapply(comparison_vars, function(var) {
+    
+    sd(fac_dem_table[[var]], na.rm = TRUE)
+    
+  })
   
-  # get the population weighted SD around the production facilities
-  local = table$GEOID %in% unique(buffer$GEOID)
-  for (v in 1:length(comparison_vars)) {
-    a = (table$pop[local]*table[local,comparison_vars[v]])/table$pop[local]
-    summary_table_sd[v,paste("Within ",buffer_radius_mi," mile(s) of production facility SD")] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-  }
   
-  return(summary_table_sd)
+  return(summary_table)
 }
+

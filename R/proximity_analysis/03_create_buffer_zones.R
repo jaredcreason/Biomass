@@ -13,5 +13,5 @@ create_buffer_zone <- function(facilities_map, radius_mi, shp) {
   # # get GEOID to facility list
   facility_buffer <- st_intersection(facilities_map, buffer) %>% select(Label, GEOID) %>% st_set_geometry(NULL)
 
-  return(buffer)
+  return(facility_buffer)
 }

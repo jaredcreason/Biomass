@@ -26,6 +26,25 @@ filter_facilities_type <- function(dataset, type_list) {
   return(filtered_data)
 }
 
+filter_tri_state <- function(dataset, state_list) {
+  
+  filtered_data <- dataset %>%
+    filter(`8. ST` %in% state_list)
+  
+  return(filtered_data)
+}
+
+
+filter_tri_industry <- function(dataset, industry_list) {
+  
+  filtered_data <- dataset %>%
+    filter(`20. INDUSTRY SECTOR` %in% industry_list)
+  
+  return(filtered_data)
+}
+
+
+
 
 filter_tri_facilities_states_industry <- function(dataset, state_list, industry_list) {
   

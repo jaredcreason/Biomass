@@ -4,59 +4,8 @@
 source('packages.R')
 source('R/01_load_data.R')
 
-acs_data <- load_acs_data('data/acs_data/acs_data_2021_block group.Rdata')
-
-
-ats_cancer <- load_ats_cancer('data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx')
-ats_resp <- load_ats_resp('data/ats_data/2019_National_RespHI_by_tract_poll.xlsx')
-
-nata_data <- left_join(ats_cancer, ats_resp, by = 'Tract')
-
-rm(ats_cancer)
-rm(ats_resp)
-
-
-# rearrange tibble column
-
-nata_data <- nata_data %>% 
-  select(
-    1:7,
-    ncol(nata_data),
-    everything()
-  )
-
 ##########################################
 ##########################################
-
-data_ct <-acs_data %>% 
-  mutate(Tract=substr(GEOID,1,11))
-
-shp = data_ct %>%
-  filter(variable=="pop") %>%
-  select(GEOID,Tract) %>%
-  arrange(GEOID) %>%
-  st_transform(3488)
-
-
-rm(acs_data)
-
-
-
-acs_health_data <- data_ct %>%
-  pivot_wider(names_from='variable',values_from='estimate') %>%
-  mutate(white_pct=(white/pop)*100,
-         minority_black=(black/pop)*100,
-         minority_other=((pop-(white + black))/pop)*100,
-         minority_hispanic=(hispanic/hispanic_denominator)*100,
-         pov99=pov99/pop*100,
-         pov50=pov50/pop*100,
-         income=income/1000)
-
-rm(data_ct)
-
-acs_health_data <- acs_health_data %>% left_join(nata_data,by=c("Tract"="Tract"))
-
-
 
 
 
@@ -644,29 +593,7 @@ summary_table$`Within Buffer Radius` <- sapply(comparison_vars, function(var) {
   
   
   
-  ##############################################
-  
-  for (v in 1:length(comparison_vars)) {
-    a = (acs_health_table$pop*acs_health_table[,comparison_vars[v]])/acs_health_table$pop
-    summary_table_sd[v,"Overall (Population Average) SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-  }
-  
-  # get the rural area level std devs
-  rural <- acs_health_table %>% filter(rural==1)
-  for (v in 1:length(comparison_vars)) {
-    a = (rural$pop*rural[,comparison_vars[v]])/rural$pop
-    summary_table_sd[v,"Rural Areas (Population Average) SD"] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-  }
-  
-  # get the population weighted SD around the production facilities
-  local = acs_health_table$GEOID %in% unique(buffer$GEOID)
-  for (v in 1:length(comparison_vars)) {
-    a = (acs_health_table$pop[local]*acs_health_table[local,comparison_vars[v]])/acs_health_table$pop[local]
-    summary_table_sd[v,paste("Within ",buffer_radius_mi," mile(s) of production facility SD")] = sqrt(sum((a-mean(a, na.rm=TRUE))^2/(length(a)-1), na.rm=TRUE))
-  }
-  
-  #################################
-  ###################################
+#
   
 
     output_path <- file.path('output', 'summary_tables', paste0(final_table_name,'_means','.xlsx'))
@@ -682,13 +609,39 @@ summary_table$`Within Buffer Radius` <- sapply(comparison_vars, function(var) {
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  #########################
+    
+    states <- c('AR','LA','MS','AL','GA','FL','TN','SC', 'NC')
+    
+    
+    
+    table_full <- data_ct_loaded %>% 
+      st_set_geometry(NULL) %>%
+      as.data.table() %>% 
+      setkey('GEOID')
+    
+    
+    
+    # table_1 <- table_full[sq_miles]
+    
+    # rm(table_full)
+    
+    # merge the acs and nata data
+    table_2 <- table_full %>%
+      pivot_wider(names_from=variable,values_from=estimate) %>%
+      mutate(white_pct=(white/pop)*100,
+             minority_black=(black/pop)*100,
+             minority_other=((pop-(white + black))/pop)*100,
+             minority_hispanic=(hispanic/hispanic_denominator)*100,
+             pov99=pov99/pop*100,
+             pov50=pov50/pop*100,
+             income=income/1000,
+             rural = fifelse(Tract %in% urban_tracts_loaded$Tract,0,1)) %>%
+      left_join(nata_data,by=c("Tract"="Tract")) %>%
+      as.data.table() %>%
+      setkey('GEOID') %>%
+      filter(State %in% states)
+    
+    
+
+      
