@@ -8,7 +8,7 @@ filter_acs_state <- function(dataset, state_list) {
   return(filtered_data)
 }
 
-
+###########################
 
 
 filter_facilities_state <- function(dataset, state_list) {
@@ -25,6 +25,8 @@ filter_facilities_type <- function(dataset, type_list) {
   filtered_data <- dataset[dataset$Type %in% type_list, ]
   return(filtered_data)
 }
+
+###########################
 
 filter_tri_state <- function(dataset, state_list) {
   

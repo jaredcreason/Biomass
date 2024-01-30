@@ -30,11 +30,10 @@ load_facilities_data <- function(facilities_filepath){
 
 load_tri_facilities_data <- function(tri_facilities_filepath){
   
-  read_csv(tri_facilities_filepath) %>%
+  tri_fac_data <- read_csv(tri_facilities_filepath) %>%
     mutate(Label = `4. FACILITY NAME`) %>%
     
-    
-    select(Label, `3. FRS ID`, `4. FACILITY NAME`,`5. STREET ADDRESS`,`6. CITY`,`7. COUNTY`,`8. ST`,`9. ZIP`,`10. BIA`,`11. TRIBE`,
+    select(Label, `2. TRIFD`, `3. FRS ID`, `4. FACILITY NAME`,`5. STREET ADDRESS`,`6. CITY`,`7. COUNTY`,`8. ST`,`9. ZIP`,`10. BIA`,`11. TRIBE`,
            `12. LATITUDE`,`13. LONGITUDE`,`14. HORIZONTAL DATUM`,
            `15. PARENT CO NAME`,
            `27. PRIMARY NAICS`,`20. INDUSTRY SECTOR`,
@@ -48,6 +47,9 @@ load_tri_facilities_data <- function(tri_facilities_filepath){
            `84. OFF-SITE RELEASE TOTAL`,`90. OFF-SITE RECYCLED TOTAL`,`93. OFF-SITE ENERGY RECOVERY T`,
            `100. OFF-SITE TREATED TOTAL`,`101. 6.2 - UNCLASSIFIED`,`102. 6.2 - TOTAL TRANSFER`,
            `103. TOTAL RELEASES`)
+  
+  return(tri_fac_data)
+  
 }
 
 load_ats_cancer <- function(ats_cancer_filepath){

@@ -13,8 +13,8 @@ merge_acs <- function(acs_dataset, nata_dataset){
     pivot_wider(names_from='variable',values_from='estimate') %>% 
     mutate(white_pct=(white/pop)*100,
            minority_black=(black/pop)*100,
-         minority_other=((pop-(white + black))/pop)*100,
-         minority_hispanic=(hispanic/hispanic_denominator)*100,
+           minority_hispanic=(hispanic/hispanic_denominator)*100,
+           minority_other=((pop-(white + black))/pop)*100,
            pov99=pov99/pop*100,
            pov50=pov50/pop*100,
            income=income/1000)

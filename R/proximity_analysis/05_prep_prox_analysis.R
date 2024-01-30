@@ -18,8 +18,8 @@ gen_natl_acs_health_table <- function(data_ct, sq_miles, urban_tracts, nata_data
     pivot_wider(names_from=variable,values_from=estimate) %>%
     mutate(white_pct=(white/pop)*100,
            minority_black=(black/pop)*100,
-           minority_other=((pop-(white + black))/pop)*100,
            minority_hispanic=(hispanic/hispanic_denominator)*100,
+           minority_other=((pop-(white + black))/pop)*100,
            pov99=pov99/pop*100,
            pov50=pov50/pop*100,
            income=income/1000,
@@ -51,8 +51,8 @@ gen_acs_health_table <- function(data_ct, sq_miles, urban_tracts, nata_data, sta
     pivot_wider(names_from=variable,values_from=estimate) %>%
     mutate(white_pct=(white/pop)*100,
            minority_black=(black/pop)*100,
-           minority_other=((pop-(white + black))/pop)*100,
            minority_hispanic=(hispanic/hispanic_denominator)*100,
+           minority_other=((pop-(white + black))/pop)*100,
            pov99=pov99/pop*100,
            pov50=pov50/pop*100,
            income=income/1000,
@@ -87,7 +87,8 @@ gen_fac_dem_mid <- function(fac_dem_pre,
     select(Label,GEOID,sq_miles,rural.x,rural.y,pop,
            white,black,indian,asian,hispanic,hispanic_denominator,income,pov50,pov99,
            total_risk,total_risk_resp) %>%
-    rename(rural_facility = rural.x, rural_blockgroup = rural.y)
+    rename(rural_facility = rural.x, rural_blockgroup = rural.y) %>% 
+    distinct()
   
   return(facility_demographics_mid)
 }
@@ -108,6 +109,7 @@ gen_fac_dem_table <- function(fac_dem_mid, sq_miles) {
       indian = sum(indian, na.rm=TRUE),
       asian = sum(asian, na.rm=TRUE),
       hispanic = sum(hispanic, na.rm=TRUE),
+      hispanic_denominator = sum(hispanic_denominator, na.rm=TRUE),
       income = mean(income, na.rm=TRUE),
       pov50 = mean(pov50, na.rm=TRUE), 
       pov99 = mean(pov99, na.rm=TRUE), 

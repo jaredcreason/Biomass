@@ -4,7 +4,7 @@ add_comp_vars <- function(fac_dem_table) {
   
   fac_dem_clean <- fac_dem_table %>%
     filter(pop > 0) %>%
-    #filter(hispanic_denominator > 0) %>%
+    filter(hispanic_denominator > 0) %>%
     drop_na()
   
   

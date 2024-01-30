@@ -60,7 +60,17 @@ tar_plan(
  
  
  tri_industry_sector <- c('Wood Products'),
-  
+ 
+ # Options Include:
+ # [1] "Plastics and Rubber"               "Machinery"                         "Petroleum Bulk Terminals"          "Chemicals"                        
+ # [5] "Food"                              "Fabricated Metals"                 "Transportation Equipment"          "Nonmetallic Mineral Product"      
+ # [9] "Primary Metals"                    "Electric Utilities"                "Electrical Equipment"              "Petroleum"                        
+ # [13] "Paper"                             "Hazardous Waste"                   "Beverages"                         "Wood Products"                    
+ # [17] "Other"                             "Chemical Wholesalers"              "Coal Mining"                       "Miscellaneous Manufacturing"      
+ # [21] "Furniture"                         "Metal Mining"                      "Computers and Electronic Products" "Printing"                         
+ # [25] "Textiles"                          "Textile Product"                   "Tobacco"                           "Leather"                          
+ # [29] "Publishing"                        "Apparel" 
+ 
   
   # Enter desired file name of output .html file
 #  map_title <- 'US_NATL_mills_map',
@@ -172,7 +182,7 @@ tar_plan(
            filter_facilities_type(facilities_data_loaded, mill_type)),
 
  # By both
-  tar_target(filter_facilities_final,
+  tar_target(filter_facilities_by_both,
              filter_facilities_type(filter_facilities_by_state, mill_type)),
 
 
@@ -183,10 +193,11 @@ tar_plan(
 
   tar_target(filter_tri_by_state, filter_tri_state(tri_facilities_data_loaded, states)),
 
+
   tar_target(filter_tri_by_industry, filter_tri_industry(tri_facilities_data_loaded, tri_industry_sector)),
 
  
-  tar_target(filter_tri_facilities_final,
+  tar_target(filter_tri_facilities_by_both,
              filter_tri_facilities_states_industry(tri_facilities_data_loaded,
                                                    states,
                                                    tri_industry_sector)),
@@ -305,7 +316,7 @@ desc_vars <- c("% White","% Black or African American ","% Other","% Hispanic",
               'Total Respiratory (hazard quotient)'),
 
 
-  tar_target(fac_dem_comp_vars, add_comp_vars(fac_dem_table)),
+  tar_target(fac_dem_comp_vars, add_comp_vars(fac_dem_mid)),
 
   tar_target(summary_means_table, gen_summary_means_table(desc_vars,
                                               comparison_vars,

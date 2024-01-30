@@ -18,8 +18,8 @@ gen_fac_lat_lon <- function(facility_data, latitude_col_name, longitude_col_name
   facilities_lat_lon <- facilities %>%
     select(longitude_col_name,
            latitude_col_name,
-           Label)
-  
+           Label) %>%
+    distinct()
   
   
   return(facilities_lat_lon)
@@ -35,7 +35,8 @@ gen_fac_sf <- function(facility_data, latitude_col_name, longitude_col_name){
   facilities_sf = st_as_sf(facility_data, 
                            coords=c(x=longitude_col_name,y=latitude_col_name), 
                            crs=4326) %>%
-    st_transform(3488)
+    st_transform(3488) %>% 
+    distinct(geometry, .keep_all = TRUE)
   
   return(facilities_sf)
 }
