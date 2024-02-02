@@ -56,10 +56,10 @@ tar_plan(
   # Enter desired mill-type, options include:
  # "pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", or "OSB" 
   
-  mill_type <- c('pellet'),
+  mill_type <- c('lumber'),
  
  
- tri_industry_sector <- c('Plastics and Rubber'),
+ tri_industry_sector <- c('Wood Products'),
  
  # Options Include:
  # [1] "Plastics and Rubber"               "Machinery"                         "Petroleum Bulk Terminals"          "Chemicals"                        
@@ -81,24 +81,24 @@ tar_plan(
  # Proximity Analysis Set-Up
  
 
- final_table_name = 'CA_tri_textiles',
+final_table_name = 'USA_woodproducts_tri',
  
  #geography_column_name = '8. ST',
  
 
  #### Uncomment for LURA All Mills
 
-  longitude_col_name = 'Longitude',
+ # longitude_col_name = 'Longitude',
 
-  latitude_col_name = 'Latitude',
+ # latitude_col_name = 'Latitude',
 
 
 
 ### Uncomment for TRI Facilities
 # 
- # longitude_col_name = '13. LONGITUDE',
+  longitude_col_name = '13. LONGITUDE',
 #  
-#   latitude_col_name = '12. LATITUDE',
+   latitude_col_name = '12. LATITUDE',
 #  
 
 # End of Set-up
@@ -237,11 +237,11 @@ tar_plan(
  tar_target(urban_areas, urban_areas()),
  tar_target(uac, gen_uac(urban_areas)),
 
-tar_target(fac_lat_lon, gen_fac_lat_lon(filter_facilities_by_milltype,
+tar_target(fac_lat_lon, gen_fac_lat_lon(filter_tri_by_industry,
                                         latitude_col_name = latitude_col_name,
                                         longitude_col_name = longitude_col_name)),
 
-tar_target(fac_sf, gen_fac_sf(filter_facilities_by_milltype,
+tar_target(fac_sf, gen_fac_sf(filter_tri_by_industry,
                               latitude_col_name = latitude_col_name,
                               longitude_col_name = longitude_col_name)),
 
@@ -342,11 +342,11 @@ tar_target(fac_dem_table_10mi, gen_fac_dem_table(fac_dem_mid_10mi, sq_miles)),
  
  
  # descriptions of the comparison variables to be included in the tables
-desc_vars <- c("% White","% Black or African American ","% Other","% Hispanic",
-               "Median Income [1,000 2019$]",
+desc_vars <- c("% White","% Black or African American (race)","% Other (race)","% Hispanic (ethnic origin)",
+               "Median Income (1k 2021$)",
               "% Below Poverty Line","% Below Half the Poverty Line",
               "Total Cancer Risk (per million)",
-               'Total Respiratory (hazard quotient)'),
+               'Total Respiratory Risk (hazard quotient)'),
  
  
   tar_target(fac_dem_comp_vars_1mi, add_comp_vars(fac_dem_mid_1mi)),
@@ -386,14 +386,15 @@ tar_target(summary_table_list, list(summary_means_buffer_1mi,
 
 
 tar_target(final_summary_table, merge_summary_tables(summary_means_table_natl,
-                                                      summary_table_list))
+                                                      summary_table_list)),
+
+tar_target(export_table_to_html, write_summary_means_table(final_summary_table, final_table_name))
 
 )
 
 
+##################
 
-
- 
  ##################
  
  
