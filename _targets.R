@@ -50,16 +50,16 @@ tar_plan(
   
   ## Enter one or multiple U.S. State Abbreviations (max two recommended)
  # states <- c('AR','LA','MS','AL','GA','FL','TN','SC', 'NC'),
-  states <- c('GA'),
+  states <- c('CA'),
  
  
   # Enter desired mill-type, options include:
  # "pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", or "OSB" 
   
-  mill_type <- c('pulp/paper'),
+  mill_type <- c('pellet'),
  
  
- tri_industry_sector <- c('Wood Products'),
+ tri_industry_sector <- c('Plastics and Rubber'),
  
  # Options Include:
  # [1] "Plastics and Rubber"               "Machinery"                         "Petroleum Bulk Terminals"          "Chemicals"                        
@@ -81,27 +81,25 @@ tar_plan(
  # Proximity Analysis Set-Up
  
 
- buffer_radius_mi = 1,
- 
- final_table_name = 'USA_tri_woodproducts_1mi',
+ final_table_name = 'CA_tri_textiles',
  
  #geography_column_name = '8. ST',
  
 
  #### Uncomment for LURA All Mills
 
- # longitude_col_name = 'Longitude',
+  longitude_col_name = 'Longitude',
 
- # latitude_col_name = 'Latitude',
+  latitude_col_name = 'Latitude',
 
 
 
 ### Uncomment for TRI Facilities
-
-  longitude_col_name = '13. LONGITUDE',
- 
-  latitude_col_name = '12. LATITUDE',
- 
+# 
+ # longitude_col_name = '13. LONGITUDE',
+#  
+#   latitude_col_name = '12. LATITUDE',
+#  
 
 # End of Set-up
 
@@ -239,11 +237,11 @@ tar_plan(
  tar_target(urban_areas, urban_areas()),
  tar_target(uac, gen_uac(urban_areas)),
 
-tar_target(fac_lat_lon, gen_fac_lat_lon(filter_tri_by_industry,
+tar_target(fac_lat_lon, gen_fac_lat_lon(filter_facilities_by_milltype,
                                         latitude_col_name = latitude_col_name,
                                         longitude_col_name = longitude_col_name)),
 
-tar_target(fac_sf, gen_fac_sf(filter_tri_by_industry,
+tar_target(fac_sf, gen_fac_sf(filter_facilities_by_milltype,
                               latitude_col_name = latitude_col_name,
                               longitude_col_name = longitude_col_name)),
 
@@ -268,11 +266,25 @@ tar_target(fac_sf_rural, gen_fac_sf_rural(fac_sf, fac_sf_urban)),
 
   tar_target(shp, prep_acs_geometry(data_ct, urban_tracts)),
 
-  tar_target(bufferzone, create_buffer_zone(fac_map,
-                                                buffer_radius_mi,
+##############
+
+  tar_target(bufferzone_1mi, create_buffer_zone(fac_map,
+                                                radius_mi = 1,
                                                 shp)),
 
+  tar_target(bufferzone_3mi, create_buffer_zone(fac_map,
+                                                radius_mi = 3,
+                                                shp)),
 
+  tar_target(bufferzone_5mi, create_buffer_zone(fac_map,
+                                                radius_mi = 5,
+                                                shp)),
+
+  tar_target(bufferzone_10mi, create_buffer_zone(fac_map,
+                                                 radius_mi = 10,
+                                                 shp)),
+
+###################
 
   tar_target(sq_miles, gen_sq_miles(shp)),
 
@@ -285,60 +297,112 @@ tar_target(fac_sf_rural, gen_fac_sf_rural(fac_sf, fac_sf_urban)),
   
   tar_target(acs_health_table, gen_acs_health_table(data_ct,
                                                     sq_miles,
-                                                    urban_tracts,
+                                                  urban_tracts,
                                                     nata_data,
                                                     states
                                                     )),
+#######################
 
-  tar_target(fac_dem_pre, merge_facility_buffer(fac_map, bufferzone)),
+  tar_target(fac_dem_pre_1mi, merge_facility_buffer(fac_map, bufferzone_1mi)),
+tar_target(fac_dem_pre_3mi, merge_facility_buffer(fac_map, bufferzone_3mi)),
+tar_target(fac_dem_pre_5mi, merge_facility_buffer(fac_map, bufferzone_5mi)),
+tar_target(fac_dem_pre_10mi, merge_facility_buffer(fac_map, bufferzone_10mi)),
 
-  tar_target(fac_dem_mid, gen_fac_dem_mid(fac_dem_pre, natl_acs_health_table)),
 
-  tar_target(fac_dem_table, gen_fac_dem_table(fac_dem_mid, sq_miles)),
 
-  tar_target(write_facility_dem_table, write_fac_dem_table(fac_dem_table, final_table_name)),
+
+########################
+  tar_target(fac_dem_mid_1mi, gen_fac_dem_mid(fac_dem_pre_1mi, natl_acs_health_table)),
+tar_target(fac_dem_mid_3mi, gen_fac_dem_mid(fac_dem_pre_3mi, natl_acs_health_table)),
+tar_target(fac_dem_mid_5mi, gen_fac_dem_mid(fac_dem_pre_5mi, natl_acs_health_table)),
+tar_target(fac_dem_mid_10mi, gen_fac_dem_mid(fac_dem_pre_10mi, natl_acs_health_table)),
+
+
+
+
+########################
+  tar_target(fac_dem_table_1mi, gen_fac_dem_table(fac_dem_mid_1mi, sq_miles)),
+tar_target(fac_dem_table_3mi, gen_fac_dem_table(fac_dem_mid_3mi, sq_miles)),
+tar_target(fac_dem_table_5mi, gen_fac_dem_table(fac_dem_mid_5mi, sq_miles)),
+tar_target(fac_dem_table_10mi, gen_fac_dem_table(fac_dem_mid_10mi, sq_miles)),
+
+
+
+
+
 
 #########################################################
 ########### Conduct Proximity Analysis
 ##################################################
 
-comparison_vars <- c("white_pct",'minority_black','minority_other','minority_hispanic',
-                    "income",
-                    "pov99","pov50",
-                    "total_risk","total_risk_resp"),
-
-
-# descriptions of the comparison variables to be included in the tables
+ comparison_vars <- c("white_pct",'minority_black','minority_other','minority_hispanic',
+                     "income",
+                     "pov99","pov50",
+                     "total_risk","total_risk_resp"),
+ 
+ 
+ # descriptions of the comparison variables to be included in the tables
 desc_vars <- c("% White","% Black or African American ","% Other","% Hispanic",
-              "Median Income [1,000 2019$]",
+               "Median Income [1,000 2019$]",
               "% Below Poverty Line","% Below Half the Poverty Line",
               "Total Cancer Risk (per million)",
-              'Total Respiratory (hazard quotient)'),
+               'Total Respiratory (hazard quotient)'),
+ 
+ 
+  tar_target(fac_dem_comp_vars_1mi, add_comp_vars(fac_dem_mid_1mi)),
+tar_target(fac_dem_comp_vars_3mi, add_comp_vars(fac_dem_mid_3mi)),
+tar_target(fac_dem_comp_vars_5mi, add_comp_vars(fac_dem_mid_5mi)),
+tar_target(fac_dem_comp_vars_10mi, add_comp_vars(fac_dem_mid_10mi)),
 
 
-  tar_target(fac_dem_comp_vars, add_comp_vars(fac_dem_mid)),
-
-  tar_target(summary_means_table, gen_summary_means_table(desc_vars,
-                                              comparison_vars,
-                                              natl_table = natl_acs_health_table,
-                                              state_table = natl_acs_health_table,
-                                              fac_dem_table = fac_dem_comp_vars)),
-
-tar_target(write_summary_means_table, write_summary_means_table(summary_means_table, final_table_name)),
+   tar_target(summary_means_table_natl, gen_summary_means_table_natl(desc_vars,
+                                               comparison_vars,
+                                               natl_table = natl_acs_health_table)),
+ 
 
 
-##################
+ tar_target(summary_means_buffer_1mi, gen_summary_means_table_buffer(desc_vars,
+                                                                     comparison_vars,
+                                                                     fac_dem_table = fac_dem_comp_vars_1mi,
+                                                                     buffer_radius = 1)),
+tar_target(summary_means_buffer_3mi, gen_summary_means_table_buffer(desc_vars,
+                                                                    comparison_vars,
+                                                                    fac_dem_table = fac_dem_comp_vars_3mi,
+                                                                    buffer_radius = 3)),
+tar_target(summary_means_buffer_5mi, gen_summary_means_table_buffer(desc_vars,
+                                                                    comparison_vars,
+                                                                    fac_dem_table = fac_dem_comp_vars_5mi,
+                                                                    buffer_radius = 5)),
+tar_target(summary_means_buffer_10mi, gen_summary_means_table_buffer(desc_vars,
+                                                                    comparison_vars,
+                                                                    fac_dem_table = fac_dem_comp_vars_10mi,
+                                                                    buffer_radius = 10)),
 
 
-tar_target(summary_sd_table, gen_summary_sd_table(desc_vars,
-                                            comparison_vars,
-                                            natl_table = natl_acs_health_table,
-                                            state_table = natl_acs_health_table,
-                                            fac_dem_table = fac_dem_comp_vars)),
+tar_target(summary_table_list, list(summary_means_buffer_1mi,
+                                    summary_means_buffer_3mi,
+                                    summary_means_buffer_5mi,
+                                    summary_means_buffer_10mi)),
 
 
-
-tar_target(write_summary_sd_table, write_summary_sd_table(summary_sd_table, final_table_name))
+tar_target(final_summary_table, merge_summary_tables(summary_means_table_natl,
+                                                      summary_table_list))
 
 )
 
+
+
+
+ 
+ ##################
+ 
+ 
+ # tar_target(summary_sd_table, gen_summary_sd_table(desc_vars,
+ #                                             comparison_vars,
+ #                                             natl_table = natl_acs_health_table,
+ #                                             state_table = acs_health_table,
+ #                                             fac_dem_table = fac_dem_comp_vars)),
+ # 
+ # 
+ # 
+ # tar_target(write_summary_sd_table, write_summary_sd_table(summary_sd_table, final_table_name))

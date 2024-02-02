@@ -70,8 +70,8 @@ gen_acs_health_table <- function(data_ct, sq_miles, urban_tracts, nata_data, sta
 
 merge_facility_buffer <- function(fac_map, buffer) {
   
-  facility_demographics_pre <- merge(as.data.table(fac_map), as.data.table(buffer),by="Label", allow.cartesian = TRUE)
-  
+ # facility_demographics_pre <- merge(as.data.table(fac_map), as.data.table(buffer),by="Label", allow.cartesian = TRUE)
+  facility_demographics_pre <- merge(as.data.table(fac_map), as.data.table(buffer),by="Label")
   return(facility_demographics_pre)
 }
 

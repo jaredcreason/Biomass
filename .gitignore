@@ -4,8 +4,5 @@
 .Ruserdata
 data/acs_data/acs_data_2021_block group.Rdata
 scripts/Biomass_EJ.R
-output/facility_maps
-output/Allocation_Rule
-output/summary_tables
-output/facility_data
+output
 

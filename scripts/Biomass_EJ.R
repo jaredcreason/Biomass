@@ -36,8 +36,8 @@ facilities <- read_excel("data/All_mills_ACS.xlsx",
   select(Longitude,Latitude,everything()) 
 
 
-facilities <- facilities %>% filter(State_Prov == 'GA') %>% 
-  filter(Type == 'pulp/paper')
+facilities <- facilities %>% 
+  filter(Type == 'lumber')
 
 facilities_lat_lon <- facilities %>% 
   select(Longitude,Latitude,Label) %>%
@@ -202,9 +202,7 @@ table_2 <- table_1 %>%
   left_join(nata_data,by=c("Tract"="Tract")) %>%
  # left_join(nata_data_resp,by=c("Tract"="Tract")) %>%
   as.data.table() %>%
-  setkey('GEOID') %>%
-  filter(State == c('GA'))
-
+  setkey('GEOID')
 
 
 
