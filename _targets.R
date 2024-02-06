@@ -50,13 +50,13 @@ tar_plan(
   
   ## Enter one or multiple U.S. State Abbreviations (max two recommended)
  # states <- c('AR','LA','MS','AL','GA','FL','TN','SC', 'NC'),
-  states <- c('CA'),
+  states <- c('LA'),
  
  
   # Enter desired mill-type, options include:
  # "pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", or "OSB" 
   
-  mill_type <- c('lumber'),
+  mill_type <- c('pulp/paper'),
  
  
  tri_industry_sector <- c('Wood Products'),
@@ -81,16 +81,16 @@ tar_plan(
  # Proximity Analysis Set-Up
  
 
-final_table_name = 'USA_woodproducts_tri',
+final_table_name = 'LA_all_tri',
  
  #geography_column_name = '8. ST',
  
 
  #### Uncomment for LURA All Mills
 
- # longitude_col_name = 'Longitude',
+  #longitude_col_name = 'Longitude',
 
- # latitude_col_name = 'Latitude',
+ #latitude_col_name = 'Latitude',
 
 
 
@@ -126,6 +126,10 @@ final_table_name = 'USA_woodproducts_tri',
   tar_target(ats_resp_data,
              'data/ats_data/2019_National_RespHI_by_tract_poll.xlsx',
              format = 'file'),
+
+  tar_target(places_data,
+             'data/places_data/places_health_outcomes_ct.csv',
+             format = 'file'),
   
   
   
@@ -142,6 +146,9 @@ final_table_name = 'USA_woodproducts_tri',
   
   tar_target(ats_resp_loaded,
              load_ats_resp(ats_resp_data)),
+
+  tar_target(places_loaded,
+             load_places(places_data)),
   
   tar_target(facilities_data_loaded,
              load_facilities_data(facilities_data)),
@@ -156,12 +163,12 @@ final_table_name = 'USA_woodproducts_tri',
  ##########################################
  
   tar_target(nata_data,
-             merge_nata(ats_cancer_loaded, ats_resp_loaded)),
+             merge_nata(ats_cancer_loaded, ats_resp_loaded, places_loaded)),
  
  
   
   tar_target(merge_acs_health,
-             merge_acs(acs_data_loaded, nata_data)),
+             merge_acs(acs_data_loaded, nata_data, places_loaded)),
 
  ###################################################################
  ##### Subset region or industry of interest from facility dataset
@@ -237,11 +244,11 @@ final_table_name = 'USA_woodproducts_tri',
  tar_target(urban_areas, urban_areas()),
  tar_target(uac, gen_uac(urban_areas)),
 
-tar_target(fac_lat_lon, gen_fac_lat_lon(filter_tri_by_industry,
+tar_target(fac_lat_lon, gen_fac_lat_lon(filter_tri_by_state,
                                         latitude_col_name = latitude_col_name,
                                         longitude_col_name = longitude_col_name)),
 
-tar_target(fac_sf, gen_fac_sf(filter_tri_by_industry,
+tar_target(fac_sf, gen_fac_sf(filter_tri_by_state,
                               latitude_col_name = latitude_col_name,
                               longitude_col_name = longitude_col_name)),
 
@@ -335,18 +342,29 @@ tar_target(fac_dem_table_10mi, gen_fac_dem_table(fac_dem_mid_10mi, sq_miles)),
 ########### Conduct Proximity Analysis
 ##################################################
 
- comparison_vars <- c("white_pct",'minority_black','minority_other','minority_hispanic',
-                     "income",
-                     "pov99","pov50",
-                     "total_risk","total_risk_resp"),
+ comparison_vars <- c("white_pct",
+                      'minority_black',
+                      'minority_other',
+                      'minority_hispanic',
+                      "income",
+                      "pov99",
+                      "pov50",
+                      "total_risk",
+                      "total_risk_resp",
+                      "asthma_prev"),
  
  
  # descriptions of the comparison variables to be included in the tables
-desc_vars <- c("% White","% Black or African American (race)","% Other (race)","% Hispanic (ethnic origin)",
+desc_vars <- c("% White",
+               "% Black or African American (race)",
+               "% Other (race)",
+               "% Hispanic (ethnic origin)",
                "Median Income (1k 2021$)",
-              "% Below Poverty Line","% Below Half the Poverty Line",
-              "Total Cancer Risk (per million)",
-               'Total Respiratory Risk (hazard quotient)'),
+               "% Below Poverty Line",
+               "% Below Half the Poverty Line",
+               "Total Cancer Risk (per million)",
+               'Total Respiratory Risk (hazard quotient)',
+               'Asthma Prevalence (% Pop.)'),
  
  
   tar_target(fac_dem_comp_vars_1mi, add_comp_vars(fac_dem_mid_1mi)),
