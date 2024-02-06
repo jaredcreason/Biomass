@@ -1,0 +1,50 @@
+---
+pagetitle: "Biomass Environmental Justice Analysis: Tables & Figures"
+output:
+  html_document:
+    number_sections: false
+    highlight: tango
+    fontsize: 12
+    fig_caption: false
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding=encoding, 
+  output_dir = here::here("output/summary_tables")) })
+
+---
+
+```{r}
+
+tar_load(summary_means_table)
+
+
+library(kableExtra)
+
+
+
+
+
+
+
+
+```
+
+
+
+```{r}
+
+summary_means_table %>% 
+  kbl(caption = "Overall Community Profile and AirToxScreen Risks for Communities Near Identified Facilities",
+      format = "html",
+      col.names = c("",
+                    "Overall National Average",
+                    "Rural Areas National Average",
+                    "Urban Areas National Average",
+                    "Rural Areas State Average",
+                    "Urban Areas State Average",
+                    "Within 1 mile of production facility"),
+      align = "r") %>% 
+  kable_classic(full_width = F, html_font = "helvetica")
+
+
+```
+
