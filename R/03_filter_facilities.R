@@ -21,6 +21,9 @@ filter_facilities_state <- function(dataset, state_list) {
 
 
 filter_facilities_type <- function(dataset, type_list) {
+  if (! (type_list %in% c("pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", "OSB"))) {
+    rlang::abort('Please use "pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", or "OSB"  for mill_type')
+  }
   
   filtered_data <- dataset[dataset$Type %in% type_list, ]
   return(filtered_data)

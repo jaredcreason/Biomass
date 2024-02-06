@@ -63,3 +63,13 @@ load_ats_resp <- function(ats_resp_filepath){
     rename(total_risk_resp='Total Respiratory (hazard quotient)') %>%
     select(Tract, total_risk_resp)
 }
+
+
+
+load_places <- function(places_data_filepath){
+  places_data <- read.csv(places_data_filepath)
+  asthma_data <- places_data %>% filter(MeasureId == 'CASTHMA') %>%
+    mutate(asthma_prev = Data_Value) %>% 
+    mutate(Tract = str_pad(LocationName, 11, pad='0', side = 'left')) %>% 
+    select('StateAbbr','Tract','asthma_prev')
+}

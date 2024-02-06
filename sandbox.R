@@ -615,7 +615,7 @@ summary_table$`Within Buffer Radius` <- sapply(comparison_vars, function(var) {
     
     
     
-    table_full <- data_ct_loaded %>% 
+    table_full <- data_ct %>% 
       st_set_geometry(NULL) %>%
       as.data.table() %>% 
       setkey('GEOID')
@@ -636,12 +636,32 @@ summary_table$`Within Buffer Radius` <- sapply(comparison_vars, function(var) {
              pov99=pov99/pop*100,
              pov50=pov50/pop*100,
              income=income/1000,
-             rural = fifelse(Tract %in% urban_tracts_loaded$Tract,0,1)) %>%
+             rural = fifelse(Tract %in% urban_tracts$Tract,0,1)) %>%
       left_join(nata_data,by=c("Tract"="Tract")) %>%
+      left_join(asthma_data,by=c("Tract"="Tract")) %>%
       as.data.table() %>%
-      setkey('GEOID') %>%
-      filter(State %in% states)
+      setkey('GEOID')
+    
+#######################
     
     
-
+places_data <- read.csv('data/places_data/places_health_outcomes_ct.csv')
+    
+    asthma_data <- places_data %>% filter(MeasureId == 'CASTHMA') %>%
+      mutate(Tract = str_pad(LocationName, 11, pad='0', side = 'left')) %>% 
+      select('StateAbbr','Tract','Data_Value')
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
       
