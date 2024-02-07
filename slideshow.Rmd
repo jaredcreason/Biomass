@@ -5,9 +5,8 @@ output:
     theme: spacelab
 ---
 
-# Automated Proximity Analysis EJ with targets
 
-## David Lopez, Climate Economics Branch
+#### David Lopez, Climate Economics Branch
 
 
 ---
@@ -20,7 +19,7 @@ output:
  - 2019 AirToxScreen Cancer & Respiratory Illness
  - 2023 CDC PLACES
  
-### Facility Locations:
+### Facility Geography:
  - LURA All Mills
  - 2020 Toxic Release Inventory
  
@@ -29,13 +28,110 @@ output:
 
 ## Automation using `targets`
 
-```{r}
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
 
-
+library(tidyverse)
 library(targets)
 library(tarchetypes)
+library(kableExtra)
+
 
 tar_visnetwork(targets_only = TRUE)
 
 ```
+
+---
+
+## EJ Proximity Analysis Tables
+
+#### Georgia Pulp/Paper Mills
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+GA_ft <- read.csv('GA_paper_mills_finaltable.csv')
+
+GA_ft %>% mutate(across(where(is.numeric), round,2)) %>% 
+    kbl(caption = "Overall Community Profile and Health Outcomes for Communities Near Identified Facilities",
+        format = "html",
+        col.names = c("",
+                      "Overall National Average",
+                      "Rural Areas National Average",
+                      "Within 1 mile of production facility",
+                      "Within 3 miles of production facility",
+                      "Within 5 miles of production facility",
+                      "Within 10 miles of production facility"
+        ),
+        align = "r") %>%
+    kable_styling(bootstrap_options = 'striped') %>% 
+    kable_classic(full_width = F, html_font = "Cambria")
+
+
+```
+
+
+---
+
+#### National Pellet Mills
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+USA_ft <- read.csv('USA_pellet_mills_finaltable.csv') %>% select(2:8)
+
+USA_ft %>% mutate(across(where(is.numeric), round,2)) %>% 
+    kbl(caption = "Overall Community Profile and Health Outcomes for Communities Near Identified Facilities",
+        format = "html",
+        col.names = c("",
+                      "Overall National Average",
+                      "Rural Areas National Average",
+                      "Within 1 mile of production facility",
+                      "Within 3 miles of production facility",
+                      "Within 5 miles of production facility",
+                      "Within 10 miles of production facility"
+        ),
+        align = "r") %>%
+    kable_styling(bootstrap_options = 'striped') %>% 
+    kable_classic(full_width = F, html_font = "Cambria")
+
+
+```
+
+
+#### Louisiana All TRI Facilities
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+LA_ft <- read.csv('LA_all_tri_finaltable.csv') %>% select(2:8)
+
+LA_ft %>% mutate(across(where(is.numeric), round,2)) %>% 
+    kbl(caption = "Overall Community Profile and Health Outcomes for Communities Near Identified Facilities",
+        format = "html",
+        col.names = c("",
+                      "Overall National Average",
+                      "Rural Areas National Average",
+                      "Within 1 mile of production facility",
+                      "Within 3 miles of production facility",
+                      "Within 5 miles of production facility",
+                      "Within 10 miles of production facility"
+        ),
+        align = "r") %>%
+    kable_styling(bootstrap_options = 'striped') %>% 
+    kable_classic(full_width = F, html_font = "Cambria")
+
+
+```
+
+
+
+---
+
+## Next Steps..
+
+ - Facility Profile Tables.
+ - Update datasets.
+ - Explore further outcomes and facilities.
+
+
+
+
+
+
+
 

@@ -50,13 +50,13 @@ tar_plan(
   
   ## Enter one or multiple U.S. State Abbreviations
 
- states <- c('GA'),
+ states <- c('LA'),
  
  
   # Enter desired mill-type, options include:
  # "pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", or "OSB" 
   
-  mill_type <- c('pulp/paper'),
+  mill_type <- c('pellet'),
  
  
   tri_industry_sector <- c('Wood Products'),
@@ -71,21 +71,21 @@ tar_plan(
  # [25] "Textiles"                          "Textile Product"                   "Tobacco"                           "Leather"                          
  # [29] "Publishing"                        "Apparel" 
  
- final_table_name = 'GA_pulppaper_mills',
+ final_table_name = 'LA_all_tri',
  
  #### Uncomment for LURA All Mills
  
- longitude_col_name = 'Longitude',
+ #longitude_col_name = 'Longitude',
  
- latitude_col_name = 'Latitude',
+#latitude_col_name = 'Latitude',
  
  
  
  ### Uncomment for TRI Facilities
   
- #longitude_col_name = '13. LONGITUDE',
+ longitude_col_name = '13. LONGITUDE',
  
-  #latitude_col_name = '12. LATITUDE',
+  latitude_col_name = '12. LATITUDE',
    
  
  # End of Set-up
@@ -212,13 +212,13 @@ tar_plan(
  tar_target(urban_areas, urban_areas()),
  tar_target(uac, gen_uac(urban_areas)),
 
-  tar_target(fac_lat_lon, gen_fac_lat_lon(filter_facilities_by_both,
+  tar_target(fac_lat_lon, gen_fac_lat_lon(filter_tri_by_state,
                                         latitude_col_name = latitude_col_name,
                                         longitude_col_name = longitude_col_name)),
 
 
 
-  tar_target(fac_sf, gen_fac_sf(filter_facilities_by_both,
+  tar_target(fac_sf, gen_fac_sf(filter_tri_by_state,
                               latitude_col_name = latitude_col_name,
                               longitude_col_name = longitude_col_name)),
 
