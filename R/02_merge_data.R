@@ -2,7 +2,7 @@
 # merge_acs.R
 
 
-merge_acs <- function(acs_dataset, nata_dataset, places_dataset){
+merge_acs <- function(acs_dataset, health_dataset){
   
   
   data_ct <-acs_dataset %>%
@@ -20,8 +20,8 @@ merge_acs <- function(acs_dataset, nata_dataset, places_dataset){
            income=income/1000)
   
 
-  acs_health_data <- acs_health_data %>% left_join(nata_dataset,by=c("Tract"="Tract"))
-  acs_health_data <- acs_health_data %>% left_join(places_dataset,by=c("Tract"="Tract"))
+  acs_health_data <- acs_health_data %>% left_join(health_dataset,by=c("Tract"="Tract"))
+  #acs_health_data <- acs_health_data %>% left_join(places_dataset,by=c("Tract"="Tract"))
   
 
   return(acs_health_data)
@@ -30,20 +30,22 @@ merge_acs <- function(acs_dataset, nata_dataset, places_dataset){
 
 
 
-merge_nata <- function(ats_cancer, ats_resp, places_dataset){
+merge_health <- function(ats_cancer, ats_resp, places_dataset){
   
   nata_data_merged <- left_join(ats_cancer, ats_resp, by = 'Tract')
-  nata_data_merged <- nata_data_merged %>% left_join(places_dataset,by=c("Tract"="Tract"))
+  health_data_merged <- nata_data_merged %>% left_join(places_dataset,by=c("Tract"="Tract"))
   
   
   # rearrange tibble column
   
-  nata_data <- nata_data_merged %>% 
+  health_data_merged <- health_data_merged %>% 
     select(
       1:7,
-      ncol(nata_data_merged),
+      ncol(health_data_merged),
       everything()
     )
+  
+  return(health_data_merged)
 }
 
 

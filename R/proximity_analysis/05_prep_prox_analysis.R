@@ -1,6 +1,6 @@
 
 
-gen_natl_acs_health_table <- function(data_ct, sq_miles, urban_tracts, nata_data) {
+gen_natl_acs_health_table <- function(data_ct, sq_miles, urban_tracts, health_data) {
   
   table_full <- data_ct %>% 
     st_set_geometry(NULL) %>%
@@ -24,7 +24,7 @@ gen_natl_acs_health_table <- function(data_ct, sq_miles, urban_tracts, nata_data
            pov50=pov50/pop*100,
            income=income/1000,
            rural = fifelse(Tract %in% urban_tracts$Tract,0,1)) %>%
-    left_join(nata_data,by=c("Tract"="Tract")) %>%
+    left_join(health_data,by=c("Tract"="Tract")) %>%
     as.data.table() %>%
     setkey('GEOID')
   # rm(table_1)
@@ -33,7 +33,7 @@ gen_natl_acs_health_table <- function(data_ct, sq_miles, urban_tracts, nata_data
 }
 
 
-gen_acs_health_table <- function(data_ct, sq_miles, urban_tracts, nata_data, state_list) {
+gen_acs_health_table <- function(data_ct, sq_miles, urban_tracts, health_data, state_list) {
   
   table_full <- data_ct %>% 
     st_set_geometry(NULL) %>%
@@ -57,7 +57,7 @@ gen_acs_health_table <- function(data_ct, sq_miles, urban_tracts, nata_data, sta
            pov50=pov50/pop*100,
            income=income/1000,
            rural = fifelse(Tract %in% urban_tracts$Tract,0,1)) %>%
-    left_join(nata_data,by=c("Tract"="Tract")) %>%
+    left_join(health_data,by=c("Tract"="Tract")) %>%
     as.data.table() %>%
     setkey('GEOID') %>% 
     filter(State %in% state_list)
@@ -121,7 +121,7 @@ gen_fac_dem_table <- function(fac_dem_mid, sq_miles) {
     ungroup() %>%
     select(Label,blockgroups_n,sq_miles,pop,pop_sq_mile_1mi,
            rural_facility,rural_bg_pct,white,black,indian,asian,hispanic,hispanic_denominator,
-           income,pov50,pov99,total_risk,total_risk_resp) %>% 
+           income,pov50,pov99,total_risk,total_risk_resp,asthma_prev) %>% 
     distinct()
   
 }

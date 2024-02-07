@@ -1,0 +1,41 @@
+---
+title: "Automated Proximity Analysis EJ with targets"
+output:
+  html_document:
+    theme: spacelab
+---
+
+# Automated Proximity Analysis EJ with targets
+
+## David Lopez, Climate Economics Branch
+
+
+---
+
+## Data Sources
+
+
+### Community and Health Outcomes:
+ - 2021 ACS
+ - 2019 AirToxScreen Cancer & Respiratory Illness
+ - 2023 CDC PLACES
+ 
+### Facility Locations:
+ - LURA All Mills
+ - 2020 Toxic Release Inventory
+ 
+ 
+---
+
+## Automation using `targets`
+
+```{r}
+
+
+library(targets)
+library(tarchetypes)
+
+tar_visnetwork(targets_only = TRUE)
+
+```
+
