@@ -56,7 +56,15 @@ tar_plan(
   # Enter desired mill-type, options include:
  # "pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", or "OSB" 
   
+<<<<<<< Updated upstream
   mill_type <- c('pulp/paper'),
+=======
+<<<<<<< Updated upstream
+  mill_type <- c('pulp/paper'),
+=======
+  mill_type <- c('pellet'),
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
  
  
  tri_industry_sector <- c('Wood Products'),
@@ -81,24 +89,44 @@ tar_plan(
  # Proximity Analysis Set-Up
  
 
+<<<<<<< Updated upstream
 final_table_name = 'LA_all_tri',
+=======
+<<<<<<< Updated upstream
+final_table_name = 'LA_all_tri',
+=======
+final_table_name = 'USA_pellet',
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
  
  #geography_column_name = '8. ST',
  
 
  #### Uncomment for LURA All Mills
 
+<<<<<<< Updated upstream
   #longitude_col_name = 'Longitude',
 
  #latitude_col_name = 'Latitude',
+=======
+<<<<<<< Updated upstream
+  #longitude_col_name = 'Longitude',
+
+ #latitude_col_name = 'Latitude',
+=======
+  longitude_col_name = 'Longitude',
+
+  latitude_col_name = 'Latitude',
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
 
 
 ### Uncomment for TRI Facilities
 # 
-  longitude_col_name = '13. LONGITUDE',
+  #longitude_col_name = '13. LONGITUDE',
 #  
-   latitude_col_name = '12. LATITUDE',
+  # latitude_col_name = '12. LATITUDE',
 #  
 
 # End of Set-up
@@ -244,11 +272,25 @@ final_table_name = 'LA_all_tri',
  tar_target(urban_areas, urban_areas()),
  tar_target(uac, gen_uac(urban_areas)),
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
 tar_target(fac_lat_lon, gen_fac_lat_lon(filter_tri_by_state,
                                         latitude_col_name = latitude_col_name,
                                         longitude_col_name = longitude_col_name)),
 
 tar_target(fac_sf, gen_fac_sf(filter_tri_by_state,
+<<<<<<< Updated upstream
+=======
+=======
+tar_target(fac_lat_lon, gen_fac_lat_lon(filter_facilities_by_milltype,
+                                        latitude_col_name = latitude_col_name,
+                                        longitude_col_name = longitude_col_name)),
+
+tar_target(fac_sf, gen_fac_sf(filter_facilities_by_milltype,
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                               latitude_col_name = latitude_col_name,
                               longitude_col_name = longitude_col_name)),
 
