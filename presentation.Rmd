@@ -1,14 +1,9 @@
 ---
-title: "Automated Proximity Analysis EJ with targets"
+title: "Automated EJ Proximity Analysis  with targets"
+author: "David Lopez, Climate Economics Branch"
+date: "February 8, 2024"
 output:
   html_document:
-    theme: spacelab
----
-
-
-#### David Lopez, Climate Economics Branch
-
-
 ---
 
 ## Data Sources
@@ -27,8 +22,7 @@ output:
 ---
 
 ## Automation using `targets`
-
-```{r, message=FALSE, echo=FALSE, warning=FALSE}
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
 
 library(tidyverse)
 library(targets)
@@ -36,11 +30,26 @@ library(tarchetypes)
 library(kableExtra)
 
 
-tar_visnetwork(targets_only = TRUE)
+```
+
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+
+
+visnetwork <- tar_visnetwork(targets_only = TRUE)
+
 
 ```
 
+```{r, echo=FALSE}
+visnetwork
+
+```
+
+
 ---
+
 
 ## EJ Proximity Analysis Tables
 
@@ -122,6 +131,7 @@ LA_ft %>% mutate(across(where(is.numeric), round,2)) %>%
 
 ---
 
+
 ## Next Steps..
 
  - Facility Profile Tables.
@@ -132,6 +142,6 @@ LA_ft %>% mutate(across(where(is.numeric), round,2)) %>%
 
 
 
-
+---
 
 

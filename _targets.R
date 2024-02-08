@@ -59,7 +59,7 @@ tar_plan(
   mill_type <- c('pellet'),
  
  
-  tri_industry_sector <- c('Wood Products'),
+  tri_industry_sector <- c('Coal Mining'),
  
  # Options Include:
  # [1] "Plastics and Rubber"               "Machinery"                         "Petroleum Bulk Terminals"          "Chemicals"                        
@@ -71,7 +71,7 @@ tar_plan(
  # [25] "Textiles"                          "Textile Product"                   "Tobacco"                           "Leather"                          
  # [29] "Publishing"                        "Apparel" 
  
- final_table_name = 'LA_all_tri',
+ final_table_name = 'USA_coalmining_tri',
  
  #### Uncomment for LURA All Mills
  
@@ -162,8 +162,8 @@ tar_plan(
  
  
   
-  tar_target(merge_acs_health,
-             merge_acs(acs_data_loaded, health_data)),
+  # tar_target(merge_acs_health,
+  #            merge_acs(acs_data_loaded, health_data)),
 
  ###################################################################
  ##### Subset region or industry of interest from facility dataset
@@ -212,13 +212,13 @@ tar_plan(
  tar_target(urban_areas, urban_areas()),
  tar_target(uac, gen_uac(urban_areas)),
 
-  tar_target(fac_lat_lon, gen_fac_lat_lon(filter_tri_by_state,
+  tar_target(fac_lat_lon, gen_fac_lat_lon(filter_tri_by_industry,
                                         latitude_col_name = latitude_col_name,
                                         longitude_col_name = longitude_col_name)),
 
 
 
-  tar_target(fac_sf, gen_fac_sf(filter_tri_by_state,
+  tar_target(fac_sf, gen_fac_sf(filter_tri_by_industry,
                               latitude_col_name = latitude_col_name,
                               longitude_col_name = longitude_col_name)),
 
