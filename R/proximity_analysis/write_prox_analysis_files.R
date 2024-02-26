@@ -1,12 +1,15 @@
 
 
-write_summary_means_table <- function(summary_table, final_table_name, output_dir = 'output/summary_tables') {
+write_summary_means_table <- function(summary_table,
+                                      final_table_name,
+                                      facility_label,
+                                      output_dir = 'output/summary_tables') {
   
   
   filepath <- file.path(output_dir, paste0(final_table_name, '_summary_table.html'))
   
   summary_table %>% mutate(across(where(is.numeric), round,2)) %>% 
-    kbl(caption = "Overall Community Profile and Health Outcomes for Communities Near Identified Facilities",
+    kbl(caption = paste("Overall Community Profile and Health Outcomes for Communities Near ",facility_label," Facilities"),
         format = "html",
         col.names = c("",
                       "Overall National Average",

@@ -24,7 +24,8 @@ load_facilities_data <- function(facilities_filepath){
   )%>%
     
     mutate(Label = `Mill_ID`) %>%
-    select(Label,Longitude,Latitude,everything())
+    select(Label,Longitude,Latitude,everything()) #%>%
+   # filter(status=='Open')
   
 }
 
@@ -66,10 +67,20 @@ load_ats_resp <- function(ats_resp_filepath){
 
 
 
-load_places <- function(places_data_filepath){
+load_asthma <- function(places_data_filepath){
   places_data <- read.csv(places_data_filepath)
   asthma_data <- places_data %>% filter(MeasureId == 'CASTHMA') %>%
     mutate(asthma_prev = Data_Value) %>% 
+    mutate(Tract = str_pad(LocationName, 11, pad='0', side = 'left'))
+  
+ 
+}
+
+load_chd <- function(places_data_filepath){
+  places_data <- read.csv(places_data_filepath)
+  heart_data <- places_data %>% filter(MeasureId == 'CHD') %>%
+    mutate(chd_prev = Data_Value) %>% 
     mutate(Tract = str_pad(LocationName, 11, pad='0', side = 'left')) %>% 
-    select('StateAbbr','Tract','asthma_prev')
+    select('StateAbbr','Tract','chd_prev')
+  
 }

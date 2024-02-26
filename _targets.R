@@ -71,7 +71,8 @@ tar_plan(
  # [25] "Textiles"                          "Textile Product"                   "Tobacco"                           "Leather"                          
  # [29] "Publishing"                        "Apparel" 
  
- final_table_name = 'USA_coalmining_tri',
+ final_file_name = 'USA_coalmining_tri',
+ table_title = 'National Coal Mining TRI',
  
  #### Uncomment for LURA All Mills
  
@@ -123,6 +124,10 @@ tar_plan(
   tar_target(asthma_data,
              'data/places_data/places_health_outcomes_ct.csv',
              format= 'file'),
+
+  tar_target(chd_data,
+           'data/places_data/places_health_outcomes_ct.csv',
+           format= 'file'),
   
   
   
@@ -141,7 +146,10 @@ tar_plan(
              load_ats_resp(ats_resp_data)),
 
   tar_target(places_asthma_loaded,
-           load_places(asthma_data)),
+           load_asthma(asthma_data)),
+
+  tar_target(places_chd_loaded,
+           load_chd(chd_data)),
   
   tar_target(facilities_data_loaded,
              load_facilities_data(facilities_data)),
@@ -158,7 +166,8 @@ tar_plan(
   tar_target(health_data,
              merge_health(ats_cancer_loaded,
                           ats_resp_loaded,
-                          places_asthma_loaded)),
+                          places_asthma_loaded,
+                          places_chd_loaded)),
  
  
   
@@ -306,8 +315,9 @@ tar_plan(
                       "pov99",
                       "pov50",
                       "total_risk",
-                      "total_risk_resp",
-                      "asthma_prev"),
+                      "total_risk_resp", 
+                      "asthma_prev",
+                      "chd_prev"),
  
  
  # descriptions of the comparison variables to be included in the tables
@@ -319,7 +329,8 @@ tar_plan(
                  "% Below Half the Poverty Line",
                  "Total Cancer Risk (per million)",
                  "Total Respiratory Risk (hazard quotient)",
-                 "Asthma Prevalence (% Pop.)"),
+                 "Asthma Prevalence (% Pop.)",
+                 "Coronary Heart Disease Prevalence (% Pop.)"),
  
  # Add comparison variables to facility demographic tables
 
@@ -363,7 +374,9 @@ tar_plan(
   tar_target(final_summary_table, merge_summary_tables(summary_means_table_natl,
                                                       summary_table_list)),
 
-  tar_target(export_table_to_html, write_summary_means_table(final_summary_table, final_table_name))
+  tar_target(export_table_to_html, write_summary_means_table(final_summary_table,
+                                                             final_file_name,
+                                                             table_title))
 
 )
 
