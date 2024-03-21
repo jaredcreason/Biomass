@@ -31,7 +31,8 @@ packages <- c('tidycensus',
               'leaflet',
               'writexl',
               'htmlwidgets',
-              'kableExtra') ## you can add more packages here
+              'kableExtra',
+              'fs') ## you can add more packages here
 lapply(packages, pkgTest)
 
 library(usmap)

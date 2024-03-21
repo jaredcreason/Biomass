@@ -14,7 +14,7 @@ source('packages.R')
 geography = "block group"
 # 
 # # year of ACS to draw data
-year = 2021
+year = 2019
 
 # 
 # ## Get dictionary of ACS variables

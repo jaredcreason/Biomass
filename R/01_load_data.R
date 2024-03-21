@@ -25,7 +25,7 @@ load_facilities_data <- function(facilities_filepath){
     
     mutate(Label = `Mill_ID`) %>%
     select(Label,Longitude,Latitude,everything()) #%>%
-   # filter(status=='Open')
+   # filter(Status=='Open')
   
 }
 
@@ -53,6 +53,27 @@ load_tri_facilities_data <- function(tri_facilities_filepath){
   
 }
 
+load_sch_h_facilities <- function(sch_h_filepath){
+  
+  facs <- read_excel(file.path(sch_h_filepath)) %>% mutate(Label = Address)
+  
+  return(facs)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+############
+
 load_ats_cancer <- function(ats_cancer_filepath){
   read_excel(file.path(ats_cancer_filepath)) %>%
     rename(total_risk='Total Cancer Risk (per million)')
@@ -65,22 +86,45 @@ load_ats_resp <- function(ats_resp_filepath){
     select(Tract, total_risk_resp)
 }
 
+load_places_cancer <- function(places_data_filepath){
+  places_data <- read.csv(places_data_filepath)
+  cancer_data <- places_data %>% filter(MeasureId == 'CANCER') %>%
+    mutate(cancer_prev = Data_Value) %>% 
+    mutate(Tract = str_pad(LocationName, 11, pad='0', side = 'left')) %>%
+    select(Tract, cancer_prev)
+  
+  
+}
 
 
 load_asthma <- function(places_data_filepath){
   places_data <- read.csv(places_data_filepath)
   asthma_data <- places_data %>% filter(MeasureId == 'CASTHMA') %>%
     mutate(asthma_prev = Data_Value) %>% 
-    mutate(Tract = str_pad(LocationName, 11, pad='0', side = 'left'))
+    mutate(Tract = str_pad(LocationName, 11, pad='0', side = 'left')) %>%
+    select(Tract, asthma_prev)
   
- 
+  
 }
+
+
 
 load_chd <- function(places_data_filepath){
   places_data <- read.csv(places_data_filepath)
   heart_data <- places_data %>% filter(MeasureId == 'CHD') %>%
     mutate(chd_prev = Data_Value) %>% 
-    mutate(Tract = str_pad(LocationName, 11, pad='0', side = 'left')) %>% 
-    select('StateAbbr','Tract','chd_prev')
+    mutate(Tract = str_pad(LocationName, 11, pad='0', side = 'left')) %>%
+    select(Tract, chd_prev)
+  
+}
+
+
+load_health_ins <- function(places_data_filepath){
+  places_data <- read.csv(places_data_filepath)
+  asthma_data <- places_data %>% filter(MeasureId == 'ACCESS2') %>%
+    mutate(health_ins = Data_Value) %>% 
+    mutate(Tract = str_pad(LocationName, 11, pad='0', side = 'left')) %>%
+    select(Tract, health_ins)
+  
   
 }

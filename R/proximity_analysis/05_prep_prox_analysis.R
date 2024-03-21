@@ -83,11 +83,33 @@ merge_facility_buffer <- function(fac_map, buffer) {
 gen_fac_dem_mid <- function(fac_dem_pre,
                             acs_health_table) {
   
-  facility_demographics_mid <- merge(fac_dem_pre, acs_health_table, by="GEOID") %>% 
-    select(Label,GEOID,sq_miles,rural.x,rural.y,pop,
-           white,black,indian,asian,hispanic,hispanic_denominator,income,pov50,pov99,
-           total_risk,total_risk_resp, asthma_prev, chd_prev) %>%
-    rename(rural_facility = rural.x, rural_blockgroup = rural.y) %>% 
+  
+  facility_demographics_mid <-
+    merge(fac_dem_pre, acs_health_table, by = "GEOID") %>%
+    select(
+      Label,
+      GEOID,
+      sq_miles,
+      rural.x,
+      rural.y,
+      pop,
+      white,
+      black,
+      indian,
+      asian,
+      hispanic,
+      hispanic_denominator,
+      income,
+      pov50,
+      pov99,
+      total_risk,
+      total_risk_resp,
+      cancer_prev,
+      asthma_prev,
+      chd_prev,
+      health_ins
+    ) %>%
+    rename(rural_facility = rural.x, rural_blockgroup = rural.y) %>%
     distinct()
   
   return(facility_demographics_mid)
@@ -96,35 +118,61 @@ gen_fac_dem_mid <- function(fac_dem_pre,
 
 
 
+
+
 gen_fac_dem_table <- function(fac_dem_mid, sq_miles) {
-  
   facility_demographics <- fac_dem_mid %>%
     group_by(Label) %>%
     mutate(
-      blockgroups_n = n(), 
-      sq_miles = sum(sq_miles, na.rm=TRUE), 
-      pop = sum(pop, na.rm=TRUE),
-      white = sum(white, na.rm=TRUE),
-      black = sum(black, na.rm=TRUE),
-      indian = sum(indian, na.rm=TRUE),
-      asian = sum(asian, na.rm=TRUE),
-      hispanic = sum(hispanic, na.rm=TRUE),
-      hispanic_denominator = sum(hispanic_denominator, na.rm=TRUE),
-      income = mean(income, na.rm=TRUE),
-      pov50 = mean(pov50, na.rm=TRUE), 
-      pov99 = mean(pov99, na.rm=TRUE), 
-      total_risk = mean(total_risk, na.rm=TRUE), 
-      total_risk_resp = mean(total_risk_resp, na.rm=TRUE),
-      asthma_prev = mean(asthma_prev, na.rm=TRUE),
-      chd_prev = mean(chd_prev, na.rm=TRUE))%>%
-    mutate(pop_sq_mile_1mi = pop/sq_miles,
-           rural_bg_pct = signif(sum(rural_blockgroup/blockgroups_n, na.rm=TRUE),2)) %>% 
+      blockgroups_n = n(),
+      sq_miles = sum(sq_miles, na.rm = TRUE),
+      pop = sum(pop, na.rm = TRUE),
+      white = sum(white, na.rm = TRUE),
+      black = sum(black, na.rm = TRUE),
+      indian = sum(indian, na.rm = TRUE),
+      asian = sum(asian, na.rm = TRUE),
+      hispanic = sum(hispanic, na.rm = TRUE),
+      hispanic_denominator = sum(hispanic_denominator, na.rm = TRUE),
+      income = mean(income, na.rm = TRUE),
+      pov50 = mean(pov50, na.rm = TRUE),
+      pov99 = mean(pov99, na.rm = TRUE),
+      total_risk = mean(total_risk, na.rm = TRUE),
+      total_risk_resp = mean(total_risk_resp, na.rm = TRUE),
+      cancer_prev = mean(cancer_prev, na.rm = TRUE),
+      asthma_prev = mean(asthma_prev, na.rm = TRUE),
+      chd_prev = mean(chd_prev, na.rm = TRUE),
+      health_ins = mean(health_ins, na.rm = TRUE)
+    ) %>%
+    mutate(pop_sq_mile_1mi = pop / sq_miles,
+           rural_bg_pct = signif(sum(
+             rural_blockgroup / blockgroups_n, na.rm = TRUE
+           ), 2)) %>%
     ungroup() %>%
-    select(Label,blockgroups_n,sq_miles,pop,pop_sq_mile_1mi,
-           rural_facility,rural_bg_pct,white,black,indian,asian,hispanic,hispanic_denominator,
-           income,pov50,pov99,total_risk,total_risk_resp,asthma_prev,chd_prev) %>% 
+    select(
+      Label,
+      blockgroups_n,
+      sq_miles,
+      pop,
+      pop_sq_mile_1mi,
+      rural_facility,
+      rural_bg_pct,
+      white,
+      black,
+      indian,
+      asian,
+      hispanic,
+      hispanic_denominator,
+      income,
+      pov50,
+      pov99,
+      total_risk,
+      total_risk_resp,
+      cancer_prev,
+      asthma_prev,
+      chd_prev,
+      health_ins
+    ) %>%
     distinct()
   
 }
-
 

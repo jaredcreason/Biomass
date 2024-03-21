@@ -1,7 +1,7 @@
 ---
 title: "Automated EJ Proximity Analysis  with targets"
 author: "David Lopez, Climate Economics Branch"
-date: "February 8, 2024"
+date: "February 27, 2024"
 output:
   html_document:
 ---
@@ -134,7 +134,6 @@ LA_ft %>% mutate(across(where(is.numeric), round,2)) %>%
 
 ## Next Steps..
 
- - Facility Profile Tables.
  - Update datasets.
  - Explore further outcomes and facilities.
 
