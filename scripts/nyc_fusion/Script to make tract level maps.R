@@ -109,7 +109,7 @@ map1
 map2 <- map1 + tm_view(set.view = c(-87.6298, 41.878, 9.25))
 map2
 
-lf <- tmap_leaflet(map2)
+lf <- tmap_ %>% (map2)
 mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaterchicago_insec.png")
 
 
@@ -137,7 +137,7 @@ map1
 map2 <- map1 + tm_view(set.view = c(-96.92, 32.70, 9.25))
 map2
 
-lf <- tmap_leaflet(map2)
+lf <- tmap_ %>% (map2)
 mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaterdallas_insec.png")
 
 
@@ -605,5 +605,5 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.75))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/nyc_insec.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_maps/nyc_insec.pdf")
 

@@ -32,7 +32,7 @@ merge_data_sets <-  function(folder) {
   
   data_list = list() # create blank list to save off data from each csv
   
-  for(i in directories) {
+  for(i in directories[1:9]) {
     name = i
     data = load_data(paste0(i,'/'))
     data = data %>% st_drop_geometry() %>% select(TRACT, variable, estimate)
@@ -114,12 +114,27 @@ recs_2020_wide <- recs2020_tall %>%  pivot_wider(names_from = 'variable',
 ##############
 
 
-nyc_joined <- left_join(recs_2020_wide,nyc_wide, by = 'tract')
+nyc_joined <- left_join(recs_2020_wide,nyc_wide, by = 'tract') 
 
-##############
-
-
-#write.xlsx(nyc_joined,'output/nyc_fusion/nyc_joined_table.xlsx')
+# %>%
+#   
+#   mutate(
+#     borough = case_when(
+#       substring(tract, 4, 5) %in% c('05') ~ "Bronx",
+#       substring(tract, 4, 5) %in% c('47') ~ "Brooklyn",
+#       substring(tract, 4, 5) %in% c('61') ~ "Manhattan",
+#       substring(tract, 4, 5) %in% c('81') ~ "Queens",
+#       substring(tract, 4, 5) %in% c('85') ~ "Staten Island",
+#       TRUE ~ NA_character_
+#     )
+#   ) %>% select(tract, borough, everything())
+# 
+# 
+# ##############
+# 
+# 
+# write.xlsx(nyc_joined,
+#            'output/nyc_fusion/nyc_joined_table_borough.xlsx')
 
 
 
