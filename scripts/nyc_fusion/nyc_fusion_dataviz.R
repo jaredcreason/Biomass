@@ -33,16 +33,24 @@ nyc_joined_geometry <-
   # )
 ########################
 
-df_sf <- st_sf(nyc_joined_geometry, sf_column_name = 'geometry')
- 
-leaflet() %>% 
-  addTiles() %>% 
-  addPolygons()
+
+borough_colors <- scale_fill_manual(values = c('Bronx' = 'blue',
+                             'Brooklyn' = 'purple',
+                             'Manhattan' = 'darkgreen',
+                             'Queens' = 'yellow',
+                             'Staten Island' = 'darkred'))
+                             
+        
+variable <- nyc_joined_geometry$insec
+
+low_color <- 'yellow'
+high_color <- 'red'
+background <- '#191919'
 
 ggplot() +
-  geom_sf(data = nyc_joined_geometry$geometry, aes(fill = nyc_joined_geometry$borough)) +
-  scale_fill_manual(values = c('Bronx' = 'blue',
-                               'Brooklyn' = 'purple',
-                               'Manhattan' = 'darkgreen',
-                               'Queens' = 'yellow',
-                               'Staten Island' = 'darkred'))
+  geom_sf(data = nyc_joined_geometry$geometry, aes(fill = variable,
+                                                   color = variable)) +
+  scale_fill_gradient(low = low_color, high = high_color) +
+  scale_color_gradient(low = low_color, high = high_color) +
+  theme_void() +
+  theme(plot.background = element_rect(fill = background))
