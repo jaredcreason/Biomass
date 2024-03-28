@@ -72,7 +72,6 @@ nyc_wide <- pivot_wider(
   values_from = 'estimate') %>% unnest(everything())
 
 
-
 ########################
 # Load RECS data
 
@@ -86,8 +85,8 @@ recs2020_tract <-
   mutate(tract10 = as.character(tract10))
 
 # pull out custom variables, get true values
-recs2020_tract_custom <-        
-  recs2020_tract %>% filter(lhs %in% custom_vars) %>% filter(level == TRUE) %>% mutate(est = 100*est) %>%
+recs2020_tract_custom <-
+  recs2020_tract %>% filter(lhs %in% custom_vars) %>% filter(level == TRUE) %>% 
   rename(tract = tract10,
          variable = lhs,
          estimate = est) %>%
@@ -96,8 +95,9 @@ recs2020_tract_custom <-
 
 # pull out non-custom variables
 recs2020_tract_default <-
-  recs2020_tract %>% filter(!lhs %in% custom_vars) %>% mutate(est = 100*est) %>%
-  rename(tract =tract10,
+  recs2020_tract %>% filter(!lhs %in% custom_vars) %>%
+  #mutate(est = 100 * est) %>%
+  rename(tract = tract10,
          variable = lhs,
          estimate = est) %>%
   select(tract, variable, estimate)
@@ -114,27 +114,24 @@ recs_2020_wide <- recs2020_tall %>%  pivot_wider(names_from = 'variable',
 ##############
 
 
-nyc_joined <- left_join(recs_2020_wide,nyc_wide, by = 'tract') 
-
-# %>%
-#   
-#   mutate(
-#     borough = case_when(
-#       substring(tract, 4, 5) %in% c('05') ~ "Bronx",
-#       substring(tract, 4, 5) %in% c('47') ~ "Brooklyn",
-#       substring(tract, 4, 5) %in% c('61') ~ "Manhattan",
-#       substring(tract, 4, 5) %in% c('81') ~ "Queens",
-#       substring(tract, 4, 5) %in% c('85') ~ "Staten Island",
-#       TRUE ~ NA_character_
-#     )
-#   ) %>% select(tract, borough, everything())
-# 
-# 
-# ##############
-# 
-# 
-# write.xlsx(nyc_joined,
-#            'output/nyc_fusion/nyc_joined_table_borough.xlsx')
+nyc_joined <- left_join(recs_2020_wide,nyc_wide, by = 'tract') %>%
+  
+  mutate(
+     borough = case_when(
+       substring(tract, 4, 5) %in% c('05') ~ "Bronx",
+       substring(tract, 4, 5) %in% c('47') ~ "Brooklyn",
+       substring(tract, 4, 5) %in% c('61') ~ "Manhattan",
+       substring(tract, 4, 5) %in% c('81') ~ "Queens",
+       substring(tract, 4, 5) %in% c('85') ~ "Staten Island",
+       TRUE ~ NA_character_
+     )
+   ) %>% select(tract, borough, everything())
+ 
+ 
+ ##############
+ 
+ 
+write.xlsx(nyc_joined,'output/nyc_fusion/nyc_joined_table_borough_0327.xlsx')
 
 
 
