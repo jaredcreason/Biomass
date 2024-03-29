@@ -18,8 +18,8 @@ load_acs_data <- function(acs_filepath){
 }
 
 
-load_facilities_data <- function(facilities_filepath){
-  read_excel(facilities_filepath,
+load_all_mills <- function(all_mills_filepath){
+  read_excel(all_mills_filepath,
              range = c("a6:ba1378")
   )%>%
     
@@ -55,19 +55,10 @@ load_tri_facilities_data <- function(tri_facilities_filepath){
 
 load_sch_h_facilities <- function(sch_h_filepath){
   
-  facs <- read_excel(file.path(sch_h_filepath)) %>% mutate(Label = Address)
+  facs <- read_excel(file.path(sch_h_filepath)) %>% mutate(Label = `Street Address 1`)
   
   return(facs)
 }
-
-
-
-
-
-
-
-
-
 
 
 

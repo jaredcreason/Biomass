@@ -26,7 +26,7 @@ library(tarchetypes)
 ######### Targets Set-Up
 ################################
 
-acs_data_filepath <- 'data/acs_data/acs_data_2021_block group.Rdata'
+acs_data_filepath <- 'data/acs_data/acs_data_2019_block group.Rdata'
 
 if (!file.exists(acs_data_filepath)) {
   source('scripts/acs_api_query.R')
@@ -44,14 +44,14 @@ tar_option_set(packages = c('tidyverse', 'leaflet', 'htmlwidgets'))
 
 tar_plan(
   ############################################
-  ##### Create Facility Interactive Map
+  ##### Identify Facilities of INterest
   ##########################################
   
   
   
   ## Enter one or multiple U.S. State Abbreviations
   
-  states <- c('HI'),
+  states <- c('LA'),
   
   
   # Enter desired mill-type, options include:
@@ -60,6 +60,10 @@ tar_plan(
   mill_type <- c('pellet'),
   
   
+  
+  ######################
+  ### TRI ONLY FILTERING
+  ######################
   tri_industry_sector <- c('Coal Mining'),
   
   # Options Include:
@@ -71,16 +75,17 @@ tar_plan(
   # [21] "Furniture"                         "Metal Mining"                      "Computers and Electronic Products" "Printing"
   # [25] "Textiles"                          "Textile Product"                   "Tobacco"                           "Leather"
   # [29] "Publishing"                        "Apparel"
-  
-  final_file_name = 'HFC_facilities_2021ACS',
-  table_title = 'HFC Facilities, 2021 ACS',
+ 
+   ###########
+  final_file_name = 'hfc_reclamation_facilties_3_12_2024',
+  table_title = 'HFC Reclamation',
   
   #### Uncomment for LURA All Mills
   
-  # longitude_col_name = 'Longitude',
-  # 
-  # latitude_col_name = 'Latitude',
-  # 
+   longitude_col_name = 'Longitude',
+  
+   latitude_col_name = 'Latitude',
+   
   
   
   ### Uncomment for TRI Facilities
@@ -90,9 +95,11 @@ tar_plan(
   
   #latitude_col_name = '12. LATITUDE',
  
- longitude_col_name = 'Long',
  
- latitude_col_name = 'Lat',
+ ## HFC Facility data
+ #longitude_col_name = 'Long',
+ 
+ #latitude_col_name = 'Lat',
  
   
   
@@ -107,76 +114,68 @@ tar_plan(
   ################################
   ###### Establish data file paths
   ################################
-  
-  
-  tar_target(facilities_data,
-             'data/All_mills_ACS.xlsx',
-             format = 'file'),
-  
-  
-  tar_target(
-    tri_facilities_data,
-    'data/tri_data/tri_2020_us.csv',
-    format = 'file'
-  ),
+ 
+ 
+ tar_target(all_mills_data,
+            'data/All_mills_ACS.xlsx',
+            format = 'file'),
+ 
+ 
+ tar_target(tri_facilities_data,
+            'data/tri_data/tri_2020_us.csv',
+            format = 'file'),
  
  tar_target(sch_h_facilities,
-            'data/HFC_reclaim_facility_data.xlsx',
+            'data/HFC Reclamation Facilities_3.12.2024.xlsx',
             format = 'file'),
  
  #############################
-  
-  
-  tar_target(
-    ats_cancer_data,
-    'data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx',
-    format = 'file'
-  ),
-  
-  
-  tar_target(
-    ats_resp_data,
-    'data/ats_data/2019_National_RespHI_by_tract_poll.xlsx',
-    format = 'file'
-  ),
-  
-  tar_target(
-    places_data,
-    'data/places_data/places_data_ct.csv',
-    format = 'file'
-  ),
-  
-  
-  
+ 
+ tar_target(
+   ats_cancer_data,
+   'data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx',
+   format = 'file'
+ ),
+ 
+ 
+ tar_target(ats_resp_data,
+            'data/ats_data/2019_National_RespHI_by_tract_poll.xlsx',
+            format = 'file'),
+ 
+ tar_target(places_data,
+            'data/places_data/places_data_ct_2021.csv',
+            format = 'file'),
+ 
+ 
+ 
   #####################################
   ####### Load data using functions
   ######################################
-  
-  
-  tar_target(
-    acs_data_loaded,
-    load_acs_data(acs_data_filepath)
-  ),
-  
-  tar_target(ats_cancer_loaded,
-             load_ats_cancer(ats_cancer_data)),
-  
-  
-  tar_target(ats_resp_loaded,
-             load_ats_resp(ats_resp_data)),
-  
-  tar_target(places_cancer_loaded,
-             load_places_cancer(places_data)),
-  
-  tar_target(places_asthma_loaded,
-             load_asthma(places_data)),
-  
-  tar_target(places_chd_loaded,
-             load_chd(places_data)),
-  
-  tar_target(places_health_ins_loaded,
-             load_health_ins(places_data)),
-  
+ 
+ 
+ 
+ tar_target(acs_data_loaded,
+            load_acs_data(acs_data_filepath)),
+ 
+ tar_target(ats_cancer_loaded,
+            load_ats_cancer(ats_cancer_data)),
+ 
+ 
+ tar_target(ats_resp_loaded,
+            load_ats_resp(ats_resp_data)),
+ 
+ tar_target(places_cancer_loaded,
+            load_places_cancer(places_data)),
+ 
+ tar_target(places_asthma_loaded,
+            load_asthma(places_data)),
+ 
+ tar_target(places_chd_loaded,
+            load_chd(places_data)),
+ 
+# tar_target(places_health_ins_loaded,
+ #           load_health_ins(places_data)),
+ 
   
   ##################################
   
@@ -184,8 +183,8 @@ tar_plan(
             load_sch_h_facilities(sch_h_facilities)),
  
  tar_target(
-    facilities_data_loaded,
-    load_facilities_data(facilities_data)
+    all_mills_loaded,
+    load_all_mills(all_mills_data)
   ),
   
   tar_target(
@@ -198,19 +197,20 @@ tar_plan(
   #########################################
   ####### Merge ACS and Health Data
   ##########################################
-  
-  tar_target(
-    health_data,
-    merge_health(
-      ats_cancer_loaded,
-      ats_resp_loaded,
-      places_cancer_loaded,
-      places_asthma_loaded,
-      places_chd_loaded,
-      places_health_ins_loaded
-    )
-  ),
-  
+ 
+ 
+ tar_target(
+   health_data,
+   merge_health(
+     ats_cancer_loaded,
+     ats_resp_loaded,
+     places_cancer_loaded,
+     places_asthma_loaded,
+     places_chd_loaded
+     #,places_health_ins_loaded
+   )
+ ),
+ 
   
   
   # tar_target(merge_acs_health,
@@ -223,20 +223,20 @@ tar_plan(
   
   # Filters LURA Mills by State..
   tar_target(
-    filter_facilities_by_state,
-    filter_facilities_state(facilities_data_loaded, states)
+    filter_mills_by_state,
+    filter_mills_state(all_mills_loaded, states)
   ),
   
   # By mill type..
   tar_target(
-    filter_facilities_by_milltype,
-    filter_facilities_type(facilities_data_loaded, mill_type)
+    filter_mills_by_type,
+    filter_mills_type(all_mills_loaded, mill_type)
   ),
   
-  # By both
+  # Or by both
   tar_target(
-    filter_facilities_by_both,
-    filter_facilities_type(filter_facilities_by_state, mill_type)
+    filter_mills_by_both,
+    filter_mills_type(filter_mills_by_state, mill_type)
   ),
   
   
@@ -261,8 +261,15 @@ tar_plan(
                                           states,
                                           tri_industry_sector)
   ),
-  
-  
+  ########################################################
+ 
+ ## Last step, input final facilities target:
+ 
+ tar_target(facilities, sch_h_facilities_loaded),
+ 
+ ## ...now tar_make()
+
+ 
   ###############################################################################
   # Biomass Proximity Analysis
   ##################################
@@ -272,13 +279,13 @@ tar_plan(
   
   ## Create facility tables with demographics
   
-  tar_target(urban_areas, urban_areas()),
+  tar_target(urban_areas, urban_areas(year = 2019)),
   tar_target(uac, gen_uac(urban_areas)),
   
   tar_target(
     fac_lat_lon,
     gen_fac_lat_lon(
-      sch_h_facilities_loaded,
+      facilities,
       latitude_col_name = latitude_col_name,
       longitude_col_name = longitude_col_name
     )
@@ -289,7 +296,7 @@ tar_plan(
   tar_target(
     fac_sf,
     gen_fac_sf(
-      sch_h_facilities_loaded,
+      facilities,
       latitude_col_name = latitude_col_name,
       longitude_col_name = longitude_col_name
     )
@@ -427,8 +434,8 @@ tar_plan(
     "total_risk_resp",
     "cancer_prev",
     "asthma_prev",
-    "chd_prev",
-    "health_ins"
+    "chd_prev"
+    #,"health_ins"
   ),
   
   
@@ -438,15 +445,15 @@ tar_plan(
     "% Black or African American (race)",
     "% Other (race)",
     "% Hispanic (ethnic origin)",
-    "Median Income (1k 2021$)",
+    "Median Income (1k 2019$)",
     "% Below Poverty Line",
     "% Below Half the Poverty Line",
     "Total Cancer Risk (per million)",
     "Total Respiratory Risk (hazard quotient)",
     "Cancer Prevalence (exl. Skin) (% Pop.)",
     "Asthma Prevalence (% Pop.)",
-    "Coronary Heart Disease Prevalence (% Pop.)",
-    "Lack Health Insurance (% Pop.)"
+    "Coronary Heart Disease Prevalence (% Pop.)"
+    #,"Lack Health Insurance (% Pop.)"
   ),
   
   # Add comparison variables to facility demographic tables
@@ -523,12 +530,90 @@ tar_plan(
   ),
   
   tar_target(
-    export_table_to_html,
-    write_summary_means_table(final_summary_table,
+    export_means_table_to_html,
+    write_summary_means_table(final_summary_table[1:9,],
                               final_file_name,
                               table_title)
-  )
+  ),
   
+
+###########################################################
+## Standard Deviations Table
+######################################################
+
+
+tar_target(
+  summary_sd_table_natl,
+  gen_summary_sd_table_natl(desc_vars,
+                               comparison_vars,
+                               natl_table = natl_acs_health_table)
+),
+
+
+
+tar_target(
+  summary_sd_buffer_1mi,
+  gen_summary_sd_table_buffer(
+    desc_vars,
+    comparison_vars,
+    fac_dem_table = fac_dem_comp_vars_1mi,
+    buffer_radius = 1
+  )
+),
+tar_target(
+  summary_sd_buffer_3mi,
+  gen_summary_sd_table_buffer(
+    desc_vars,
+    comparison_vars,
+    fac_dem_table = fac_dem_comp_vars_3mi,
+    buffer_radius = 3
+  )
+),
+tar_target(
+  summary_sd_buffer_5mi,
+  gen_summary_sd_table_buffer(
+    desc_vars,
+    comparison_vars,
+    fac_dem_table = fac_dem_comp_vars_5mi,
+    buffer_radius = 5
+  )
+),
+tar_target(
+  summary_sd_buffer_10mi,
+  gen_summary_sd_table_buffer(
+    desc_vars,
+    comparison_vars,
+    fac_dem_table = fac_dem_comp_vars_10mi,
+    buffer_radius = 10
+  )
+),
+
+
+tar_target(
+  summary_sd_table_list,
+  list(
+    summary_sd_buffer_1mi,
+    summary_sd_buffer_3mi,
+    summary_sd_buffer_5mi,
+    summary_sd_buffer_10mi
+  )
+),
+
+
+tar_target(
+  final_summary_sd_table,
+  merge_summary_tables(summary_sd_table_natl,
+                       summary_sd_table_list)
+),
+
+tar_target(
+  export_sd_table_to_html,
+  write_summary_sd_table(final_summary_sd_table[1:9, ],
+                            paste0(final_file_name,'_sd'),
+                            table_title)
+)
+
+
 )
 
 # End of Pipeline

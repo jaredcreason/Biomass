@@ -32,8 +32,23 @@ nyc_joined_geometry <-
 
 
 ###############
+library(targets)
+tar_load(natl_acs_health_table)
 
+acs_table <- natl_acs_health_table %>% rename(tract=Tract,
+                                              population=pop) %>% select(
+                                                tract,
+                                                population,
+                                                income,
+                                                pov50,
+                                                pov99,
+                                                white_pct,
+                                                minority_black,
+                                                minority_hispanic,
+                                                minority_other
+                                              ) %>% drop_na()
 
+nyc_acs_joined <- nyc_joined %>% left_join(acs_table)
 
 ########################
 
@@ -67,15 +82,12 @@ ggplot() +
 variables_list <- names(nyc_joined)
 output_dir <- 'output/nyc_fusion/nyc_maps/'
 
-var <- variables_list[4]
 
-for(var in variables_list[3:33]){
-  title <- var
+for(i in seq(3,33)){
+  title <- names(nyc_joined)[i]
 
-  
-  ggplot() +
-    geom_sf(data = nyc_joined_geometry$geometry, aes(fill = paste0(nyc_joined,$,var),
-                                                     color = paste0(nyc_joined,$,var))) +
+  p <- ggplot() +
+    geom_sf(data = nyc_joined_geometry$geometry, aes_string(fill = nyc_joined[[i]], color = nyc_joined[[i]])) +
     scale_fill_gradient(low = low_color, high = high_color, name = title) +
     scale_color_gradient(low = low_color, high = high_color, name = title) +
     theme_void() +
@@ -84,7 +96,7 @@ for(var in variables_list[3:33]){
           legend.title = element_text(color = text_color)) +
     labs(fill = title, color = title)
   
-  ggsave(paste0(output_dir,'nyc_downscaled_',var,'.jpg'))
+  ggsave(paste0(output_dir,'nyc_downscaled_',title,'.jpg'), plot = p)
 }
 
 

@@ -106,8 +106,8 @@ gen_fac_dem_mid <- function(fac_dem_pre,
       total_risk_resp,
       cancer_prev,
       asthma_prev,
-      chd_prev,
-      health_ins
+      chd_prev
+      #,health_ins
     ) %>%
     rename(rural_facility = rural.x, rural_blockgroup = rural.y) %>%
     distinct()
@@ -140,8 +140,8 @@ gen_fac_dem_table <- function(fac_dem_mid, sq_miles) {
       total_risk_resp = mean(total_risk_resp, na.rm = TRUE),
       cancer_prev = mean(cancer_prev, na.rm = TRUE),
       asthma_prev = mean(asthma_prev, na.rm = TRUE),
-      chd_prev = mean(chd_prev, na.rm = TRUE),
-      health_ins = mean(health_ins, na.rm = TRUE)
+      chd_prev = mean(chd_prev, na.rm = TRUE)
+      #,health_ins = mean(health_ins, na.rm = TRUE)
     ) %>%
     mutate(pop_sq_mile_1mi = pop / sq_miles,
            rural_bg_pct = signif(sum(
@@ -169,8 +169,8 @@ gen_fac_dem_table <- function(fac_dem_mid, sq_miles) {
       total_risk_resp,
       cancer_prev,
       asthma_prev,
-      chd_prev,
-      health_ins
+      chd_prev
+      #,health_ins
     ) %>%
     distinct()
   

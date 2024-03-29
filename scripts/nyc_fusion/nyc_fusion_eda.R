@@ -133,6 +133,19 @@ nyc_joined <- left_join(recs_2020_wide,nyc_wide, by = 'tract') %>%
  
 write.xlsx(nyc_joined,'output/nyc_fusion/nyc_joined_table_borough_0327.xlsx')
 
+########################################
+
+
+library(targets)
+tar_load(acs_data_loaded)
+
+
+
+
+
+
+
+
 
 
 

@@ -30,13 +30,13 @@ merge_acs <- function(acs_dataset, health_dataset){
 
 
 
-merge_health <- function(ats_cancer, ats_resp, places_cancer, places_asthma, places_chd,  places_health_ins){
+merge_health <- function(ats_cancer, ats_resp, places_cancer, places_asthma, places_chd){
   
   nata_data_merged <- left_join(ats_cancer, ats_resp, by = 'Tract')
   health_data_merged <- nata_data_merged %>% left_join(places_cancer,by=c("Tract"="Tract")) %>%
     left_join(places_asthma,by=c("Tract"="Tract"))%>%
-    left_join(places_chd,by=c("Tract"="Tract"))%>%
-    left_join(places_health_ins,by=c("Tract"="Tract"))
+    left_join(places_chd,by=c("Tract"="Tract"))
+  #%>% left_join(places_health_ins,by=c("Tract"="Tract"))
   
   
   # rearrange tibble column
