@@ -26,7 +26,7 @@ library(tarchetypes)
 ######### Targets Set-Up
 ################################
 
-acs_data_filepath <- 'data/acs_data/acs_data_2019_block group.Rdata'
+acs_data_filepath <- 'data/acs_data/acs_data_2021_block group.Rdata'
 
 if (!file.exists(acs_data_filepath)) {
   source('scripts/acs_api_query.R')
@@ -51,13 +51,13 @@ tar_plan(
   
   ## Enter one or multiple U.S. State Abbreviations
   
-  states <- c('LA'),
+  states <- c('NC'),
   
   
   # Enter desired mill-type, options include:
   # "pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", or "OSB"
   
-  mill_type <- c('pellet'),
+  mill_type <- c('lumber'),
   
   
   
@@ -77,8 +77,8 @@ tar_plan(
   # [29] "Publishing"                        "Apparel"
  
    ###########
-  final_file_name = 'hfc_reclamation_facilties_3_12_2024',
-  table_title = 'HFC Reclamation',
+  final_file_name = 'usa_lumber',
+  table_title = 'National Lumber Mills',
   
   #### Uncomment for LURA All Mills
   
@@ -126,7 +126,7 @@ tar_plan(
             format = 'file'),
  
  tar_target(sch_h_facilities,
-            'data/HFC Reclamation Facilities_3.12.2024.xlsx',
+            'data/HFC Reclamation Facilities_3.29.2024_filtered.xlsx',
             format = 'file'),
  
  #############################
@@ -265,9 +265,9 @@ tar_plan(
  
  ## Last step, input final facilities target:
  
- tar_target(facilities, sch_h_facilities_loaded),
+ tar_target(facilities, filter_mills_by_type),
  
- ## ...now tar_make()
+ ## ...now save and tar_make()
 
  
   ###############################################################################
@@ -531,9 +531,10 @@ tar_plan(
   
   tar_target(
     export_means_table_to_html,
-    write_summary_means_table(final_summary_table[1:9,],
+    write_summary_means_table(final_summary_table,
                               final_file_name,
-                              table_title)
+                              table_title,
+                              fac_sf_rural = fac_sf_rural)
   ),
   
 
@@ -608,9 +609,10 @@ tar_target(
 
 tar_target(
   export_sd_table_to_html,
-  write_summary_sd_table(final_summary_sd_table[1:9, ],
+  write_summary_sd_table(final_summary_sd_table,
                             paste0(final_file_name,'_sd'),
-                            table_title)
+                            table_title,
+                         fac_sf_rural = fac_sf_rural)
 )
 
 

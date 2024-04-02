@@ -55,12 +55,10 @@ load_tri_facilities_data <- function(tri_facilities_filepath){
 
 load_sch_h_facilities <- function(sch_h_filepath){
   
-  facs <- read_excel(file.path(sch_h_filepath)) %>% mutate(Label = `Street Address 1`)
+  facs <- read_excel(file.path(sch_h_filepath)) %>% mutate(Label = `Street Address 1`) %>% drop_na(Label)
   
   return(facs)
 }
-
-
 
 
 ############
