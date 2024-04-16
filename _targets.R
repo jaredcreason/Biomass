@@ -57,7 +57,7 @@ tar_plan(
   # Enter desired mill-type, options include:
   # "pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", or "OSB"
   
-  mill_type <- c('lumber'),
+  mill_type <- c('pellet'),
   
   
   
@@ -77,8 +77,8 @@ tar_plan(
   # [29] "Publishing"                        "Apparel"
  
    ###########
-  final_file_name = 'usa_lumber',
-  table_title = 'National Lumber Mills',
+  final_file_name = 'nc_pellets_0403',
+  table_title = 'NC Pellet Mills',
   
   #### Uncomment for LURA All Mills
   
@@ -265,7 +265,7 @@ tar_plan(
  
  ## Last step, input final facilities target:
  
- tar_target(facilities, filter_mills_by_type),
+ tar_target(facilities, filter_mills_by_both),
  
  ## ...now save and tar_make()
 
@@ -400,6 +400,8 @@ tar_plan(
   ),
   
   ########################
+
+
   
   tar_target(
     fac_dem_table_1mi,
@@ -417,7 +419,37 @@ tar_plan(
     fac_dem_table_10mi,
     gen_fac_dem_table(fac_dem_mid_10mi, sq_miles)
   ),
-  
+
+
+# Get bufferzone populations
+
+tar_target(buffer_pop_table_1mi, gen_buffer_pop_table(fac_dem_mid_1mi)),
+tar_target(buffer_pop_table_3mi, gen_buffer_pop_table(fac_dem_mid_3mi)),
+tar_target(buffer_pop_table_5mi, gen_buffer_pop_table(fac_dem_mid_5mi)),
+tar_target(buffer_pop_table_10mi, gen_buffer_pop_table(fac_dem_mid_10mi)),
+
+tar_target(mean_buffer_pop_1mi, calc_mean_buffer_pop(buffer_pop_table_1mi)),
+tar_target(mean_buffer_pop_3mi, calc_mean_buffer_pop(buffer_pop_table_3mi)),
+tar_target(mean_buffer_pop_5mi, calc_mean_buffer_pop(buffer_pop_table_5mi)),
+tar_target(mean_buffer_pop_10mi, calc_mean_buffer_pop(buffer_pop_table_10mi)),
+
+
+tar_target(median_buffer_pop_1mi, calc_median_buffer_pop(buffer_pop_table_1mi)),
+tar_target(median_buffer_pop_3mi, calc_median_buffer_pop(buffer_pop_table_3mi)),
+tar_target(median_buffer_pop_5mi, calc_median_buffer_pop(buffer_pop_table_5mi)),
+tar_target(median_buffer_pop_10mi, calc_median_buffer_pop(buffer_pop_table_10mi)),
+
+
+
+
+
+
+
+
+
+
+
+#########################
   #########################################################
   ########### Conduct Proximity Analysis
   ##################################################
