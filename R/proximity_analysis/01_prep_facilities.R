@@ -9,11 +9,9 @@ gen_uac <- function(urban_areas) {
 gen_fac_lat_lon <- function(facility_data, latitude_col_name, longitude_col_name) {
   
   facilities <- facility_data %>%
-    
     select(longitude_col_name,
            latitude_col_name,
            everything())
-  
   
   facilities_lat_lon <- facilities %>%
     select(longitude_col_name,
@@ -65,14 +63,10 @@ gen_fac_sf_rural <- function(facilities_sf, facilities_sf_urban){
 
 gen_fac_map <- function(facilities_sf, facilities_sf_rural, facilities_lat_lon) {
   
-
- 
-  
   facilities_map <- facilities_sf %>%
     left_join(facilities_sf_rural, by = "Label") %>%
     left_join(facilities_lat_lon, by = "Label") %>%
     distinct()
-  
   
   return(facilities_map)
   

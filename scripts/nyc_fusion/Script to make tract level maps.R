@@ -57,7 +57,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaternyc_insec.png",res = 3000 )
+mapshot(lf, file = "output/nyc_fusion/greaternyc_insec_01.png",res = 6000 )
 
 
 ###Make map for Boston########
@@ -84,7 +84,7 @@ map2 <- map1 + tm_view(set.view = c(-71.05, 42.36, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaterboston_insec.png")
+mapshot(lf, file = "output/nyc_fusion/greaterboston_insec.png")
 
 ###Make map for Chicago########
 recs2020_insec_CHI  <- recs2020_tract %>% filter(level == 'TRUE') %>% mutate(est = 100 *est) %>%
@@ -110,7 +110,7 @@ map2 <- map1 + tm_view(set.view = c(-87.6298, 41.878, 9.25))
 map2
 
 lf <- tmap_ %>% (map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaterchicago_insec.png")
+mapshot(lf, file = "output/nyc_fusion/greaterchicago_insec.png")
 
 
 
@@ -138,7 +138,7 @@ map2 <- map1 + tm_view(set.view = c(-96.92, 32.70, 9.25))
 map2
 
 lf <- tmap_ %>% (map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaterdallas_insec.png")
+mapshot(lf, file = "output/nyc_fusion/greaterdallas_insec.png")
 
 
 
@@ -167,7 +167,7 @@ map2 <- map1 + tm_view(set.view = c(-122.4194, 37.774, 9.75))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greatersanfran_insec.png")
+mapshot(lf, file = "output/nyc_fusion/greatersanfran_insec.png")
 
 
 ###Plot burden maps########
@@ -195,7 +195,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaternyc_burden.png")
+mapshot(lf, file = "output/nyc_fusion/greaternyc_burden.png")
 
 
 ###Make map for Boston########
@@ -222,7 +222,7 @@ map2 <- map1 + tm_view(set.view = c(-71.05, 42.36, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaterboston_burden.png")
+mapshot(lf, file = "output/nyc_fusion/greaterboston_burden.png")
 
 
 
@@ -250,7 +250,7 @@ map2 <- map1 + tm_view(set.view = c(-87.6298, 41.878, 9.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaterchicago_burden.png")
+mapshot(lf, file = "output/nyc_fusion/greaterchicago_burden.png")
 
 
 
@@ -278,7 +278,7 @@ map2 <- map1 + tm_view(set.view = c(-96.92, 32.70, 9.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaterdallas_burden.png")
+mapshot(lf, file = "output/nyc_fusion/greaterdallas_burden.png")
 
 
 
@@ -307,7 +307,7 @@ map2 <- map1 + tm_view(set.view = c(-122.4194, 37.774, 9.75))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greatersanfran_burden.png")
+mapshot(lf, file = "output/nyc_fusion/greatersanfran_burden.png")
 
 
 
@@ -420,7 +420,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaternyc_insec_medburden.png")
+mapshot(lf, file = "output/nyc_fusion/greaternyc_insec_medburden.png")
 
 
 ###Make map for Boston########
@@ -447,7 +447,7 @@ map2 <- map1 + tm_view(set.view = c(-71.05, 42.36, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaterboston_insec_medburden.png")
+mapshot(lf, file = "output/nyc_fusion/greaterboston_insec_medburden.png")
 
 
 ###Make map for Chicago########
@@ -474,7 +474,7 @@ map2 <- map1 + tm_view(set.view = c(-87.6298, 41.878, 9.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaterchicago_insec_medburden.png")
+mapshot(lf, file = "output/nyc_fusion/greaterchicago_insec_medburden.png")
 
 
 
@@ -502,7 +502,7 @@ map2 <- map1 + tm_view(set.view = c(-96.92, 32.70, 9.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greaterdallas_insec_medburden.png")
+mapshot(lf, file = "output/nyc_fusion/greaterdallas_insec_medburden.png")
 
 
 
@@ -531,7 +531,7 @@ map2 <- map1 + tm_view(set.view = c(-122.4194, 37.774, 9.75))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/greatersanfran_insec_medburden.png")
+mapshot(lf, file = "output/nyc_fusion/greatersanfran_insec_medburden.png")
 
 
 
@@ -577,7 +577,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.75))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/production/UrbanPop/nyc_burden.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_burden.pdf")
 
 
 

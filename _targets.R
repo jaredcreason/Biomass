@@ -26,7 +26,7 @@ library(tarchetypes)
 ######### Targets Set-Up
 ################################
 
-acs_data_filepath <- 'data/acs_data/acs_data_2021_block group.Rdata'
+acs_data_filepath <- 'data/acs_data/acs_data_2019_block group.Rdata'
 
 if (!file.exists(acs_data_filepath)) {
   source('scripts/acs_api_query.R')
@@ -51,7 +51,7 @@ tar_plan(
   
   ## Enter one or multiple U.S. State Abbreviations
   
-  states <- c('NC'),
+  states <- c('TX'),
   
   
   # Enter desired mill-type, options include:
@@ -77,15 +77,15 @@ tar_plan(
   # [29] "Publishing"                        "Apparel"
  
    ###########
-  final_file_name = 'nc_pellets_0403',
-  table_title = 'NC Pellet Mills',
+  final_file_name = 'subpart_w_facilities',
+  table_title = 'Subpart W Facilities',
   
   #### Uncomment for LURA All Mills
   
-   longitude_col_name = 'Longitude',
-  
-   latitude_col_name = 'Latitude',
-   
+   # longitude_col_name = 'Longitude',
+   # 
+   # latitude_col_name = 'Latitude',
+   # 
   
   
   ### Uncomment for TRI Facilities
@@ -101,7 +101,13 @@ tar_plan(
  
  #latitude_col_name = 'Lat',
  
-  
+ 
+ # subpart_w facs
+ longitude_col_name = 'longitude',
+ 
+ latitude_col_name = 'latitude',
+ 
+ 
   
   # End of Set-up
   
@@ -127,6 +133,10 @@ tar_plan(
  
  tar_target(sch_h_facilities,
             'data/HFC Reclamation Facilities_3.29.2024_filtered.xlsx',
+            format = 'file'),
+ 
+ tar_target(subpart_w_data,
+            'data/ghgrp_2022_subpart_w.csv',
             format = 'file'),
  
  #############################
@@ -191,6 +201,12 @@ tar_plan(
     tri_facilities_data_loaded,
     load_tri_facilities_data(tri_facilities_data)
   ),
+
+tar_target(
+  subpart_w_data_loaded,
+  load_subpart_w_facilities(subpart_w_data)
+  
+),
   
   
   
@@ -265,7 +281,7 @@ tar_plan(
  
  ## Last step, input final facilities target:
  
- tar_target(facilities, filter_mills_by_both),
+ tar_target(facilities, subpart_w_data_loaded),
  
  ## ...now save and tar_make()
 

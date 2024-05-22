@@ -29,7 +29,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/data/nyc_fusion/Slides/Downscaled/nyc_food.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_food.png")
 
 # Read gst results from disk
 gst1 <- readRDS("data/nyc_fusion/NHTS_gstotcst_NYC/36005_gstotcst.RDS") %>% select(.,c('TRACT','estimate'))
@@ -54,7 +54,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/data/nyc_fusion/Slides/Downscaled/nyc_gst.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_gst.pdf")
 
 
 # Read vmt results from disk
@@ -80,7 +80,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/data/nyc_fusion/Slides/Downscaled/nyc_vmt.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_vmt.pdf")
 
 
 
@@ -107,7 +107,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/data/nyc_fusion/Slides/Downscaled/nyc_price.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_price.pdf")
 
 # Read place results from disk
 place1 <- readRDS("data/nyc_fusion/NHTS_tract/36005_place_binary.RDS") %>% select(.,c('TRACT','estimate'))
@@ -132,7 +132,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/data/nyc_fusion/Slides/Downscaled/nyc_place.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_place.pdf")
 
 
 
@@ -160,7 +160,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/data/nyc_fusion/Slides/Downscaled/nyc_ptrans.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_ptrans.pdf")
 
 
 
@@ -188,7 +188,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/data/nyc_fusion/Slides/Downscaled/nyc_transbur.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_transbur.pdf")
 
 
 # Read commute time from disk
@@ -214,7 +214,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/data/nyc_fusion/Slides/Downscaled/nyc_commute.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_commute.pdf")
 
 
 #More commute time maps
@@ -241,7 +241,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/data/nyc_fusion/Slides/Downscaled/nyc_commute_PTRANS.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_commute_PTRANS.pdf")
 
 # Read commute time from disk
 JWMNP1_WALKBIKE <- readRDS("data/nyc_fusion/commute_times_NYC_3/36005_commute_time_WALKBIKE.RDS") %>% select(.,c('TRACT','estimate'))
@@ -266,7 +266,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/data/nyc_fusion/Slides/Downscaled/nyc_commute_WALKBIKE.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_commute_WALKBIKE.pdf")
 
 
 
@@ -293,7 +293,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/data/nyc_fusion/Slides/Downscaled/nyc_commute_PRIVATE.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_commute_PRIVATE.pdf")
 
 #Downscaling Cold
 # Read food results from disk
@@ -319,7 +319,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/data/nyc_fusion/Slides/Downscaled/nyc_cold.pdf")
+mapshot(lf, file = "output/nyc_fusion/nyc_cold.pdf")
 
 
 #Downscaling NHTS double burden
@@ -373,7 +373,7 @@ map2 <- map1 + tm_view(set.view = c(-74.0060, 40.7128, 10.25))
 map2
 
 lf <- tmap_leaflet(map2)
-mapshot(lf, file = "/Users/karthikakkiraju/Documents/fusionData/data/nyc_fusion/Slides/Downscaled/greaternyc_double.pdf")
+mapshot(lf, file = "output/nyc_fusion/greaternyc_double.pdf")
 
 
 

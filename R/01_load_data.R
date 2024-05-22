@@ -60,6 +60,14 @@ load_sch_h_facilities <- function(sch_h_filepath){
   return(facs)
 }
 
+load_subpart_w_facilities <- function(subpart_w_filepath){
+  
+  facs <- read_csv(subpart_w_filepath) %>%
+    mutate(Label = `facility_id`)
+
+  return(facs)
+}
+
 
 ############
 
