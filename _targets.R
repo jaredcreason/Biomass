@@ -1,5 +1,3 @@
-
-
 # Biomass/_targets.R
 
 ######################################
@@ -9,12 +7,13 @@
 # FIRST TIME ONLY: Script will query ACS Data from Census API
 # Runtime: (approx. 90 minutes)
 
+# MUST BE CONNECTED TO EPA VPN AND HAVE CACHED
+# GITHUB ACCESS TOKEN FOR EPA REPOs
+
 
 # Step 1: Load required targets packages
 library(targets)
 library(tarchetypes)
-
-
 
 # Step 2: Complete Set-up by altering strings by state and facility
 
@@ -38,28 +37,21 @@ source('packages.R')
 
 tar_source()
 
-
 tar_option_set(packages = c('tidyverse', 'leaflet', 'htmlwidgets'))
-
 
 tar_plan(
   ############################################
   ##### Identify Facilities of INterest
   ##########################################
   
-  
-  
   ## Enter one or multiple U.S. State Abbreviations
   
-  states <- c('TX'),
-  
-  
+  states <- c('OR'),
+
   # Enter desired mill-type, options include:
   # "pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", or "OSB"
   
-  mill_type <- c('pellet'),
-  
-  
+  mill_type <- c('lumber'),
   
   ######################
   ### TRI ONLY FILTERING
@@ -76,38 +68,10 @@ tar_plan(
   # [25] "Textiles"                          "Textile Product"                   "Tobacco"                           "Leather"
   # [29] "Publishing"                        "Apparel"
  
-   ###########
-  final_file_name = 'subpart_w_facilities',
-  table_title = 'Subpart W Facilities',
+  ###########
   
-  #### Uncomment for LURA All Mills
-  
-   # longitude_col_name = 'Longitude',
-   # 
-   # latitude_col_name = 'Latitude',
-   # 
-  
-  
-  ### Uncomment for TRI Facilities
-  
-  
- #longitude_col_name = '13. LONGITUDE',
-  
-  #latitude_col_name = '12. LATITUDE',
- 
- 
- ## HFC Facility data
- #longitude_col_name = 'Long',
- 
- #latitude_col_name = 'Lat',
- 
- 
- # subpart_w facs
- longitude_col_name = 'longitude',
- 
- latitude_col_name = 'latitude',
- 
- 
+  final_file_name = 'oregon_lumber',
+  table_title = 'Oregon Lumber Mills',
   
   # End of Set-up
   
@@ -115,18 +79,14 @@ tar_plan(
   
   # Proximity Analysis Set-Up
   
-  
-  
   ################################
   ###### Establish data file paths
   ################################
- 
- 
+
  tar_target(all_mills_data,
             'data/All_mills_ACS.xlsx',
             format = 'file'),
- 
- 
+
  tar_target(tri_facilities_data,
             'data/tri_data/tri_2020_us.csv',
             format = 'file'),
@@ -141,13 +101,10 @@ tar_plan(
  
  #############################
  
- tar_target(
-   ats_cancer_data,
-   'data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx',
-   format = 'file'
- ),
- 
- 
+ tar_target(ats_cancer_data,
+            'data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx',
+            format = 'file'),
+
  tar_target(ats_resp_data,
             'data/ats_data/2019_National_RespHI_by_tract_poll.xlsx',
             format = 'file'),
@@ -156,21 +113,16 @@ tar_plan(
             'data/places_data/places_data_ct_2021.csv',
             format = 'file'),
  
- 
- 
   #####################################
   ####### Load data using functions
   ######################################
- 
- 
  
  tar_target(acs_data_loaded,
             load_acs_data(acs_data_filepath)),
  
  tar_target(ats_cancer_loaded,
             load_ats_cancer(ats_cancer_data)),
- 
- 
+
  tar_target(ats_resp_loaded,
             load_ats_resp(ats_resp_data)),
  
@@ -207,8 +159,6 @@ tar_target(
   load_subpart_w_facilities(subpart_w_data)
   
 ),
-  
-  
   
   #########################################
   ####### Merge ACS and Health Data
@@ -254,8 +204,7 @@ tar_target(
     filter_mills_by_both,
     filter_mills_type(filter_mills_by_state, mill_type)
   ),
-  
-  
+
   #########################################
   
   
@@ -263,14 +212,12 @@ tar_target(
     filter_tri_by_state,
     filter_tri_state(tri_facilities_data_loaded, states)
   ),
-  
-  
+
   tar_target(
     filter_tri_by_industry,
     filter_tri_industry(tri_facilities_data_loaded, tri_industry_sector)
   ),
-  
-  
+
   tar_target(
     filter_tri_facilities_by_both,
     filter_tri_facilities_states_industry(tri_facilities_data_loaded,
@@ -281,7 +228,7 @@ tar_target(
  
  ## Last step, input final facilities target:
  
- tar_target(facilities, subpart_w_data_loaded),
+ tar_target(facilities, filter_mills_by_both),
  
  ## ...now save and tar_make()
 
@@ -298,25 +245,9 @@ tar_target(
   tar_target(urban_areas, urban_areas(year = 2019)),
   tar_target(uac, gen_uac(urban_areas)),
   
-  tar_target(
-    fac_lat_lon,
-    gen_fac_lat_lon(
-      facilities,
-      latitude_col_name = latitude_col_name,
-      longitude_col_name = longitude_col_name
-    )
-  ),
-  
-  
-  
-  tar_target(
-    fac_sf,
-    gen_fac_sf(
-      facilities,
-      latitude_col_name = latitude_col_name,
-      longitude_col_name = longitude_col_name
-    )
-  ),
+  tar_target(fac_lat_lon, gen_fac_lat_lon(facilities)),
+
+  tar_target(fac_sf, gen_fac_sf(facilities)),
   
   tar_target(fac_sf_urban, gen_fac_sf_urban(fac_sf, uac)),
   
@@ -367,8 +298,6 @@ tar_target(
                               health_data)
   ),
   
-  
-  
   tar_target(
     acs_health_table,
     gen_acs_health_table(data_ct,
@@ -416,9 +345,6 @@ tar_target(
   ),
   
   ########################
-
-
-  
   tar_target(
     fac_dem_table_1mi,
     gen_fac_dem_table(fac_dem_mid_1mi, sq_miles)
@@ -455,16 +381,6 @@ tar_target(median_buffer_pop_3mi, calc_median_buffer_pop(buffer_pop_table_3mi)),
 tar_target(median_buffer_pop_5mi, calc_median_buffer_pop(buffer_pop_table_5mi)),
 tar_target(median_buffer_pop_10mi, calc_median_buffer_pop(buffer_pop_table_10mi)),
 
-
-
-
-
-
-
-
-
-
-
 #########################
   #########################################################
   ########### Conduct Proximity Analysis
@@ -485,8 +401,7 @@ tar_target(median_buffer_pop_10mi, calc_median_buffer_pop(buffer_pop_table_10mi)
     "chd_prev"
     #,"health_ins"
   ),
-  
-  
+
   # descriptions of the comparison variables to be included in the tables
   desc_vars <- c(
     "% White",
@@ -519,8 +434,6 @@ tar_target(median_buffer_pop_10mi, calc_median_buffer_pop(buffer_pop_table_10mi)
                                  comparison_vars,
                                  natl_table = natl_acs_health_table)
   ),
-  
-  
   
   tar_target(
     summary_means_buffer_1mi,
@@ -558,8 +471,7 @@ tar_target(median_buffer_pop_10mi, calc_median_buffer_pop(buffer_pop_table_10mi)
       buffer_radius = 10
     )
   ),
-  
-  
+
   tar_target(
     summary_table_list,
     list(
@@ -584,12 +496,10 @@ tar_target(median_buffer_pop_10mi, calc_median_buffer_pop(buffer_pop_table_10mi)
                               table_title,
                               fac_sf_rural = fac_sf_rural)
   ),
-  
 
 ###########################################################
 ## Standard Deviations Table
 ######################################################
-
 
 tar_target(
   summary_sd_table_natl,
@@ -597,8 +507,6 @@ tar_target(
                                comparison_vars,
                                natl_table = natl_acs_health_table)
 ),
-
-
 
 tar_target(
   summary_sd_buffer_1mi,
@@ -637,7 +545,6 @@ tar_target(
   )
 ),
 
-
 tar_target(
   summary_sd_table_list,
   list(
@@ -647,7 +554,6 @@ tar_target(
     summary_sd_buffer_10mi
   )
 ),
-
 
 tar_target(
   final_summary_sd_table,
@@ -662,8 +568,6 @@ tar_target(
                             table_title,
                          fac_sf_rural = fac_sf_rural)
 )
-
-
 )
 
 # End of Pipeline

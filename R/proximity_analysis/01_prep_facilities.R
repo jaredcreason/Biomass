@@ -6,32 +6,27 @@ gen_uac <- function(urban_areas) {
 }
 
 
-gen_fac_lat_lon <- function(facility_data, latitude_col_name, longitude_col_name) {
+gen_fac_lat_lon <- function(facilities) {
+  facs_infer_latlon <- EJAM::latlon_any_format(facilities)
   
-  facilities <- facility_data %>%
-    select(longitude_col_name,
-           latitude_col_name,
-           everything())
-  
-  facilities_lat_lon <- facilities %>%
-    select(longitude_col_name,
-           latitude_col_name,
+  facilities_lat_lon <- facs_infer_latlon %>%
+    select(lon,
+           lat,
            Label) %>%
     distinct()
   
-  
   return(facilities_lat_lon)
-  
-  
 }
 
 
 ##
 
 
-gen_fac_sf <- function(facility_data, latitude_col_name, longitude_col_name){
-  facilities_sf = st_as_sf(facility_data, 
-                           coords=c(x=longitude_col_name,y=latitude_col_name), 
+gen_fac_sf <- function(facilities){
+  facs_infer_latlon <- EJAM::latlon_any_format(facilities) %>%
+    select(Label, lon, lat)
+  facilities_sf = st_as_sf(facs_infer_latlon, 
+                           coords=c(x='lon',y='lat'), 
                            crs=4326) %>%
     st_transform(3488) %>% 
     distinct(geometry, .keep_all = TRUE)
@@ -51,9 +46,9 @@ gen_fac_sf_urban <- function(facilities_sf, uac) {
 }
 
 
-gen_fac_sf_rural <- function(facilities_sf, facilities_sf_urban){
-  facilities_sf_rural <- facilities_sf %>%
-    mutate(rural = fifelse(Label %in% unique(facilities_sf_urban$Label),0,1)) %>%
+gen_fac_sf_rural <- function(fac_sf, fac_sf_urban){
+  facilities_sf_rural <- fac_sf %>%
+    mutate(rural = ifelse(Label %in% unique(fac_sf_urban$Label),0,1)) %>%
     as.data.frame() %>%
     select(rural,Label)
   

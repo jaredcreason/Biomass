@@ -1,6 +1,7 @@
 
 # R/packages.R
 
+require(EJAM)
 
 # This function will check if a package is installed, and if not, install it
 pkgTest <- function(x) {
@@ -38,7 +39,7 @@ lapply(packages, pkgTest)
 
 library(usmap)
 library(ggplot2)
- library(stringr)
+library(stringr)
 
 
 #load_required_packages <- function() {
