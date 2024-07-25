@@ -1,8 +1,7 @@
 
 # R/packages.R
 
-require(EJAM)
-
+library(EJAM)
 # This function will check if a package is installed, and if not, install it
 pkgTest <- function(x) {
   if (!require(x, character.only = TRUE))
@@ -26,6 +25,7 @@ packages <- c('tidycensus',
               'colorspace',
               'openxlsx',
               'here',
+              'shiny',
               'readxl',
               'openxlsx',
               'RColorBrewer',
