@@ -51,7 +51,7 @@ tar_plan(
   # Enter desired mill-type, options include:
   # "pellet", "plywood/veneer", "lumber", "pulp/paper", "chip", or "OSB"
   
-  mill_type <- c('lumber'),
+  mill_type <- c('pellet'),
   
   ######################
   ### TRI ONLY FILTERING
@@ -70,8 +70,8 @@ tar_plan(
  
   ###########
   
-  final_file_name = 'oregon_lumber',
-  table_title = 'Oregon Lumber Mills',
+  final_file_name = 'oregon_pellet',
+  table_title = 'Oregon Pellet Mills',
   
   # End of Set-up
   

@@ -1,76 +1,8 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    https://shiny.posit.co/
-#
+# Write _targets.R script to project directory.
 
-library(shiny)
-
-# Define UI for application that draws a histogram
-ui <- fluidPage(
-
-    # Application title
-    titlePanel("Cumulative Impacts EJ: Proxmity Analysis Tool"),
-
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            fileInput("file", "Upload tabular data for pipeline.",
-                      accept = c('.csv','.xlsx')),
-            uiOutput("column_select"),
-            textInput("table_title", "Enter table name:", value = ''),
-            actionButton("run_pipeline", "Run Pipeline")
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-          tableOutput("result")
-        )
-    )
-)
-
-# Define server logic required to draw a histogram
-server <- function(input, output, session) {
-  data <- reactive({
-    req(input$file)
-    file <- input$file
-    ext <- tools::file_ext(file$datapath)
-    if (ext == "csv") {
-      read_csv(file$datapath)
-    } else if (ext == 'xlsx') {
-      read_excel(file$datapath)
-    } else {
-      stop("Please upload csv or xlsx file.")
-    }
-  })
-  
-  output$column_select <- renderUI({
-    req(data())
-    selectInput("column", "Select Unique Identifier Column:", choices = colnames(data()))
-  })
-  
-  observeEvent(input$run_pipeline, {
-    req(input$file)
-    req(input$column)
-    req(input$table_title)
-    
-    tmp_file <- tempfile(fileext = ".rds")
-    saveRDS(data(), tmp_file)
-    
-    targets_script <- sprintf("
-    library(targets)
+pipeline <- "
+library(targets)
 library(tarchetypes)
-
-acs_data_filepath <- 'data/acs_data/acs_data_2019_block group.Rdata'
-
-if (!file.exists(acs_data_filepath)) {
-  source('scripts/acs_api_query.R')
-} else {
-  print('ACS Data already exists. Skipping Census API Query.')
-}
 
 source('packages.R')
 
@@ -289,19 +221,19 @@ tar_target(median_buffer_pop_10mi, calc_median_buffer_pop(buffer_pop_table_10mi)
   ),
 
   desc_vars <- c(
-    '% White',
-    '% Black or African American (race)',
-    '% Other (race)',
-    '% Hispanic (ethnic origin)',
+    '%% White',
+    '%% Black or African American (race)',
+    '%% Other (race)',
+    '%% Hispanic (ethnic origin)',
     'Median Income (1k 2019$)',
-    '% Below Poverty Line',
-    '% Below Half the Poverty Line',
+    '%% Below Poverty Line',
+    '%% Below Half the Poverty Line',
     'Total Cancer Risk (per million)',
     'Total Respiratory Risk (hazard quotient)',
-    'Cancer Prevalence (exl. Skin) (% Pop.)',
-    'Asthma Prevalence (% Pop.)',
-    'Coronary Heart Disease Prevalence (% Pop.)'
-    #,'Lack Health Insurance (% Pop.)'
+    'Cancer Prevalence (exl. Skin) (%% Pop.)',
+    'Asthma Prevalence (%% Pop.)',
+    'Coronary Heart Disease Prevalence (%% Pop.)'
+    #,'Lack Health Insurance (%% Pop.)'
   ),
   
 
@@ -374,18 +306,4 @@ tar_target(median_buffer_pop_10mi, calc_median_buffer_pop(buffer_pop_table_10mi)
 
 
     
-    ", input$table_title, input$file$datapath, input$column)
-    
-    script_path <- tempfile(fileext = ".R")
-    writeLines(gsub("{tmp_file}", tmp_file, gsub("{input$column}", input$column, targets_script)), script_path)
-    tar_script(script_path)
-    tar_make()
-    
-    output$result <- renderTable({
-    tar_read(final_summary_table)
-  })
-})
-}
-
-# Run the application 
-shinyApp(ui = ui, server = server)
+    "
