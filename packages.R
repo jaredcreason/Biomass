@@ -27,41 +27,15 @@ packages <- c('tidycensus',
               'here',
               'shiny',
               'readxl',
-              'openxlsx',
-              'RColorBrewer',
               'usmap',
               'leaflet',
               'writexl',
               'htmlwidgets',
               'kableExtra',
-              'fs') ## you can add more packages here
+              'fs',
+              'gt') ## you can add more packages here
 lapply(packages, pkgTest)
 
 library(usmap)
 library(ggplot2)
 library(stringr)
-
-
-#load_required_packages <- function() {
- # library(targets)
-  #library(tarchetypes)
-  #library(tidycensus)
-  #library(tigris)
-  #library(tidyverse)
-  #library(magrittr)
-  #library(data.table)
-  #library(sf)
-  #library(foreach)
-  #library(doSNOW)
-  #library(scales)
-  #library(odbc)
-  #library(colorspace)
-  #library(openxlsx)
-  #library(openxlsx)
-  #library(usmap)
-  #library(leaflet)
-  #library(leafdown)
-  #library(shiny)
-  #library(shinydashboard)
-  #library(htmlwidgets)
-#}

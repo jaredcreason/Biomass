@@ -10,7 +10,7 @@
 source('shiny_app/packages.R')
 source('shiny_app/ui.R')
 source('shiny_app/server.R')
-#source('shiny_app/write_pipeline.R')
+source('shiny_app/server_test.R')
 
 # Run the application 
-shinyApp(ui = ui, server = server)
+shinyApp(ui = ui, server = server_test)

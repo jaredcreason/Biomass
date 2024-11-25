@@ -1,5 +1,5 @@
 # Biomass/_targets.R
-# THIS _targets.R SCRIPT USES 2020 ACS, 2020 ATS CANCER DATA
+
 ######################################
 ### How to Run this Repository
 ######################################
@@ -86,7 +86,7 @@ tar_target(acs_data_filepath,
             format = 'file'),
  
  tar_target(sch_h_facilities,
-            'data/HFC production facilities list_11.15.2024.xlsx',
+            'data/HFC Reclamation Facilities_3.29.2024_filtered.xlsx',
             format = 'file'),
  
  tar_target(subpart_w_data,
@@ -94,9 +94,21 @@ tar_target(acs_data_filepath,
             format = 'file'),
  
  #############################
+ 
+ tar_target(ats_cancer_data,
+            'data/ats_data/2019_National_CancerRisk_by_tract_poll.xlsx',
+            format = 'file'),
 
-tar_target(ats_2020_filepath,
-           "data/ats_data/ats_2020_cancer_tract.csv"),
+ tar_target(ats_resp_data,
+            'data/ats_data/2019_National_RespHI_by_tract_poll.xlsx',
+            format = 'file'),
+ 
+ tar_target(places_data,
+            'data/places_data/places_data_ct_2021.csv',
+            format = 'file'),
+
+tar_target(ats_2020_folder_path,
+           "data/ats_data/ats_2020"),
  
   #####################################
   ####### Load data using functions
@@ -104,10 +116,28 @@ tar_target(ats_2020_filepath,
  
  tar_target(acs_data_loaded,
             load_acs_data(acs_data_filepath)),
+ 
+ tar_target(ats_cancer_loaded,
+            load_ats_2020(ats_2020_folder_path)),
 
  tar_target(ats_2020_cancer_loaded,
-            read_csv(ats_2020_filepath)),
+            load_ats_2020(ats_2020_folder_path)),
 
+ tar_target(ats_resp_loaded,
+            load_ats_resp(ats_resp_data)),
+ 
+ tar_target(places_cancer_loaded,
+            load_places_cancer(places_data)),
+ 
+ tar_target(places_asthma_loaded,
+            load_asthma(places_data)),
+ 
+ tar_target(places_chd_loaded,
+            load_chd(places_data)),
+ 
+# tar_target(places_health_ins_loaded,
+ #           load_health_ins(places_data)),
+ 
   
   ##################################
   
@@ -137,8 +167,18 @@ tar_target(
  
  tar_target(
    health_data,
-   ats_2020_cancer_loaded
+   merge_health(
+     ats_cancer_loaded,
+     ats_resp_loaded,
+     places_cancer_loaded,
+     places_asthma_loaded,
+     places_chd_loaded
+     #,places_health_ins_loaded
+   )
  ),
+
+ tar_target(health_data_ats_2020,
+            )
  
   
   
@@ -266,7 +306,8 @@ tar_target(
     gen_acs_health_table(data_ct,
                          sq_miles,
                          urban_tracts,
-                         health_data)
+                         health_data,
+                         states)
   ),
   #######################################################################
   
@@ -356,7 +397,12 @@ tar_target(median_buffer_pop_10mi, calc_median_buffer_pop(buffer_pop_table_10mi)
     "income",
     "pov99",
     "pov50",
-    "total_risk"
+    "total_risk",
+    "total_risk_resp",
+    "cancer_prev",
+    "asthma_prev",
+    "chd_prev"
+    #,"health_ins"
   ),
 
   # descriptions of the comparison variables to be included in the tables
@@ -368,7 +414,12 @@ tar_target(median_buffer_pop_10mi, calc_median_buffer_pop(buffer_pop_table_10mi)
     "Median Income (1k 2019$)",
     "% Below Poverty Line",
     "% Below Half the Poverty Line",
-    "Total Cancer Risk (per million)"
+    "Total Cancer Risk (per million)",
+    "Total Respiratory Risk (hazard quotient)",
+    "Cancer Prevalence (exl. Skin) (% Pop.)",
+    "Asthma Prevalence (% Pop.)",
+    "Coronary Heart Disease Prevalence (% Pop.)"
+    #,"Lack Health Insurance (% Pop.)"
   ),
   
   # Add comparison variables to facility demographic tables
