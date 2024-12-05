@@ -76,6 +76,17 @@ load_ats_cancer <- function(ats_cancer_filepath){
     rename(total_risk='Total Cancer Risk (per million)')
 }
 
+load_ats_2020_filepath <- function(ats_2020_filepath) {
+  
+  df <- read_csv(ats_2020_filepath)
+  
+  ats_df <- df %>%
+    mutate(Tract = as.character(Tract)) %>%
+    mutate(Tract = str_pad(Tract, 11, pad='0', side = 'left'))
+  
+  return(ats_df)
+}
+
 
 load_ats_resp <- function(ats_resp_filepath){
   read_excel(ats_resp_filepath) %>%

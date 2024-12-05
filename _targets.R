@@ -61,8 +61,8 @@ tar_plan(
  
   ###########
   
-  final_file_name = 'sch_h_112124',
-  table_title = 'HFC Reclamation',
+  final_file_name = 'sch_h_120524',
+  table_title = 'HFC Production',
   
   # End of Set-up
   
@@ -96,7 +96,8 @@ tar_target(acs_data_filepath,
  #############################
 
 tar_target(ats_2020_filepath,
-           "data/ats_data/ats_2020_cancer_tract.csv"),
+           "data/ats_data/ats_2020_cancer_tract.csv",
+           format = "file"),
  
   #####################################
   ####### Load data using functions
@@ -106,7 +107,7 @@ tar_target(ats_2020_filepath,
             load_acs_data(acs_data_filepath)),
 
  tar_target(ats_2020_cancer_loaded,
-            read_csv(ats_2020_filepath)),
+            load_ats_2020_filepath(ats_2020_filepath)),
 
   
   ##################################
